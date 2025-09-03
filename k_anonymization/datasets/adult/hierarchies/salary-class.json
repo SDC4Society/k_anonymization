@@ -1,0 +1,7 @@
+{
+  "name": "salary-class",
+  "type": "lambda",
+  "lambda": [
+    "lambda x: '*'"
+  ]
+}

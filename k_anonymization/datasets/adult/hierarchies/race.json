@@ -1,0 +1,7 @@
+{
+  "name": "race",
+  "type": "lambda",
+  "lambda": [
+    "lambda x: '*'"
+  ]
+}

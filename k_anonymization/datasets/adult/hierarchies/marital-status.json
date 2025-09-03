@@ -1,0 +1,8 @@
+{
+  "name": "marital-status",
+  "type": "lambda",
+  "lambda": [
+    "lambda x: 'spouse present' if x in ['Married-civ-spouse', 'Married-AF-spouse'] else 'spouse not present'",
+    "lambda x: '*'"
+  ]
+}
