@@ -20,10 +20,10 @@ class Algorithm(ABC):
     def org_data(self):
         return self.dataset.df
 
-    def __reset_anon_data(self, anonymize_method):
+    def __reset_anon_data(self, anonymize_func):
         def wrapper(*args, **kwargs):
             self.anon_data = self.org_data[:]
-            return anonymize_method(self, *args, **kwargs)
+            return anonymize_func(self, *args, **kwargs)
 
         return wrapper
 

@@ -61,3 +61,6 @@ class Dataset:
 
     def reload_df(self):
         self.__df = read_csv(f"{self.path}/{self.name}.csv")
+
+    def _repr_html_(self):
+        return self.df.to_html()
