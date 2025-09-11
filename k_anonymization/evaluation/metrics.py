@@ -1,4 +1,5 @@
 # +
+from numpy import ndarray
 from pandas.core.frame import DataFrame
 
 from ..algorithms.type import Algorithm
@@ -8,13 +9,13 @@ from .utils import count_equivalent_qids
 # -
 
 def discernibility(
-    anon_df: DataFrame,
+    anon_data: DataFrame | ndarray,
     qids_idx: list = [],
-    suppressed_qids: int = 0,
-    org_df_size: int = 0,
+    suppression_counts: int = 0,
+    org_data_size: int = 0,
 ):
-    num_of_equivalent_qids = count_equivalent_qids(anon_df, qids_idx=qids_idx)
-    return sum([x**2 for x in num_of_equivalent_qids]) + suppressed_qids * org_df_size
+    num_of_equivalent_qids = count_equivalent_qids(anon_data, qids_idx=qids_idx)
+    return sum([x**2 for x in num_of_equivalent_qids]) + suppression_counts * org_data_size
 
 
 def discernibility_from_algo(algo: Algorithm):
