@@ -9,17 +9,25 @@ from .utils import count_equivalent_qids
 # -
 
 def discernibility(
+    equivalent_qids: list,
+    suppression_counts: int = 0,
+    org_data_size: int = 0,
+):
+    return sum([x**2 for x in equivalent_qids]) + suppression_counts * org_data_size
+
+
+def discernibility_from_data(
     anon_data: DataFrame | ndarray,
     qids_idx: list = [],
     suppression_counts: int = 0,
     org_data_size: int = 0,
 ):
-    num_of_equivalent_qids = count_equivalent_qids(anon_data, qids_idx=qids_idx)
-    return sum([x**2 for x in num_of_equivalent_qids]) + suppression_counts * org_data_size
+    equivalent_qids = count_equivalent_qids(anon_data, qids_idx=qids_idx)
+    return discernibility(equivalent_qids, suppression_counts, org_data_size)
 
 
 def discernibility_from_algo(algo: Algorithm):
-    return discernibility(
+    return discernibility_from_data(
         algo.anon_data,
         algo.dataset.qids_idx,
         (

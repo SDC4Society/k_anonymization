@@ -1,5 +1,6 @@
 # +
 import json
+from functools import cached_property
 from os import path as os_path
 
 from pandas import read_csv
@@ -8,16 +9,34 @@ from pandas import read_csv
 # -
 
 class HierarchiesDict(dict):
-    def __init__(self, hierarchies_dir: str):
+    def __init__(
+        self,
+        hierarchies_dir: str,
+        num_of_attributes: int,
+        qids: list,
+        qids_idx: list,
+    ):
         self.hierarchies_dir = hierarchies_dir
+        self.__qids = []
+        for pos, qid in enumerate(qids):
+            self.__qids.extend([None] * (qids_idx[pos] - len(self.__qids)))
+            self.__qids.append(qid)
+        self.__qids.extend([None] * (num_of_attributes - len(self.__qids)))
+
     def __getitem__(self, key):
-        if key not in self.keys():
+        if isinstance(key, int):
+            _key = self.__qids[key]
+            if _key is None:
+                raise AttributeError(f"Cannot find hierarchy for attribute at index '{key}'")
+        else:
+            _key = key
+        if _key not in self.keys():
             try:
-                with open(f"{self.hierarchies_dir}/{key}.json") as f:
-                    super().__setitem__(key, json.load(f))
+                with open(f"{self.hierarchies_dir}/{_key}.json") as f:
+                    super().__setitem__(_key, json.load(f))
             except:
-                raise FileNotFoundError(f"Cannot find the hierarchy \"{key}\".")
-        return super().__getitem__(key)
+                raise FileNotFoundError(f'Cannot find the hierarchy "{_key}".')
+        return super().__getitem__(_key)
 
 
 class Dataset:
@@ -33,11 +52,11 @@ class Dataset:
     def __str__(self):
         return self.name
 
-    @property
+    @cached_property
     def path(self):
         return f"{os_path.dirname(__file__)}/{self.name}"
 
-    @property
+    @cached_property
     def props(self):
         if self.__props is None:
             with open(f"{self.path}/props.json") as f:
@@ -45,13 +64,17 @@ class Dataset:
             self.__props = _props
         return self.__props
 
-    @property
+    @cached_property
     def qids(self):
         return [self.df.columns[x] for x in self.props["qi_index"]]
 
-    @property
+    @cached_property
     def qids_idx(self):
         return self.props["qi_index"]
+
+    @cached_property
+    def is_categorical(self):
+        return self.props["is_category"]
 
     @property
     def df(self):
@@ -62,7 +85,12 @@ class Dataset:
     @property
     def hierarchies(self):
         if self.__hierarchies is None:
-            self.__hierarchies = HierarchiesDict(f"{self.path}/hierarchies")
+            self.__hierarchies = HierarchiesDict(
+                f"{self.path}/hierarchies",
+                len(list(self.df)),
+                self.qids,
+                self.qids_idx,
+            )
         return self.__hierarchies
 
     def reload_df(self):
