@@ -1,6 +1,5 @@
 {
   "name": "age",
-  "type": "lambda",
   "lambda": [
     "lambda x: f'{(x-1)//5*5}~{(x-1)//5*5+4}'",
     "lambda x: f'{int(x.split(\"~\")[0])//10*10}~{int(x.split(\"~\")[0])//10*10+9}'",

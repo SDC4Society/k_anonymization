@@ -7,7 +7,8 @@ from pandas import DataFrame
 from k_anonymization.algorithms.type import Algorithm
 from k_anonymization.datasets import Dataset
 
-from .utils import generalize, get_mean_mode, summarize
+from .utils import get_mean_mode, summarize
+from ..utils import generalize_column
 
 
 # -
@@ -50,7 +51,7 @@ class ClusteringBasedAlgorithm(Algorithm):
             elif self.anon_method == ClusterAnonMethod.GENERALIZATION:
                 level = 0
                 while len(set(columns[idx])) > 1:
-                    columns[idx] = generalize(
+                    columns[idx] = generalize_column(
                         columns[idx], self.hierarchies[idx], level
                     )
                     level += 1

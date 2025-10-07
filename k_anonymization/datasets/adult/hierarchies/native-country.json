@@ -1,7 +1,6 @@
 {
     "name": "native-country",
-    "type": "list",
-    "hierarchy": [
+    "tree": [
         {
             "is_suppressed": false,
             "values": [

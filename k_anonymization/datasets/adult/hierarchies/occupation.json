@@ -1,7 +1,6 @@
 {
     "name": "occupation",
-    "type": "list",
-    "hierarchy": [
+    "tree": [
         {
             "is_suppressed": false,
             "values": [

@@ -1,3 +1,6 @@
+from ..utils import generalize_column_tree
+
+
 def get_max_ranges(data, qids_idx, is_cat, hierarchies):
     max_ranges = []
 
@@ -7,8 +10,8 @@ def get_max_ranges(data, qids_idx, is_cat, hierarchies):
         if is_cat[pos] == True:
             max_ranges.append(
                 len(hierarchies[idx]["lambda"])
-                if hierarchies[idx]["type"] == "lambda"
-                else len(hierarchies[idx]["hierarchy"])
+                if "lambda" in list(hierarchies[idx])
+                else len(hierarchies[idx]["tree"])
             )
         else:
             max_ranges.append(max(columns[idx]) - min(columns[idx]))
@@ -65,29 +68,12 @@ def get_categorical_distance(values, hierarchy, height):
     generalized_values = values[:]
 
     while len(set(generalized_values)) > 1:
-        generalized_values = generalize(generalized_values, hierarchy, level)
+        generalized_values = generalize_column_tree(
+            generalized_values, hierarchy, level
+        )
         level += 1
 
     return level / height
-
-
-def generalize(values, hierarchy, level):
-    if hierarchy["type"] == "lambda":
-        f = eval(hierarchy["lambda"][level])
-    elif hierarchy["type"] == "list":
-        is_suppressed = hierarchy["hierarchy"][level]["is_suppressed"]
-        if is_suppressed:
-            f = lambda x: "*"
-        else:
-            generalized_values = hierarchy["hierarchy"][level]["values"]
-
-            def find_generalized_value(x):
-                for generalized_value in generalized_values:
-                    if x in generalized_value["original"]:
-                        return generalized_value["generalized"]
-
-            f = lambda x: find_generalized_value(x)
-    return list(map(f, values))
 
 
 def summarize(values, is_cat):
@@ -98,7 +84,10 @@ def summarize(values, is_cat):
         except:
             anon_value = " ~ ".join([str(x) for x in set(values)])
     else:
-        anon_value = f"{min(values)} ~ {max(values)}"
+        if len(set(values)) == 1:
+            anon_value = f"{values[0]}"
+        else:
+            anon_value = f"{min(values)} ~ {max(values)}"
     return list(map(lambda x: anon_value, values))
 
 

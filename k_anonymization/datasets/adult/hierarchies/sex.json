@@ -1,7 +1,11 @@
 {
   "name": "sex",
-  "type": "lambda",
   "lambda": [
     "lambda x: '*'"
-  ]
+  ],
+  "tree": [
+      {
+          "is_suppressed": true
+      }
+  ] 
 }
