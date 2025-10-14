@@ -28,6 +28,9 @@ class ClusteringBasedAlgorithm(Algorithm):
         anon_method: ClusterAnonMethod = ClusterAnonMethod.SUMMARIZATION,
     ):
         self.anon_method = anon_method
+        self.qids_idx = dataset.qids_idx
+        self.is_categorical = dataset.is_categorical
+        self.hierarchies = dataset.hierarchies
         super().__init__(dataset, k)
 
     def anonymize(self):

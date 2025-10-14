@@ -1,10 +1,19 @@
+# +
+from k_anonymization.datasets.type import Dataset
+
 from ..utils import generalize_column_tree
 
 
-def get_max_ranges(data, qids_idx, is_cat, hierarchies):
-    max_ranges = []
+# -
 
-    columns = list(zip(*data))
+def get_max_ranges(dataset: Dataset):
+    qids_idx = dataset.qids_idx
+    is_cat = dataset.is_categorical
+    hierarchies = dataset.hierarchies
+    df = dataset.df
+    columns = list(df)
+
+    max_ranges = []
     for pos, idx in enumerate(qids_idx):
         max_ranges.extend([None] * (idx - len(max_ranges)))
         if is_cat[pos] == True:
@@ -14,7 +23,7 @@ def get_max_ranges(data, qids_idx, is_cat, hierarchies):
                 else len(hierarchies[idx]["tree"])
             )
         else:
-            max_ranges.append(max(columns[idx]) - min(columns[idx]))
+            max_ranges.append(df[columns[idx]].max() - df[columns[idx]].min())
 
     max_ranges.extend([None] * (len(columns) - len(max_ranges)))
 

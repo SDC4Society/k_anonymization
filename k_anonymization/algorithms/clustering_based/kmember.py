@@ -1,12 +1,22 @@
 # +
 import random
+from functools import partial
+from multiprocessing import cpu_count
 
+from numpy import argmax, argmin
 from tqdm.auto import tqdm
 
 from k_anonymization.datasets import Dataset
+from k_anonymization.utils.parallel import Parallel
 
 from .type import ClusterAnonMethod, ClusteringBasedAlgorithm
 from .utils import get_distance, get_information_loss, get_max_ranges
+
+try:
+    __IPYTHON__
+    _bar_format = None
+except:
+    _bar_format = "{l_bar}{bar:20}|{n_fmt}/{total_fmt} [{elapsed}]"
 
 
 # -
@@ -17,81 +27,63 @@ class KMember(ClusteringBasedAlgorithm):
         dataset: Dataset,
         k: int,
         anon_method: ClusterAnonMethod = ClusterAnonMethod.SUMMARIZATION,
+        parallel: bool = False,
+        cpu_cores: int = cpu_count() - 1,
     ):
-        self.hierarchies = dataset.hierarchies
-        self.qids_idx = dataset.qids_idx
-        self.is_categorical = dataset.is_categorical
         super().__init__(dataset, k, anon_method)
+        self.cpu_cores = cpu_cores
+        self.is_parallel = parallel
+        self.__parallel = Parallel(cpu_cores)
+        max_ranges = get_max_ranges(dataset)
+        self.get_distance = partial(
+            get_distance,
+            qids_idx=self.qids_idx,
+            is_cat=self.is_categorical,
+            max_ranges=max_ranges,
+            hierarchies=self.hierarchies,
+        )
+        self.get_information_loss = partial(
+            get_information_loss,
+            qids_idx=self.qids_idx,
+            is_cat=self.is_categorical,
+            max_ranges=max_ranges,
+            hierarchies=self.hierarchies,
+        )
 
     def find_furthest_record_from_r(self, r, data):
-        max_distance = 0
-        furthest_idx = None
-        furthest_r = None
-
-        for idx, record in enumerate(data):
-            this_distance = get_distance(
-                r,
-                record,
-                self.qids_idx,
-                self.is_categorical,
-                self.max_ranges,
-                self.hierarchies,
-            )
-            if this_distance > max_distance:
-                max_distance = this_distance
-                furthest_r = record
-                furthest_idx = idx
-
-        return (furthest_r, furthest_idx)
+        f = partial(self.get_distance, record=r)
+        distances = (
+            self.__parallel.perform(f, data)
+            if self.is_parallel
+            else [f(record) for record in data]
+        )
+        furthest_idx = argmax(distances).item()
+        return (data[furthest_idx], furthest_idx)
 
     def find_best_record(self, data, cluster):
-        min_information_loss = float("inf")
-        best_idx = None
-        best_r = None
-
-        for idx, record in enumerate(data):
-            this_information_loss = get_information_loss(
-                record,
-                cluster,
-                self.qids_idx,
-                self.is_categorical,
-                self.max_ranges,
-                self.hierarchies,
-            )
-            if this_information_loss < min_information_loss:
-                min_information_loss = this_information_loss
-                best_r = record
-                best_idx = idx
-
-        return (best_r, best_idx, min_information_loss)
+        f = partial(self.get_information_loss, cluster=cluster)
+        information_losses = (
+            self.__parallel.perform(f, data)
+            if self.is_parallel
+            else [f(record) for record in data]
+        )
+        best_idx = argmin(information_losses).item()
+        return (data[best_idx], best_idx, information_losses[best_idx])
 
     def find_best_cluster(self, clusters, r):
-        min_information_loss = float("inf")
-        best_idx = None
-
-        for idx, cluster in enumerate(clusters):
-            this_information_loss = get_information_loss(
-                r,
-                cluster,
-                self.qids_idx,
-                self.is_categorical,
-                self.max_ranges,
-                self.hierarchies,
+        information_losses = (
+            self.__parallel.perform(
+                self.get_information_loss, [r] * len(clusters), clusters
             )
-            if this_information_loss < min_information_loss:
-                min_information_loss = this_information_loss
-                best_idx = idx
-
-        return (best_idx, min_information_loss)
+            if self.is_parallel
+            else [self.get_information_loss(r, cluster) for cluster in clusters]
+        )
+        best_idx = argmin(information_losses).item()
+        return (best_idx, information_losses[best_idx])
 
     def do_clustering(self):
         data = self.anon_data.values.tolist()
-        self.max_ranges = get_max_ranges(
-            data,
-            self.qids_idx,
-            self.is_categorical,
-            self.hierarchies,
-        )
+
         clusters = []
         information_losses = []
         r_i = None
@@ -99,8 +91,12 @@ class KMember(ClusteringBasedAlgorithm):
         progress_bar = tqdm(
             total=len(data),
             desc="   Clustering Progress",
-            bar_format="{l_bar}{bar:20}|{n_fmt}/{total_fmt} [{elapsed}]",
+            bar_format=_bar_format,
         )
+
+        if self.is_parallel:
+            print(f"Parallelize with {self.cpu_cores} core(s).")
+            self.__parallel.activate()
 
         while len(data) >= self.k:
             if r_i is None:
@@ -130,6 +126,10 @@ class KMember(ClusteringBasedAlgorithm):
             progress_bar.update(1)
 
         self.information_loss = sum(information_losses)
+        progress_bar.close()
+
+        if self.is_parallel:
+            self.__parallel.deactivate()
 
         return clusters
 
