@@ -39,42 +39,58 @@ def show(
     search_columns_per_row: int = 5,
     max_bytes: str = "64KB",
 ):
-    _search_panes_props = {"features": "searchPanes"}
-
-    if table_name:
-        _table_name = table_name.replace(" ", "_").lower()
-        table_css = f"""
-            #{_table_name}-search-panes div.dtsp-searchPanes {"{"}
-                width: 100% !important;
-                display: grid !important;
-                column-gap: 1% !important;
-                grid-template-columns: repeat(auto-fit, minmax({int(100/search_columns_per_row)-1}%, {int(100/search_columns_per_row)-1}%)) !important;
-                justify-content: unset !important;
-            {"}"}
-            #{_table_name}-search-panes div.dtsp-columns-{search_columns_per_row} {"{"}
-                max-width: unset !important;
-                min-width: unset !important;
-            {"}"}
-        """
-        display(HTML(f"<style>{table_css}</style>" ""))
-        _search_panes_props["id"] = f"{_table_name}-search-panes"
+    _table_name = (
+        table_name.replace(" ", "_").lower() if table_name else "custom-itables"
+    )
+    table_css = f"""
+        #{_table_name}-buttons .dt-button-collection {"{"}
+            padding: 10px
+        {"}"}
+        #{_table_name}-buttons div.dtsp-searchPanes {"{"}
+            width: 100% !important;
+            column-gap: 10px !important;
+            justify-content: flex-start !important;
+        {"}"}
+    """
+    display(HTML(f"<style>{table_css}</style>" ""))
 
     itables_show(
         data,
         table_name,
         maxBytes=max_bytes,
         layout={
-            "top1": _search_panes_props,
-            "topStart": "searchBuilder",
-            "topEnd": "pageLength",
-            "bottomEnd": "paging",
+            "top": {
+                "id": f"{_table_name}-buttons",
+                "features": [
+                    {
+                        "buttons": [
+                            "pageLength",
+                            {
+                                "extend": "searchPanes",
+                                "config": {
+                                    "threshold": 1,
+                                    "columns": [i for i in range(1, len(data.keys()))],
+                                    "layout": f"columns-{search_columns_per_row}",
+                                    "cascadePanes": True,
+                                    "initCollapsed": True,
+                                    "dtOpts": {"order": [[1, "desc"], [0, "asc"]]},
+                                },
+                            },
+                            "searchBuilder",
+                        ]
+                    }
+                ],
+            },
+            "topStart": None,
+            "topEnd": None,
+            "bottomStart": None,
+            "bottomEnd": None,
+            "bottom1": ["paging"],
+            "bottom2": ["info"],
         },
-        searchPanes={
-            "threshold": 1,
-            "columns": [i for i in range(1, len(data.keys()))],
-            "layout": f"columns-{search_columns_per_row}",
-            "cascadePanes": True,
-            "initCollapsed": True,
-            "dtOpts": {"order": [[1, "desc"], [0, "asc"]]},
+        language={
+            "searchPanes": {
+                "collapse": {0: "Filters", "_": "Filters (%d)"},
+            }
         },
     )

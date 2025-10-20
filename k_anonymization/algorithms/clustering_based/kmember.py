@@ -88,15 +88,15 @@ class KMember(ClusteringBasedAlgorithm):
         information_losses = []
         r_i = None
 
+        if self.is_parallel:
+            print(f"Parallelize with {self.cpu_cores} core(s).")
+            self.__parallel.activate()
+
         progress_bar = tqdm(
             total=len(data),
             desc="   Clustering Progress",
             bar_format=_bar_format,
         )
-
-        if self.is_parallel:
-            print(f"Parallelize with {self.cpu_cores} core(s).")
-            self.__parallel.activate()
 
         while len(data) >= self.k:
             if r_i is None:
