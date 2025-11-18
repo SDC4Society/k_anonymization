@@ -246,7 +246,7 @@ class Dataset:
     def reload_df(self):
         self.__df = DataFrameTable(
           read_csv(f"{self.path}/{self.name}.csv"), 
-          self.name.upper(),
+          table_name=self.name.upper(),
         )
 
     def describe(self):
