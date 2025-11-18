@@ -244,7 +244,10 @@ class Dataset:
         return self.__hierarchies
 
     def reload_df(self):
-        self.__df = DataFrameTable(read_csv(f"{self.path}/{self.name}.csv"))
+        self.__df = DataFrameTable(
+          read_csv(f"{self.path}/{self.name}.csv"), 
+          self.name.upper(),
+        )
 
     def describe(self):
         itables_show(
