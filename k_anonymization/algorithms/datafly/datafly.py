@@ -77,5 +77,4 @@ class Datafly(Algorithm):
                 hierarchies_tracking[generalized_att],
             )
 
-        self.anon_data = DataFrame(np_anon_data, columns=list(self.anon_data))
-        return self.anon_data
+        self._construct_anon_data(np_anon_data, columns=list(self.anon_data))

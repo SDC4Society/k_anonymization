@@ -13,6 +13,23 @@ from k_anonymization.utils.data_table import show
 
 # -
 
+class DataFrameTable(DataFrame):
+    def __init__(
+        self,
+        *args,
+        **kwargs,
+    ):
+        table_name = None
+        if "table_name" in kwargs:
+            table_name = kwargs.pop("table_name")
+        super().__init__(*args, **kwargs)
+        self.table_name = table_name
+
+    def _repr_html_(self):
+        show(self, self.table_name)
+        return "<i hidden></i>"
+
+
 class HierarchiesDict(dict):
     def __init__(
         self,
@@ -133,9 +150,9 @@ class HierarchyDict(dict):
             nodes.append(eval(f)(nodes[-1]))
         for i, v in enumerate(nodes[0:-1]):
             if i == 0:
-                tree.edge(str(nodes[0]), str(nodes[1]), label='(1)')
+                tree.edge(str(nodes[0]), str(nodes[1]), label="(1)")
             else:
-                tree.edge(str(nodes[i]), str(nodes[i+1]), label=f"({i+1})")
+                tree.edge(str(nodes[i]), str(nodes[i + 1]), label=f"({i+1})")
         return tree
 
 
@@ -227,7 +244,7 @@ class Dataset:
         return self.__hierarchies
 
     def reload_df(self):
-        self.__df = read_csv(f"{self.path}/{self.name}.csv")
+        self.__df = DataFrameTable(read_csv(f"{self.path}/{self.name}.csv"))
 
     def describe(self):
         itables_show(
@@ -266,9 +283,5 @@ class Dataset:
             ],
         )
 
-    def display(self):
-        show(self.df, self.name.upper())
-
     def _repr_html_(self):
-        self.display()
-        return "<i hidden></i>"
+        return self.df._repr_html_()

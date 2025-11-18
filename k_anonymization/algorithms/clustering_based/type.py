@@ -38,7 +38,7 @@ class ClusteringBasedAlgorithm(Algorithm):
         result = []
         for cluster in clusters:
             result.extend(self.anonymize_cluster(cluster))
-        self.anon_data = DataFrame(result, columns=list(self.org_data))
+        self._construct_anon_data(result, columns=list(self.org_data))
 
     @abstractmethod
     def do_clustering(self):

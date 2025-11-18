@@ -1,7 +1,7 @@
 # +
 from abc import ABC, abstractmethod
 
-from ..datasets import Dataset
+from ..datasets import DataFrameTable, Dataset
 
 
 # -
@@ -37,5 +37,8 @@ class Algorithm(ABC):
     @abstractmethod
     def anonymize(self):
         pass
+
+    def _construct_anon_data(self, data, columns, table_name="Anonymized Data"):
+        self.anon_data = DataFrameTable(data, columns=columns, table_name=table_name)
 
 
