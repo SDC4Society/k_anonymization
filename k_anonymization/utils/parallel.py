@@ -2,6 +2,9 @@ import multiprocessing as mp
 
 
 class Parallel(object):
+
+    max_cores = mp.cpu_count()
+  
     def __init__(
         self,
         n_cores: int = mp.cpu_count() - 1,

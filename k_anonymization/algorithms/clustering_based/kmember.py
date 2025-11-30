@@ -1,7 +1,6 @@
 # +
 import random
 from functools import partial
-from multiprocessing import cpu_count
 
 from numpy import argmax, argmin
 from tqdm.auto import tqdm
@@ -29,7 +28,7 @@ class KMember(ClusteringBasedAlgorithm):
         seed: int = None,
         anon_method: ClusterAnonMethod = ClusterAnonMethod.SUMMARIZATION,
         parallel: bool = False,
-        cpu_cores: int = cpu_count() - 1,
+        cpu_cores: int = Parallel.max_cores - 1,
     ):
         super().__init__(dataset, k, anon_method)
         self.seed = seed

@@ -27,12 +27,8 @@ thead:has(.no-header) {
   display: none;
 }
 """
-display(HTML(f"<style>{css}</style>" ""))
 
-init_notebook_mode(
-    # all_interactive=True, 
-    connected=True,
-)
+__init = False
 
 
 def show(
@@ -41,6 +37,14 @@ def show(
     search_columns_per_row: int = 4,
     max_bytes: str = "64KB",
 ):
+    global __init
+    if not __init:
+        display(HTML(f"<style>{css}</style>" ""))
+        init_notebook_mode(
+            # all_interactive=True, 
+            connected=True,
+        )
+        __init = True
     _layout = {
         "topStart": None,
         "topEnd": None,

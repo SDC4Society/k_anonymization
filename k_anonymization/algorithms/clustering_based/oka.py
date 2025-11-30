@@ -1,13 +1,16 @@
 # +
 import random
+from functools import partial
 
+from numpy import argmin
 from tqdm.auto import tqdm
 
 from k_anonymization.datasets import Dataset
+from k_anonymization.utils.parallel import Parallel
 
-from ..utils import generalize_column
+from .oka_utils import _oka_get_distance_parallel, _oka_init_cluster
 from .type import ClusterAnonMethod, ClusteringBasedAlgorithm
-from .utils import get_distance, get_information_loss, get_max_ranges
+from .utils import get_information_loss, get_max_ranges
 
 try:
     __IPYTHON__
@@ -18,89 +21,6 @@ except:
 
 # -
 
-class OKA_Cluster(object):
-    def __init__(
-        self,
-        first_record,
-        qids_idx,
-        is_categorical,
-        max_ranges,
-        hierarchies,
-    ):
-        self.member = [first_record]
-        self.centroid = first_record
-        self.qids_idx = qids_idx
-        self.is_categorical = is_categorical
-        self.max_ranges = max_ranges
-        self.hierarchies = hierarchies
-
-    def add(self, record):
-        self.member.append(record)
-        self.__update_centroid()
-
-    def remove(self, idx: int = 0):
-        assert len(self.member) > 0
-        self.member.pop(idx)
-        self.__update_centroid()
-
-    def remove(self, from_to: list):
-
-        results = self.member[from_to[0] : from_to[1]]
-        self.member = self.member[: from_to[0]] + self.member[from_to[1] :]
-
-        self.__update_centroid()
-        return results
-
-    def distance(self, record):
-        return len(self.member) * get_distance(
-            record,
-            self.centroid,
-            self.qids_idx,
-            self.is_categorical,
-            self.max_ranges,
-            self.hierarchies,
-        )
-
-    def sort_by_distance(self):
-        self.member.sort(
-            key=lambda record: get_distance(
-                record,
-                self.centroid,
-                self.qids_idx,
-                self.is_categorical,
-                self.max_ranges,
-                self.hierarchies,
-            )
-        )
-
-    def __update_centroid(self):
-        if len(self.member) == 0:
-            self.centroid = None
-        elif len(self.member) == 1:
-            self.centroid = self.member[0]
-        else:
-            centroid = []
-            for idx, col in enumerate(zip(*self.member)):
-                if idx not in self.qids_idx:
-                    centroid.append(-1)
-                elif self.is_categorical[self.qids_idx.index(idx)] == True:
-                    level = 0
-                    values = col[:]
-                    while len(set(values)) > 1:
-                        values = generalize_column(values, self.hierarchies[idx], level)
-                        level += 1
-                    centroid.append(values[0])
-                else:
-                    centroid.append(sum(col) / len(col))
-            self.centroid = centroid
-
-    def __getitem__(self, item):
-        return self.member[item]
-
-    def __len__(self):
-        return len(self.member)
-
-
 class OKA(ClusteringBasedAlgorithm):
 
     def __init__(
@@ -109,45 +29,69 @@ class OKA(ClusteringBasedAlgorithm):
         k: int,
         seed: int = None,
         anon_method: ClusterAnonMethod = ClusterAnonMethod.SUMMARIZATION,
+        parallel: bool = False,
+        cpu_cores: int = Parallel.max_cores - 1,
     ):
+        super().__init__(dataset, k, anon_method)
         self.seed = seed
+        self.cpu_cores = cpu_cores
+        self.is_parallel = parallel
+        self.__parallel = Parallel(cpu_cores)
         self.hierarchies = dataset.hierarchies
         self.qids_idx = dataset.qids_idx
         self.is_categorical = dataset.is_categorical
         self.max_ranges = get_max_ranges(dataset)
-        super().__init__(dataset, k, anon_method)
+        self.__get_distance_parallel = partial(_oka_get_distance_parallel)
+        self.__init_cluster = partial(
+            _oka_init_cluster,
+            qids_idx=self.qids_idx,
+            is_categorical=self.is_categorical,
+            max_ranges=self.max_ranges,
+            hierarchies=self.hierarchies,
+        )
 
     def find_best_cluster(self, record, clusters):
-        min_distance = float("inf")
-        best_idx = None
+        f = partial(self.__get_distance_parallel, record=record)
+        distances = (
+            self.__parallel.perform(f, clusters)
+            if self.is_parallel
+            else [cluster.distance(record) for cluster in clusters]
+        )
 
-        for idx, cluster in enumerate(clusters):
-            distance = cluster.distance(record)
-            if distance < min_distance:
-                min_distance = distance
-                best_idx = idx
+        best_idx = argmin(distances).item()
 
         return best_idx
 
-    def do_clustering(self):
-        clusters = []
+    def init_clusters(self):
+        rand_records = [self.anon_data.loc[i].tolist() for i in self.rand_idx]
+        return (
+            self.__parallel.perform(self.__init_cluster, rand_records)
+            if self.is_parallel
+            else [self.__init_cluster(r) for r in rand_records]
+        )
 
+    def get_adjusting_records(self, clusters):
+        def __get_adjusting_records(cluster, k):
+            cluster.sort_by_distance()
+            return cluster.remove([0, len(cluster) - k])
+
+        _adjusting_records = [__get_adjusting_records(c, self.k) for c in clusters]
+        return sum(_adjusting_records, [])
+
+    def do_clustering(self):
         random.seed(self.seed)
-        for r_i_idx in random.sample(
+        self.rand_idx = random.sample(
             range(0, self.anon_data.shape[0]),
             int(self.anon_data.shape[0] / self.k),
-        ):
-            clusters.append(
-                OKA_Cluster(
-                    self.anon_data.loc[r_i_idx].tolist(),
-                    self.qids_idx,
-                    self.is_categorical,
-                    self.max_ranges,
-                    self.hierarchies,
-                )
-            )
-            self.anon_data.drop(r_i_idx, inplace=True)
+        )
 
+        if self.is_parallel:
+            print(f"Parallelize with {self.cpu_cores} core(s).")
+            self.__parallel.activate()
+
+        clusters = self.init_clusters()
+
+        self.anon_data.drop(self.rand_idx, inplace=True)
         data = self.anon_data.values.tolist()
 
         clustering_progress_bar = tqdm(
@@ -171,18 +115,17 @@ class OKA(ClusteringBasedAlgorithm):
         )
 
         # Adjustment Stage
-        adjusting_records = []
         less_than_k_clusters = []
+        more_than_k_clusters = []
         for cluster in clusters:
+            adjustment_progress_bar.update(1)
             if len(cluster) == self.k:
-                adjustment_progress_bar.update(1)
                 continue
             elif len(cluster) < self.k:
                 less_than_k_clusters.append(cluster)
             else:
-                cluster.sort_by_distance()
-                adjusting_records.extend(cluster.remove([0, len(cluster) - self.k]))
-            adjustment_progress_bar.update(1)
+                more_than_k_clusters.append(cluster)
+        adjusting_records = self.get_adjusting_records(more_than_k_clusters)
 
         while len(adjusting_records) > 0:
             record = adjusting_records.pop()
