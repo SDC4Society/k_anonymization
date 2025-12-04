@@ -275,14 +275,14 @@ class Dataset:
     def reload_df(self):
         self.__df = DataFrameTable(
           read_csv(f"{self.path}/{self.name}.csv"), 
-          table_name=self.name.upper(),
+          table_name=str(self),
         )
 
     def describe(self):
         itables_show(
             DataFrame(
                 [
-                    self.name.upper(),
+                    str(self),
                     self.df.shape[0],
                     self.df.shape[1],
                 ],
@@ -315,5 +315,52 @@ class Dataset:
             ],
         )
 
+    def sample(self, n=None, frac=None, seed=None, ignore_index=True):
+        return SampleDataset(
+            self,
+            self.df.groupby(
+                self.target,
+                group_keys=False,
+            )[self.df.columns].apply(
+                lambda x: x.sample(
+                    n=n,
+                    frac=frac,
+                    random_state=seed,
+                    ignore_index=ignore_index,
+                )
+            ).reset_index(drop=True),
+        )
+
     def _repr_html_(self):
         return self.df._repr_html_()
+
+
+class SampleDataset(Dataset):
+    all_sample_datasets = []
+
+    def __init__(self, dataset: Dataset, df: DataFrame):
+        super().__init__(dataset.name)
+        self.__df = DataFrameTable(
+            df,
+            table_name=f"SAMPLE {self.name.upper()}",
+        )
+        SampleDataset.all_sample_datasets.append(self)
+
+    def reload_df(self):
+        print(
+            f"""
+        This dataset was sampled from '{self.name}'. 
+        This function may not perform correctly! 
+        Consider sampling '{self.name}' again. 
+        """
+        )
+        return self.__df
+
+    @property
+    def df(self):
+        if self.__df is None:
+            self.reload_df()
+        return self.__df
+
+    def __str__(self):
+        return "SAMPLE " + self.name.upper()

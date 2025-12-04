@@ -85,7 +85,7 @@ class MLClassificationMetrics:
         self.model = model
         self.split_ratio = split_ratio
 
-        _df = df if df != None else dataset.df
+        _df = df if df is not None else dataset.df
         self.target = dataset.target
         self.features = (
             [] if features != [] else [x for x in list(_df) if x != self.target]
