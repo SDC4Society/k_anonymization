@@ -35,19 +35,18 @@ class KMember(ClusteringBasedAlgorithm):
         self.cpu_cores = cpu_cores
         self.is_parallel = parallel
         self.__parallel = Parallel(cpu_cores)
-        max_ranges = get_max_ranges(dataset)
         self.get_distance = partial(
             get_distance,
             qids_idx=self.qids_idx,
             is_cat=self.is_categorical,
-            max_ranges=max_ranges,
+            max_ranges=self.max_ranges,
             hierarchies=self.hierarchies,
         )
         self.get_information_loss = partial(
             get_information_loss,
             qids_idx=self.qids_idx,
             is_cat=self.is_categorical,
-            max_ranges=max_ranges,
+            max_ranges=self.max_ranges,
             hierarchies=self.hierarchies,
         )
 

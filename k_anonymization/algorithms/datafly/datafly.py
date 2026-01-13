@@ -56,7 +56,7 @@ class Datafly(Algorithm):
                             if att == "*":
                                 continue
                             else:
-                                condition |= np_anon_data[0, qids_idx[i]] != att
+                                condition |= np_anon_data[:, qids_idx[i]] != att
                         np_anon_data = np_anon_data[condition]
 
                     break

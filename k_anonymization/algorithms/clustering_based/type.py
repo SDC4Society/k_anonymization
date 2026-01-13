@@ -8,7 +8,7 @@ from k_anonymization.algorithms.type import Algorithm
 from k_anonymization.datasets import Dataset
 
 from ..utils import generalize_column
-from .utils import get_mean_mode, summarize
+from .utils import get_mean_mode, summarize, get_max_ranges
 
 
 # -
@@ -52,13 +52,14 @@ class ClusteringBasedAlgorithm(Algorithm):
         self.qids_idx = dataset.qids_idx
         self.is_categorical = dataset.is_categorical
         self.hierarchies = dataset.hierarchies
+        self.max_ranges = get_max_ranges(dataset)
         super().__init__(dataset, k)
 
     def anonymize(self):
         self.anon_data["__ID"] = arange(self.anon_data.shape[0])
-        clusters = self.do_clustering()
+        self.clusters = self.do_clustering()
         result = []
-        for cluster in clusters:
+        for cluster in self.clusters:
             result.extend(self.cluster_anon_method(cluster, self))
         self._construct_anon_data(result, columns=(list(self.org_data) + ["__ID"]))
         self.anon_data.sort_values("__ID", inplace=True, ignore_index=True)

@@ -37,7 +37,6 @@ class OKA(ClusteringBasedAlgorithm):
         self.cpu_cores = cpu_cores
         self.is_parallel = parallel
         self.__parallel = Parallel(cpu_cores)
-        self.max_ranges = get_max_ranges(dataset)
         self.__get_distance_parallel = partial(_oka_get_distance_parallel)
         self.__init_cluster = partial(
             _oka_init_cluster,

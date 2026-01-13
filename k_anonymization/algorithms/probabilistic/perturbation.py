@@ -96,7 +96,7 @@ class Perturbation(Algorithm):
     def solve_b_given_k(self):
         # Get parameter b (or sigma) for Laplacian Noise (for numerical qids)
         size_data = self.org_data.shape[0]
-        return 2.0 / np.log((size_data - 1.0) / (self.k - 1.0)).item()
+        return (2.0 * len(self.num_qids)) / np.log((size_data - 1.0) / (self.k - 1.0)).item()
 
     def do_laplacian_noise(self):
         # Laplacian Noise
