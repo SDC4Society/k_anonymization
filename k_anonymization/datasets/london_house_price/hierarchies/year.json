@@ -1,0 +1,7 @@
+{
+  "name": "year",
+  "lambda": [
+    "lambda x: '1990s' if x <2000 else '2000s'",
+    "lambda x: '*'"
+  ]
+}
