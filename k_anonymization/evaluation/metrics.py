@@ -129,9 +129,6 @@ class UtilityMetrics:
     ):
         _all_penalties = 0.0
 
-        # TODO: Fix this! This only works with Datafly on ADULT
-        # because all qids are suppressed except marital-status and occupation,
-        # whose generalization trees are only of height 2
         def get_penalty_cat(value, hierarchy):
             if "values" not in list(hierarchy["tree"][0]):
                 return 0
@@ -140,11 +137,22 @@ class UtilityMetrics:
                 if value in x["original"]:
                     return 0
                 all_leaves += len(x["original"])
-
-            for level in hierarchy["tree"][0:-1]:
-                for x in level["values"]:
+        
+            def find_leaves_under_this_node(value, hierarchy, pos):
+                leaves = 0
+                for node in hierarchy["tree"][pos]["values"]:
+                    if node["generalized"] == value:
+                        if pos == 0:
+                            return len(node["original"])
+                        for _value in node["original"]:
+                            leaves += find_leaves_under_this_node(_value, hierarchy, pos-1)
+                        return leaves
+                return leaves          
+        
+            for level in range(len(hierarchy["tree"])-1):
+                for x in hierarchy["tree"][level]["values"]:
                     if value == x["generalized"]:
-                        return len(x["original"]) / all_leaves
+                        return find_leaves_under_this_node(value, hierarchy, level) / all_leaves
 
         for qid in equivalence_qids:
             _penalty = 0.0
