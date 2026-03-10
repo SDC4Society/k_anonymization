@@ -1,10 +1,10 @@
 # +
 from abc import ABC, abstractmethod
 
-from ..datasets import DataFrameTable, Dataset
-
+from k_anonymization.core.dataset import Dataset, ITableDF
 
 # -
+
 
 class Algorithm(ABC):
     def __init__(
@@ -39,6 +39,4 @@ class Algorithm(ABC):
         pass
 
     def _construct_anon_data(self, data, columns, table_name="Anonymized Data"):
-        self.anon_data = DataFrameTable(data, columns=columns, table_name=table_name)
-
-
+        self.anon_data = ITableDF(data, columns=columns, table_name=table_name)

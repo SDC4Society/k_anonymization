@@ -6,8 +6,8 @@ from pandas import concat, get_dummies
 from pandas.core.frame import DataFrame
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import (  # auc,; roc_curve,
-    accuracy_score,
+from sklearn.metrics import (
+    accuracy_score,  # auc,; roc_curve,
     classification_report,
     confusion_matrix,
     f1_score,
@@ -21,12 +21,13 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from xgboost.sklearn import XGBClassifier
 
+from k_anonymization.core.dataset import Dataset
+
 from ..algorithms.type import Algorithm
-from ..datasets import Dataset
 from .utils import get_equivalence_qids
 
-
 # -
+
 
 class UtilityMetrics:
     @staticmethod
@@ -137,7 +138,7 @@ class UtilityMetrics:
                 if value in x["original"]:
                     return 0
                 all_leaves += len(x["original"])
-        
+
             def find_leaves_under_this_node(value, hierarchy, pos):
                 leaves = 0
                 for node in hierarchy["tree"][pos]["values"]:
@@ -145,14 +146,19 @@ class UtilityMetrics:
                         if pos == 0:
                             return len(node["original"])
                         for _value in node["original"]:
-                            leaves += find_leaves_under_this_node(_value, hierarchy, pos-1)
+                            leaves += find_leaves_under_this_node(
+                                _value, hierarchy, pos - 1
+                            )
                         return leaves
-                return leaves          
-        
-            for level in range(len(hierarchy["tree"])-1):
+                return leaves
+
+            for level in range(len(hierarchy["tree"]) - 1):
                 for x in hierarchy["tree"][level]["values"]:
                     if value == x["generalized"]:
-                        return find_leaves_under_this_node(value, hierarchy, level) / all_leaves
+                        return (
+                            find_leaves_under_this_node(value, hierarchy, level)
+                            / all_leaves
+                        )
 
         for qid in equivalence_qids:
             _penalty = 0.0

@@ -1,16 +1,15 @@
 # +
-from numpy import ndarray, median
-from pandas import DataFrame, Series, factorize, unique
+from numpy import median, ndarray
+from pandas import factorize, unique
 
-from k_anonymization import datasets
 from k_anonymization.algorithms.clustering_based.type import (
     ClusterAnonMethod,
     ClusteringBasedAlgorithm,
 )
-from k_anonymization.datasets import Dataset
-
+from k_anonymization.core.dataset import Dataset
 
 # -
+
 
 class ClassicMondrian(ClusteringBasedAlgorithm):
     def __init__(
@@ -45,7 +44,9 @@ class ClassicMondrian(ClusteringBasedAlgorithm):
         # TODO: Normalized _Ordinal_ Categorical
 
         return (
-            normalized_cat() if isinstance(self.__ranges[idx], int) else normalized_num()
+            normalized_cat()
+            if isinstance(self.__ranges[idx], int)
+            else normalized_num()
         )
 
     def sort_qids_idx(self, slice_data: ndarray):

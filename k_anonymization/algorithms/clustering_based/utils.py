@@ -1,10 +1,10 @@
 # +
-from k_anonymization.datasets.type import Dataset
+from k_anonymization.core.dataset import Dataset
 
 from ..utils import generalize_column_tree
 
-
 # -
+
 
 def get_max_ranges(dataset: Dataset):
     qids_idx = dataset.qids_idx

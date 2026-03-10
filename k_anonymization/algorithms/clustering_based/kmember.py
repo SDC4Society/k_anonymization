@@ -5,7 +5,7 @@ from functools import partial
 from numpy import argmax, argmin
 from tqdm.auto import tqdm
 
-from k_anonymization.datasets import Dataset
+from k_anonymization.core.dataset import Dataset
 from k_anonymization.utils.parallel import Parallel
 
 from .type import ClusterAnonMethod, ClusteringBasedAlgorithm
@@ -19,6 +19,7 @@ except:
 
 
 # -
+
 
 class KMember(ClusteringBasedAlgorithm):
     def __init__(
@@ -133,5 +134,3 @@ class KMember(ClusteringBasedAlgorithm):
             self.__parallel.deactivate()
 
         return clusters
-
-

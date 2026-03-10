@@ -5,13 +5,13 @@ from numpy import arange
 from pandas import DataFrame
 
 from k_anonymization.algorithms.type import Algorithm
-from k_anonymization.datasets import Dataset
+from k_anonymization.core.dataset import Dataset
 
 from ..utils import generalize_column
-from .utils import get_mean_mode, summarize, get_max_ranges
-
+from .utils import get_max_ranges, get_mean_mode, summarize
 
 # -
+
 
 class ClusterAnonMethod:
     @staticmethod

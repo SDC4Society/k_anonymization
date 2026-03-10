@@ -5,7 +5,7 @@ from functools import partial
 from numpy import argmin
 from tqdm.auto import tqdm
 
-from k_anonymization.datasets import Dataset
+from k_anonymization.core.dataset import Dataset
 from k_anonymization.utils.parallel import Parallel
 
 from .oka_utils import _oka_get_distance_parallel, _oka_init_cluster
@@ -20,6 +20,7 @@ except:
 
 
 # -
+
 
 class OKA(ClusteringBasedAlgorithm):
 
