@@ -21,6 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install "jupyter-book<2"
+          pip install --upgrade sphinx
           pip install -e .
       - name: Build Jupyter-Book
         run: jupyter-book build docs
