@@ -4,9 +4,9 @@ Implementation of `k`-anonymization algorithms and evaluation metrics.
 
 from pandas import set_option as pd_set_option
 
-from . import algorithms, core, utils
+from . import algorithms, core, evaluation, utils
 
 pd_set_option("mode.copy_on_write", True)
 
-__all__ = ["core", "algorithms", "utils"]
+__all__ = ["core", "algorithms", "utils", "evaluation"]
 # __all__ += core.__all__
