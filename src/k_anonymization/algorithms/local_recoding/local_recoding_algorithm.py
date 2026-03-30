@@ -24,9 +24,9 @@ to make records become indistinguishable in their respective group.
 Parameters
 ----------
 group : Collection[Collection]
-    A group of records to be anonymized.
+    The group of records to be anonymized.
 props : dict
-    An dictionary containing necessary properties for anonymization.
+    A dictionary containing necessary properties for anonymization.
 
 Returns
 -------
@@ -38,20 +38,19 @@ See Also
 LocalRecodingAlgorithm : 
     Abstract class for local recoding-based k-anonymization algorithms.
 GroupAnonymizationBuiltIn :
-    A set of built-in `GroupAnonymization` methods.
-
+    A set of built-in ``GroupAnonymization``.
 """
 
 
 class GroupAnonymizationBuiltIn:
     """
-    A set of built-in `GroupAnonymization` methods.
+    A set of built-in ``GroupAnonymization``.
     """
 
     @staticmethod
     def SUMMARIZATION(group: Collection[Collection], props: dict):
         """
-        Anonymize a group by creating a summary range or set for each QID.
+        Anonymize a group by creating a summary range or set.
 
         Numerical values are converted into intervals (e.g., "20-30"),
         while categorical values are listed as a set.
@@ -176,15 +175,12 @@ class LocalRecodingAlgorithm(Algorithm):
     [...] : attributes inherited from ``Algorithm``
 
     group_anonymization : GroupAnonymization
-        The group anonymization method.
-    qids_idx : list[int]
-        List of column indices for Quasi-Identifiers.
-    is_categorical : list[bool]
-        Boolean flags indicating if each QID is categorical.
-    hierarchies : HierarchiesDict
-        The collection of generalization hierarchies for the dataset.
+        Group anonymization method.
+    groups : list | None
+        List of groups of *original* records after applying local recoding
+        (before applying the group anonymization method)
     max_ranges : list[int | None]
-        The maximum range (or unique count) for each QID attribute.
+        Maximum range (or unique count) for each QID attribute.
     """
 
     def __init__(
@@ -210,6 +206,7 @@ class LocalRecodingAlgorithm(Algorithm):
             ``custom_group_anonymization(group: list, props: Any) -> list``.
             Default: ``GroupAnonymizationBuiltIn.SUMMARIZATION``
         """
+        self.groups = None
         self.group_anonymization = group_anonymization
         self.qids_idx = dataset.qids_idx
         self.is_categorical = dataset.is_categorical

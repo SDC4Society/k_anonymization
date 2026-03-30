@@ -1,5 +1,9 @@
+"""
+Interactive DataFrame display on IPython environments using ``itables``.
+"""
+
 from IPython.display import HTML, display
-from itables import init_notebook_mode, JavascriptFunction
+from itables import JavascriptFunction, init_notebook_mode
 from itables import show as itables_show
 from pandas.core.frame import DataFrame
 
@@ -37,11 +41,45 @@ def show(
     search_columns_per_row: int = 4,
     max_bytes: str = "64KB",
 ):
+    """
+    Interactive DataFrame display on IPython environments using ``itables``.
+
+    Parameters
+    ----------
+    data : pandas.DataFrame
+        The Pandas DataFrame to be displayed.
+    table_name : str, optional
+        An optional title to display above the table.
+        If provided, the title is also used as an HTML id for CSS.
+    search_columns_per_row : int, default 4
+        Determines the grid layout of the SearchPanes (filter boxes).
+    max_bytes : str, default "64KB"
+        The maximum data size threshold for ``itables`` to render.
+        If data size is larger than ``max_bytes``, it will be downsampled.
+        To remove the size threshold, set ``max_bytes`` to ``0``.
+        Note that this may cause a performance issue if data is large.
+
+    Notes
+    -----
+    On the first call, this function performs a global initialization:
+
+    1. Injects customized layout CSS.
+
+    2. Initializes ``itables`` notebook mode with ``connected=True``.
+
+    The resulting dataframe display includes:
+
+    * **Pagination**: Display data in pages of maximum 10 records.
+
+    * **Filters**: High-level filters for attributes values.
+
+    * **Column Controls**: Individual dropdown searches per column.
+    """
     global __init
     if not __init:
         display(HTML(f"<style>{css}</style>" ""))
         init_notebook_mode(
-            # all_interactive=True, 
+            # all_interactive=True,
             connected=True,
         )
         __init = True
@@ -99,7 +137,7 @@ def show(
                         "split": [
                             {"extend": "searchPanesClear", "text": "Reset Filters"},
                             {"extend": "ccSearchClear", "text": "Reset Search"},
-                        ]                      
+                        ],
                     },
                 ]
             },
@@ -132,6 +170,6 @@ def show(
                 "collapse": {0: "Filters", "_": "Filters (%d)"},
             }
         },
-        columnControl=['searchDropdown'],
+        columnControl=["searchDropdown"],
         ordering={"indicators": False},
     )

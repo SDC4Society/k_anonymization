@@ -99,73 +99,66 @@ class Dataset:
     @cached_property
     def qids(self):
         """
-        Retrieve the names of the Quasi-Identifier (QID) columns.
+        A list of names of the QID attributes.
 
         Returns
         -------
         list
-            A list of column names designated as QIDs.
         """
         return [self.df.columns[x] for x in self.props["qi_index"]]
 
     @cached_property
     def qids_idx(self):
         """
-        Retrieve the indices of the Quasi-Identifier (QID) columns.
+        The column indices of the QID attributes.
 
         Returns
         -------
         list
-            A list of integers representing the column positions of QIDs.
         """
         return self.props["qi_index"]
 
     @cached_property
     def is_categorical(self):
         """
-        Check which QID attributes are categorical.
+        A list of booleans indicating if a QID attribute is categorical.
 
         Returns
         -------
         list
-            A list of booleans indicating if the QID at that position
-            is categorical.
         """
         return self.props["is_category"]
 
     @cached_property
     def target(self):
         """
-        Retrieve the name of the target/sensitive attribute.
+        The sensitive attribute.
 
         Returns
         -------
         str
-            The column name of the target attribute.
         """
         return self.props["target"]
 
     @cached_property
     def qids_categorial(self):
         """
-        Filter and return categorical QID names.
+        A list of names of the cateforical QID attributes.
 
         Returns
         -------
         list
-            Names of QIDs that are categorical.
         """
         return [qid for pos, qid in enumerate(self.qids) if self.is_categorical[pos]]
 
     @cached_property
     def qids_numerical(self):
         """
-        Filter and return numerical QID names.
+        A list of names of the numerical QID attributes.
 
         Returns
         -------
         list
-            Names of QIDs that are numerical.
         """
         return [
             qid for pos, qid in enumerate(self.qids) if not self.is_categorical[pos]
@@ -174,12 +167,11 @@ class Dataset:
     @cached_property
     def qids_idx_categorial(self):
         """
-        Filter and return categorical QID indices.
+        The column indices of the categorical QID attributes.
 
         Returns
         -------
         list
-            Column indices of QIDs that are categorical.
         """
         return [
             idx for pos, idx in enumerate(self.qids_idx) if self.is_categorical[pos]
@@ -188,12 +180,11 @@ class Dataset:
     @cached_property
     def qids_idx_numerical(self):
         """
-        Filter and return numerical QID indices.
+        The column indices of the numerical QID attributes.
 
         Returns
         -------
         list
-            Column indices of QIDs that are numerical.
         """
         return [
             idx for pos, idx in enumerate(self.qids_idx) if not self.is_categorical[pos]
@@ -270,7 +261,7 @@ class Dataset:
         Returns
         -------
         HierarchiesDict
-            A manager containing hierarchy definitions for QID columns.
+            Hierarchy definitions for the QID attributes.
         """
         if self.__hierarchies is None:
             self.__hierarchies = HierarchiesDict(
@@ -340,9 +331,9 @@ class Dataset:
         Parameters
         ----------
         n : int, optional
-            Number of items from each group to sample.
+            Number of rows to sample.
         frac : float, optional
-            Fraction of items from each group to sample.
+            Fraction of data to sample.
         seed : int, optional
             Random state for reproducibility.
         ignore_index : bool, default True
@@ -353,6 +344,10 @@ class Dataset:
         SampleDataset
             A new dataset object containing the sampled records.
         """
+        if n is None:
+            _frac = frac
+        else:
+            _frac = float(n / self.df.shape[0])
         return SampleDataset(
             self,
             self.df.groupby(
@@ -361,8 +356,7 @@ class Dataset:
             )[self.df.columns]
             .apply(
                 lambda x: x.sample(
-                    n=n,
-                    frac=frac,
+                    frac=_frac,
                     random_state=seed,
                     ignore_index=ignore_index,
                 )

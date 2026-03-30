@@ -1,7 +1,10 @@
 from numpy import argmax, unique
 
 from k_anonymization.core import Algorithm, Dataset
-from k_anonymization.evaluation.utils import find_not_k_anonymized_qids, is_k_anonymized
+from k_anonymization.evaluation.anonymity import (
+    find_not_k_anonymous_qids,
+    is_k_anonymous,
+)
 
 from ..utils import generalize
 
@@ -103,13 +106,13 @@ class Datafly(Algorithm):
         self.hierarchies_tracking = dict.fromkeys(qids, 0)
 
         while True:
-            if self.suppression_threshold == 0 and is_k_anonymized(
+            if self.suppression_threshold == 0 and is_k_anonymous(
                 np_anon_data, self.k, qids_idx
             ):
                 break
 
             else:
-                not_k_anonymized_qids = find_not_k_anonymized_qids(
+                not_k_anonymized_qids = find_not_k_anonymous_qids(
                     np_anon_data, self.k, qids_idx
                 )
                 if (

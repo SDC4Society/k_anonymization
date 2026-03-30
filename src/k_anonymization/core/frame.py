@@ -51,8 +51,7 @@ class ITableDF(DataFrame):
         """
         Display the entirety of the table.
 
-        Calls the external `show` function with `max_bytes=0` to ensure
-        that display truncation or byte-size limits are bypassed.
+        Ensure that data is not downsampled when displaying.
         Note that this may cause a performance issue if data is large.
         """
         show(self, self.table_name, max_bytes=0)

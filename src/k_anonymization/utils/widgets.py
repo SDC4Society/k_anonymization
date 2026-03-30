@@ -3,6 +3,9 @@ from traitlets import observe
 
 
 class AutoSortedTagsInput(TagsInput):
+    """
+    Custom ipywidgets.TagsInput
+    """
 
     @observe("value")
     def _sort_value(self, change):

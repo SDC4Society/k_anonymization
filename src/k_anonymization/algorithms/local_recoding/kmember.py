@@ -61,6 +61,11 @@ class KMember(LocalRecodingAlgorithm):
         Whether the algorithm is running in parallel mode.
     information_loss : float
         The total information loss calculated across all clusters.
+
+    See Also
+    --------
+    k_anonymization.core.Parallel :
+        Utility wrapper for paralellizing tasks across multiple CPU cores.
     """
 
     def __init__(
