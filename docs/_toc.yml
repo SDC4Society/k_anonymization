@@ -2,30 +2,8 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 
 format: jb-book
-root: about
+root: index
 parts:
-  - caption: Algorithms
-    chapters:
-      - file: algorithms/intro
-      - file: algorithms/guide
-      - file: algorithms/implemented
-        sections:
-          - file: algorithms/datafly
-          - file: algorithms/kmember
-          - file: algorithms/oka
-  - caption: Datasets
-    chapters:
-      - file: datasets/intro
-      - file: datasets/guide
-      - file: datasets/implemented
-        sections:
-          - file: datasets/open_datasets
-          - file: datasets/test_datasets
   - caption: API Reference
     chapters:
-      - file: markdown
-      - file: markdown-notebooks
-      - file: api/api
-        # sections:
-        #   - file: api/dataset
-        #   - file: api/frame
+      - file: api

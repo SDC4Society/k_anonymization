@@ -19,10 +19,9 @@ dependencies = [
     "numpy",
     "tqdm",
     "scikit-learn",
-    "xgboost",
     "itables==2.5.2",
     "ipywidgets",
-    "graphviz",
+    "itables[widget]",
 ]
 dynamic = ["version"]
 

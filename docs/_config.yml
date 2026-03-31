@@ -16,22 +16,16 @@ sphinx:
     - "sphinx.ext.napoleon"
   config:
     autosummary_generate: True
+    autosummary_ignore_module_all: False
     add_module_names: False
     napoleon_google_docstring: False
     napoleon_include_private_with_doc: True
-    # napoleon_include_init_with_doc: True
     napoleon_use_ivar: True
     napoleon_attr_annotations: True
     napoleon_use_rtype: False
-    # python_maximum_signature_line_length: 88
     autodoc_default_options:
-      # members: True
-      # undoc-members: True
-      # private-members: True
       show-inheritance: True
-      # member-order: groupwise
-      # exclude-members: _abc_impl
-    autosummary_ignore_module_all: False
+    toc_object_entries_show_parents: "hide"
     suppress_warnings: ["etoc.toctree"]
     templates_path:
       - "_templates"

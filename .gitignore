@@ -11,6 +11,8 @@ profile_default/
 ipython_config.py
 
 # JupyterLite && JupyterBook
+/docs/_build
+/docs/api_reference
 
 # MacOS
 .DS_Store
