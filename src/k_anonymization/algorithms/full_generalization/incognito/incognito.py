@@ -12,9 +12,13 @@ class Incognito(Algorithm):
     """
     Implementation of Incognito algorithm.
 
-    Incognito is a bottom-up algorithm that explores the generalization lattice to identify all transformations satisfying k-anonymity.
+    Incognito is a bottom-up algorithm that explores the generalization lattice to
+    identify all transformations satisfying k-anonymity.
 
-    It efficiently prunes the search space by leveraging the monotonicity property of generalization, where if a node in the lattice satisfies `k`-anonymity, all of its direct ancestors (more generalized nodes) are guaranteed to satisfy it as well.
+    It efficiently prunes the search space by leveraging the monotonicity property
+    of generalization, where if a node in the lattice satisfies `k`-anonymity, all
+    of its direct ancestors (more generalized nodes) are guaranteed to satisfy it
+    as well.
 
     Parameters
     ----------
@@ -26,7 +30,9 @@ class Incognito(Algorithm):
     Attributes
     ----------
     solutions : list[ITableDF]
-        All anonymized tables that satisfy k-anonymity. Best solution is stored in ``anon_data``. Configurable utility metric support will be added in a follow-up update.
+        All anonymized tables that satisfy k-anonymity. Best solution is stored in
+        ``anon_data``. Configurable utility metric support will be added in a
+        follow-up update.
     """
 
     def __init__(self, dataset: Dataset, k: int):
