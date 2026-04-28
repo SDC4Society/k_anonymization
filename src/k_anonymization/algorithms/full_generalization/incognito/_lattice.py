@@ -2,7 +2,7 @@ import itertools
 from typing import List
 
 from ._node import Node
-from ....core import Dataset, HierarchiesDict
+from k_anonymization.core import Dataset, HierarchiesDict
 
 
 class Lattice:
