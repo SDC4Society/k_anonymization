@@ -49,7 +49,7 @@ class Incognito(Algorithm):
             qid: dataset.qids_idx[pos] for pos, qid in enumerate(dataset.qids)
         }
 
-    def _apply_node_generalization(self, generalization: list[tuple[str, int]]):
+    def __apply_node_generalization(self, generalization: list[tuple[str, int]]):
         """Apply one lattice node's full-domain generalization to original data."""
         generalized_df = self.org_data.copy()
 
@@ -86,7 +86,7 @@ class Incognito(Algorithm):
                 if node.is_marked() or node.deleted:
                     continue
 
-                generalized_df = self._apply_node_generalization(node.generalization)
+                generalized_df = self.__apply_node_generalization(node.generalization)
                 node_qids_idx = [self.__qids_idx_map[qid] for qid, _ in node.generalization]
                 k_anonymous = is_k_anonymous(generalized_df, self.k, node_qids_idx)
 
@@ -106,7 +106,7 @@ class Incognito(Algorithm):
             if node.deleted:
                 continue
 
-            generalized_df = self._apply_node_generalization(node.generalization)
+            generalized_df = self.__apply_node_generalization(node.generalization)
             solution_df = ITableDF(
                 generalized_df,
                 table_name=f"Incognito solution: {sorted(node.generalization, key=lambda x: x[0])}",
