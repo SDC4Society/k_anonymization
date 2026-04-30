@@ -1,5 +1,9 @@
 from queue import PriorityQueue
 
+from k_anonymization.algorithms.full_generalization._utility_metric import (
+    UtilityMetric,
+    UtilityMetricBuiltIn,
+)
 from k_anonymization.algorithms.utils import generalize_column
 from k_anonymization.core import Algorithm, Dataset
 from k_anonymization.core.frame import ITableDF
@@ -26,16 +30,27 @@ class Incognito(Algorithm):
         The Dataset object holding the original data and its metadata.
     k : int
         The privacy parameter `k`.
+    utility_metric : UtilityMetric
+        The metric used to select the best solution among all valid anonymizations.
+        It is possible to use a built-in from ``UtilityMetricBuiltIn``, or provide a
+        custom function ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
+        Default: ``UtilityMetricBuiltIn.NCP``
 
     Attributes
     ----------
     solutions : list[ITableDF]
-        All anonymized tables that satisfy k-anonymity. Best solution is stored in
-        ``anon_data``. Configurable utility metric support will be added in a
-        follow-up update.
+        All anonymized tables that satisfy k-anonymity. The best solution
+        (lowest score under ``utility_metric``) is stored in ``anon_data``.
+    utility_metric : UtilityMetric
+        The utility metric used to select the best solution.
     """
 
-    def __init__(self, dataset: Dataset, k: int):
+    def __init__(
+        self,
+        dataset: Dataset,
+        k: int,
+        utility_metric: UtilityMetric = UtilityMetricBuiltIn.NCP,
+    ):
         """
         Initialize the Incognito algorithm.
 
@@ -45,8 +60,14 @@ class Incognito(Algorithm):
             The Dataset object holding the original data and its metadata.
         k : int
             The privacy parameter `k`.
+        utility_metric : UtilityMetric
+            The metric used to select the best solution among all valid anonymizations.
+            It is possible to use a built-in from ``UtilityMetricBuiltIn``, or provide a
+            custom function ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
+            Default: ``UtilityMetricBuiltIn.NCP``
         """
         super().__init__(dataset, k)
+        self.utility_metric = utility_metric
         self.solutions: list[ITableDF] = []
         self.__lattice: Lattice = Lattice(dataset)
         self.__num_qids: int = len(dataset.qids)
@@ -105,9 +126,9 @@ class Incognito(Algorithm):
                         self.__pqueue.put(dst_node)
                     node.delete()
 
-        # Gather all valid solutions.
+        # Gather all valid solutions and select the best by utility_metric.
         best_df = None
-        best_height = None
+        best_score = None
         for node in self.__lattice.nodes:
             if node.deleted:
                 continue
@@ -119,9 +140,9 @@ class Incognito(Algorithm):
             )
             self.solutions.append(solution_df)
 
-            # Hardcoded utility for now: lower total generalization height is better.
-            if best_height is None or node.height < best_height:
-                best_height = node.height
+            score = self.utility_metric(generalized_df, self)
+            if best_score is None or score < best_score:
+                best_score = score
                 best_df = generalized_df
 
         if best_df is not None:
