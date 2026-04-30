@@ -33,7 +33,8 @@ class Incognito(Algorithm):
     utility_metric : UtilityMetric
         The metric used to select the best solution among all valid anonymizations.
         It is possible to use a built-in from ``UtilityMetricBuiltIn``, or provide a
-        custom function ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
+        custom function
+        ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
         Default: ``UtilityMetricBuiltIn.NCP``
 
     Attributes
@@ -63,7 +64,8 @@ class Incognito(Algorithm):
         utility_metric : UtilityMetric
             The metric used to select the best solution among all valid anonymizations.
             It is possible to use a built-in from ``UtilityMetricBuiltIn``, or provide a
-            custom function ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
+            custom function
+        ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
             Default: ``UtilityMetricBuiltIn.NCP``
         """
         super().__init__(dataset, k)
@@ -114,7 +116,9 @@ class Incognito(Algorithm):
                     continue
 
                 generalized_df = self.__apply_node_generalization(node.generalization)
-                node_qids_idx = [self.__qids_idx_map[qid] for qid, _ in node.generalization]
+                node_qids_idx = [
+                    self.__qids_idx_map[qid] for qid, _ in node.generalization
+                ]
                 k_anonymous = is_k_anonymous(generalized_df, self.k, node_qids_idx)
 
                 if k_anonymous:
@@ -134,9 +138,10 @@ class Incognito(Algorithm):
                 continue
 
             generalized_df = self.__apply_node_generalization(node.generalization)
+            sorted_gen = sorted(node.generalization, key=lambda x: x[0])
             solution_df = ITableDF(
                 generalized_df,
-                table_name=f"Incognito solution: {sorted(node.generalization, key=lambda x: x[0])}",
+                table_name=f"Incognito solution: {sorted_gen}",
             )
             self.solutions.append(solution_df)
 

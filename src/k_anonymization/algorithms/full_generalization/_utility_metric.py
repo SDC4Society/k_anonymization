@@ -5,7 +5,7 @@ from typing import Any, Callable
 from pandas import DataFrame
 
 from k_anonymization.core.algorithm import Algorithm
-from k_anonymization.evaluation.data_utility import CAVG, Discernibility, NCP
+from k_anonymization.evaluation.data_utility import CAVG, NCP, Discernibility
 
 type UtilityMetric = Callable[[DataFrame, Algorithm], Any]
 """
@@ -72,7 +72,8 @@ class UtilityMetricBuiltIn:
     @staticmethod
     def CAVG(generalized_df: DataFrame, algo: Algorithm) -> float:
         """
-        Normalized average equivalence class size (lower = closer to optimal k grouping).
+        Normalized average equivalence class size
+        (lower = closer to optimal k grouping).
 
         See Also
         --------
