@@ -140,9 +140,7 @@ class Flash(Algorithm):
         node = start_node
 
         while node != self.__lattice.top:
-            upper_indices = node.get_upper_neighbor_index(
-                self.__lattice.max_levels
-            )
+            upper_indices = node.get_upper_neighbor_index(self.__lattice.max_levels)
             found_next = False
             for idx in upper_indices:
                 child = self.__lattice[idx]
@@ -186,9 +184,7 @@ class Flash(Algorithm):
             node = path[mid]
             node.tag()
 
-            generalized_df = self.__apply_generalization(
-                node.generalization_tuple
-            )
+            generalized_df = self.__apply_generalization(node.generalization_tuple)
             k_ano = is_k_anonymous(generalized_df, self.k, self.__qids_idx)
 
             if k_ano:
@@ -222,9 +218,7 @@ class Flash(Algorithm):
             The set of newly tagged nodes.
         """
         found = set()
-        upper_indices = start_node.get_upper_neighbor_index(
-            self.__lattice.max_levels
-        )
+        upper_indices = start_node.get_upper_neighbor_index(self.__lattice.max_levels)
         for idx in upper_indices:
             upper = self.__lattice[idx]
             if not upper.tagged:
@@ -252,9 +246,7 @@ class Flash(Algorithm):
             The set of newly tagged nodes.
         """
         found = set()
-        lower_indices = start_node.get_lower_neighbor_index(
-            self.__lattice.max_levels
-        )
+        lower_indices = start_node.get_lower_neighbor_index(self.__lattice.max_levels)
         for idx in lower_indices:
             lower = self.__lattice[idx]
             if not lower.tagged:

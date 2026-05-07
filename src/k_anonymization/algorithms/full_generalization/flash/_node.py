@@ -61,10 +61,7 @@ class Node:
         """
         c1 = self.height
         c2 = np.average(
-            [
-                h / max_levels[j]
-                for j, h in enumerate(self.generalization_tuple)
-            ]
+            [h / max_levels[j] for j, h in enumerate(self.generalization_tuple)]
         )
         c3 = 1 - np.average(
             [
