@@ -118,7 +118,7 @@ class KMember(LocalRecodingAlgorithm):
         else:
             self.device = torch.device("cpu")
             print(f"This machine only has these devices available: {
-                    ", ".join(_available_devices)
+                    ', '.join(_available_devices)
                     }")
             print("Fall back to cpu.")
 
