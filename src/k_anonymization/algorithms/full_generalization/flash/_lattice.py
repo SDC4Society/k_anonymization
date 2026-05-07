@@ -40,16 +40,14 @@ class Lattice:
 
     def __init__(self, dataset: Dataset) -> None:
         self.qids: list[str] = dataset.qids
-        self.max_levels: list[int] = [
-            dataset.hierarchies[qid].height for qid in self.qids
-        ]
-        self.distinct_counts: list[list[int]] = [
-            [
-                dataset.hierarchies[qid].hierarchy_df[level].nunique()
-                for level in range(self.max_levels[i] + 1)
-            ]
-            for i, qid in enumerate(self.qids)
-        ]
+        hierarchies = [dataset.hierarchies[qid] for qid in self.qids]
+        self.max_levels: list[int] = [h.height for h in hierarchies]
+        self.distinct_counts: list[list[int]] = []
+        for hierarchy, max_level in zip(hierarchies, self.max_levels):
+            h_df = hierarchy.hierarchy_df
+            self.distinct_counts.append(
+                [h_df[level].nunique() for level in range(max_level + 1)]
+            )
 
         self.shape: tuple = tuple(ml + 1 for ml in self.max_levels)
         self.max_height: int = sum(self.max_levels)
