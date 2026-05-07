@@ -9,6 +9,7 @@ hierarchy, which helps achieving `k`-anonymity.
 """
 
 from .datafly import Datafly
+from .flash import Flash
 from .incognito import Incognito
 
-__all__ = ["Datafly", "Incognito"]
+__all__ = ["Datafly", "Flash", "Incognito"]
