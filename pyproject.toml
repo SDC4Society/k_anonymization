@@ -20,6 +20,7 @@ dependencies = [
     "tqdm",
     "scikit-learn",
     "itables==2.5.2",
+    "packaging",
     "ipywidgets",
     "itables[widget]",
 ]
