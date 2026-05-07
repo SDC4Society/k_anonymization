@@ -88,7 +88,22 @@ class Flash(Algorithm):
         self._construct_anon_data(generalized_df.values, columns=list(generalized_df))
 
     def __apply_generalization(self, generalization_tuple: tuple):
-        """Apply full-domain generalization defined by the given tuple."""
+        """
+        Apply full-domain generalization defined by the given tuple.
+
+        For each QID attribute, generalizes the original data from level 0
+        to the level specified in the tuple using ``generalize_column``.
+
+        Parameters
+        ----------
+        generalization_tuple : tuple
+            The generalization level for each QID attribute.
+
+        Returns
+        -------
+        DataFrame
+            A copy of the original data with generalization applied.
+        """
         generalized_df = self.org_data.copy()
         for i, level in enumerate(generalization_tuple):
             if level == 0:
@@ -104,7 +119,23 @@ class Flash(Algorithm):
         return generalized_df
 
     def __find_path(self, start_node: Node) -> List[Node]:
-        """Build a greedy path of untagged nodes from start_node toward the top."""
+        """
+        Build a greedy path of untagged nodes from start_node toward the top.
+
+        Extends the path by selecting the first untagged upper neighbor at
+        each step. Stops when the top node is reached or all upper neighbors
+        are already tagged.
+
+        Parameters
+        ----------
+        start_node : Node
+            The starting node of the path.
+
+        Returns
+        -------
+        list[Node]
+            Ordered list of nodes forming the path (lower to higher).
+        """
         path = [start_node]
         node = start_node
 
@@ -131,7 +162,22 @@ class Flash(Algorithm):
         heap: PriorityQueue,
         heap_optims: PriorityQueue,
     ) -> None:
-        """Binary search on a path to locate the k-anonymity boundary."""
+        """
+        Binary search on a path to locate the k-anonymity boundary.
+
+        Nodes that fail k-anonymity are added to ``heap`` as candidates
+        for further exploration. The best k-anonymous node found on this
+        path is added to ``heap_optims``.
+
+        Parameters
+        ----------
+        path : list[Node]
+            The path to search (lower index = less generalized).
+        heap : PriorityQueue
+            Queue collecting non-k-anonymous nodes for further exploration.
+        heap_optims : PriorityQueue
+            Queue collecting the best k-anonymous node per path.
+        """
         low, high = 0, len(path) - 1
         optim: Node = None
 
@@ -159,7 +205,22 @@ class Flash(Algorithm):
             heap_optims.put(optim)
 
     def __tagging_upper_nodes(self, start_node: Node) -> set[Node]:
-        """Tag all reachable untagged upper nodes as k-anonymous."""
+        """
+        Recursively tag all reachable untagged upper nodes as k-anonymous.
+
+        Leverages the monotonicity property: if a node satisfies
+        k-anonymity, all of its more generalized ancestors do as well.
+
+        Parameters
+        ----------
+        start_node : Node
+            The node from which to propagate upward.
+
+        Returns
+        -------
+        set[Node]
+            The set of newly tagged nodes.
+        """
         found = set()
         upper_indices = start_node.get_upper_neighbor_index(
             self.__lattice.max_levels
@@ -174,7 +235,22 @@ class Flash(Algorithm):
         return found
 
     def __tagging_lower_nodes(self, start_node: Node) -> set[Node]:
-        """Tag all reachable untagged lower nodes as not k-anonymous."""
+        """
+        Recursively tag all reachable untagged lower nodes as not k-anonymous.
+
+        Leverages the monotonicity property: if a node does not satisfy
+        k-anonymity, none of its less generalized descendants do either.
+
+        Parameters
+        ----------
+        start_node : Node
+            The node from which to propagate downward.
+
+        Returns
+        -------
+        set[Node]
+            The set of newly tagged nodes.
+        """
         found = set()
         lower_indices = start_node.get_lower_neighbor_index(
             self.__lattice.max_levels
