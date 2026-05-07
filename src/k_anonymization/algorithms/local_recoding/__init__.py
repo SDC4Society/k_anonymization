@@ -10,7 +10,7 @@ identical (with respect to QID); the anonymized data is simply a
 concatenation of these anonymized groups, thus guaranteeing `k`-anonymity.
 """
 
-from .kmember import KMember
+from .kmember import KMember, KMemberUnOptimized
 from .local_recoding_algorithm import (
     GroupAnonymization,
     GroupAnonymizationBuiltIn,
@@ -25,5 +25,6 @@ __all__ = [
     "GroupAnonymizationBuiltIn",
     "ClassicMondrian",
     "KMember",
+    "KMemberUnOptimized",
     "OKA",
 ]
