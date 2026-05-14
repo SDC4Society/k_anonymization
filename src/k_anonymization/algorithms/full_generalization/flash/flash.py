@@ -91,7 +91,7 @@ class Flash(Algorithm):
         """
         heap = PriorityQueue()
         self.__best_score = None
-        self.__best_df = None
+        self.__best_generalization = None
 
         for level in range(self.__lattice.max_height + 1):
             for node in self.__lattice.get_nodes_at_height(level):
@@ -110,12 +110,11 @@ class Flash(Algorithm):
                                 path = self.__find_path(child)
                                 self.__check_path(path, heap)
 
-        if self.__best_df is None:
+        if self.__best_generalization is None:
             raise RuntimeError("No generalization satisfies k-anonymity.")
 
-        self._construct_anon_data(
-            self.__best_df.values, columns=list(self.__best_df)
-        )
+        best_df = self.__apply_generalization(self.__best_generalization)
+        self._construct_anon_data(best_df.values, columns=list(best_df))
 
     def __apply_generalization(self, generalization_tuple: tuple):
         """
@@ -220,7 +219,7 @@ class Flash(Algorithm):
                 score = self.generalization_scoring(generalized_df, self)
                 if self.__best_score is None or score < self.__best_score:
                     self.__best_score = score
-                    self.__best_df = generalized_df
+                    self.__best_generalization = node.generalization_tuple
                 high = mid - 1
             else:
                 heap.put(node)
