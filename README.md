@@ -6,10 +6,11 @@ The following algorithms have been implemented and tested:
 
 - Datafly [[1]](#references)
 - Flash [[2]](#references)
-- Classic Mondrian [[3]](#references)
-- k-Member [[4]](#references)
-- One-pass K-Means (OKA) [[5]](#references)
-- Perturbation [[6-7]](#references)
+- Incognito [[3]](#references)
+- Classic Mondrian [[4]](#references)
+- k-Member [[5]](#references)
+- One-pass K-Means (OKA) [[6]](#references)
+- Perturbation [[7-8]](#references)
 
 Before using/developing the module, run the following command to install dependencies and the module itself.
 
@@ -22,12 +23,14 @@ pip install -e .
 
 [2] Kohlmayer, F., Prasser, F., Eckert, C., Kemper, A., and Kuhn, K. A. “Flash: Efficient, Stable and Optimal K-Anonymity.” 2012 International Conference on Privacy, Security, Risk and Trust and 2012 International Conference on Social Computing. IEEE, 2012. https://doi.org/10.1109/SocialCom-PASSAT.2012.52
 
-[3] LeFevre, Kristen, David J. DeWitt, and Raghu Ramakrishnan. “Mondrian multidimensional k-anonymity.” Proceedings of the 22nd International conference on data engineering (ICDE'06). IEEE, 2006. https://doi.org/10.1109/ICDE.2006.101.
+[3] LeFevre, Kristen, David J. DeWitt, and Raghu Ramakrishnan. “Incognito: Efficient full-domain k-anonymity.” Proceedings of the 2005 ACM SIGMOD International Conference on Management of Data. ACM, 2005. pp. 49–60. https://doi.org/10.1145/1066157.1066164.
 
-[4] Byun, JW., Kamra, A., Bertino, E., Li, N. “Efficient k-Anonymization Using Clustering Techniques.” Proceedings of the International conference on database systems for advanced applications (DASFAA 2007). Lecture Notes in Computer Science, vol 4443. Springer, 2007. https://doi.org/10.1007/978-3-540-71703-4_18.
+[4] LeFevre, Kristen, David J. DeWitt, and Raghu Ramakrishnan. “Mondrian multidimensional k-anonymity.” Proceedings of the 22nd International conference on data engineering (ICDE'06). IEEE, 2006. https://doi.org/10.1109/ICDE.2006.101.
 
-[5] Lin, Jun-Lin, and Meng-Cheng Wei. “An efficient clustering method for k-anonymization.” Proceedings of the 2008 international workshop on Privacy and anonymity in information society. ACM, 2008. https://doi.org/10.1145/1379287.1379297.
+[5] Byun, JW., Kamra, A., Bertino, E., Li, N. “Efficient k-Anonymization Using Clustering Techniques.” Proceedings of the International conference on database systems for advanced applications (DASFAA 2007). Lecture Notes in Computer Science, vol 4443. Springer, 2007. https://doi.org/10.1007/978-3-540-71703-4_18.
 
-[6] I. Dai, C. Koji, and T. Katsumi. “k-匿名性の確率的指標への拡張とその適用例.” In コンピュータセキュリティシンポジウム2009 (CSS2009) 論文集, vol. 2009, pp. 1–6. 情報処理学会, 2011. https://ipsj.ixsq.nii.ac.jp/records/74904.
+[6] Lin, Jun-Lin, and Meng-Cheng Wei. “An efficient clustering method for k-anonymization.” Proceedings of the 2008 international workshop on Privacy and anonymity in information society. ACM, 2008. https://doi.org/10.1145/1379287.1379297.
 
-[7] I. Dai, C. Koji, and T. Katsumi. “数値属性における, k-匿名性を満たすランダム化手法.” In コンピュータセキュリティシンポジウム2011 (CSS2011) 論文集,vol. 2011, pp. 450–455. 情報処理学会, 2011. https://ipsj.ixsq.nii.ac.jp/records/77972.
+[7] I. Dai, C. Koji, and T. Katsumi. “k-匿名性の確率的指標への拡張とその適用例.” In コンピュータセキュリティシンポジウム2009 (CSS2009) 論文集, vol. 2009, pp. 1–6. 情報処理学会, 2011. https://ipsj.ixsq.nii.ac.jp/records/74904.
+
+[8] I. Dai, C. Koji, and T. Katsumi. “数値属性における, k-匿名性を満たすランダム化手法.” In コンピュータセキュリティシンポジウム2011 (CSS2011) 論文集,vol. 2011, pp. 450–455. 情報処理学会, 2011. https://ipsj.ixsq.nii.ac.jp/records/77972.

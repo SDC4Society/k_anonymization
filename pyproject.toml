@@ -7,7 +7,7 @@ name = "k_anonymization"
 authors = [{ name = "SDC4Society", email = "sdc4society@grp.ism.ac.jp" }]
 description = "My package description"
 # readme = "README.rst"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 # keywords = ["one", "two"]
 # license = "BSD-3-Clause"
 # classifiers = [
@@ -20,6 +20,7 @@ dependencies = [
     "tqdm",
     "scikit-learn",
     "itables==2.5.2",
+    "packaging",
     "ipywidgets",
     "itables[widget]",
 ]
