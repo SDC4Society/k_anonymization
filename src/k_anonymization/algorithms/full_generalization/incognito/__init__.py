@@ -1,7 +1,7 @@
-from k_anonymization.algorithms.full_generalization._utility_metric import (
-    UtilityMetric,
-    UtilityMetricBuiltIn,
+from k_anonymization.algorithms.full_generalization._generalization_scoring import (
+    GeneralizationScoring,
+    GeneralizationScoringBuiltIn,
 )
 from .incognito import Incognito
 
-__all__ = ["Incognito", "UtilityMetric", "UtilityMetricBuiltIn"]
+__all__ = ["Incognito", "GeneralizationScoring", "GeneralizationScoringBuiltIn"]

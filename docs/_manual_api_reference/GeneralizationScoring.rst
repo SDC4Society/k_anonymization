@@ -1,10 +1,10 @@
-.. type:: UtilityMetric
+.. type:: GeneralizationScoring
     :no-contents-entry:
     :annotation: : (DataFrame, Algorithm) -> Any
 
-    Prototype of a utility metric for full-domain generalization algorithms.
+    Prototype of a scoring function for full-domain generalization algorithms.
 
-    A utility metric assigns a score to a generalized candidate, enabling
+    A scoring function assigns a score to a generalized candidate, enabling
     algorithms to rank or order candidates during search or solution selection.
     The return value must support the ``<`` operator — typically a ``float``,
     but n-dimensional vectors or any other comparable type are equally valid.
@@ -20,5 +20,5 @@
 
     .. seealso::
 
-        :class:`UtilityMetricBuiltIn`
-            A set of built-in ``UtilityMetric`` implementations.
+        :class:`GeneralizationScoringBuiltIn`
+            A set of built-in ``GeneralizationScoring`` implementations.
