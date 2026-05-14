@@ -1,9 +1,9 @@
 from queue import PriorityQueue
 from typing import List
 
-from k_anonymization.algorithms.full_generalization._utility_metric import (
-    UtilityMetric,
-    UtilityMetricBuiltIn,
+from k_anonymization.algorithms.full_generalization._generalization_scoring import (
+    GeneralizationScoring,
+    GeneralizationScoringBuiltIn,
 )
 from k_anonymization.algorithms.utils import generalize_column
 from k_anonymization.core import Algorithm, Dataset
@@ -31,17 +31,17 @@ class Flash(Algorithm):
         The Dataset object holding the original data and its metadata.
     k : int
         The privacy parameter `k`.
-    utility_metric : UtilityMetric
+    generalization_scoring : GeneralizationScoring
         The metric used to select the best solution among all valid
         anonymizations.
-        It is possible to use a built-in from ``UtilityMetricBuiltIn``, or
-        provide a custom function
+        It is possible to use a built-in from
+        ``GeneralizationScoringBuiltIn``, or provide a custom function
         ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
-        Default: ``UtilityMetricBuiltIn.NCP``
+        Default: ``GeneralizationScoringBuiltIn.NCP``
 
     Attributes
     ----------
-    utility_metric : UtilityMetric
+    generalization_scoring : GeneralizationScoring
         The metric used to select the best solution.
     """
 
@@ -49,7 +49,7 @@ class Flash(Algorithm):
         self,
         dataset: Dataset,
         k: int,
-        utility_metric: UtilityMetric = UtilityMetricBuiltIn.NCP,
+        generalization_scoring: GeneralizationScoring = GeneralizationScoringBuiltIn.NCP,
     ):
         """
         Initialize the Flash algorithm.
@@ -60,16 +60,17 @@ class Flash(Algorithm):
             The Dataset object holding the original data and its metadata.
         k : int
             The privacy parameter `k`.
-        utility_metric : UtilityMetric
+        generalization_scoring : GeneralizationScoring
             The metric used to select the best solution among all valid
             anonymizations.
-            It is possible to use a built-in from ``UtilityMetricBuiltIn``,
-            or provide a custom function
-        ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
-            Default: ``UtilityMetricBuiltIn.NCP``
+            It is possible to use a built-in from
+            ``GeneralizationScoringBuiltIn``, or provide a custom function
+            ``custom_metric(generalized_df: DataFrame, algo: Algorithm)
+            -> Any``.
+            Default: ``GeneralizationScoringBuiltIn.NCP``
         """
         super().__init__(dataset, k)
-        self.utility_metric = utility_metric
+        self.generalization_scoring = generalization_scoring
         self.__lattice: Lattice = Lattice(dataset)
         self.__qids: list[str] = dataset.qids
         self.__qids_idx: list[int] = dataset.qids_idx
@@ -81,7 +82,7 @@ class Flash(Algorithm):
         Explores the generalization lattice bottom-up, constructing greedy
         paths and applying binary search on each path to locate the
         k-anonymity boundary. The k-anonymous node with the lowest
-        ``utility_metric`` score is selected as the optimal solution.
+        ``generalization_scoring`` score is selected as the optimal solution.
 
         Raises
         ------
@@ -193,7 +194,7 @@ class Flash(Algorithm):
 
         Nodes that fail k-anonymity are added to ``heap`` as candidates
         for further exploration. When a k-anonymous node is found, it is
-        scored with ``utility_metric`` and the global optimum is updated
+        scored with ``generalization_scoring`` and the global optimum is updated
         if the score is lower.
 
         Parameters
@@ -216,7 +217,7 @@ class Flash(Algorithm):
             if k_ano:
                 node.check_as_k_ano()
                 self.__tagging_upper_nodes(node)
-                score = self.utility_metric(generalized_df, self)
+                score = self.generalization_scoring(generalized_df, self)
                 if self.__best_score is None or score < self.__best_score:
                     self.__best_score = score
                     self.__best_df = generalized_df
