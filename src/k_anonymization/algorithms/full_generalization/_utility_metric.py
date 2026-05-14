@@ -1,13 +1,13 @@
 __all__ = ["UtilityMetric", "UtilityMetricBuiltIn"]
 
-from typing import Any, Callable
+from typing import Any, Callable, TypeAlias
 
 from pandas import DataFrame
 
 from k_anonymization.core.algorithm import Algorithm
 from k_anonymization.evaluation.data_utility import CAVG, NCP, Discernibility
 
-type UtilityMetric = Callable[[DataFrame, Algorithm], Any]
+UtilityMetric: TypeAlias = Callable[[DataFrame, Algorithm], Any]
 """
 Prototype of a utility metric for full-domain generalization algorithms.
 
