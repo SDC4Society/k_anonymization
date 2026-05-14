@@ -52,8 +52,8 @@ class Flash(Algorithm):
 
         Explores the generalization lattice bottom-up, constructing greedy
         paths and applying binary search on each path to locate the
-        k-anonymity boundary. The node with the lowest criterion score
-        among all k-anonymous nodes is selected as the optimal solution.
+        k-anonymity boundary. The k-anonymous node with the lowest
+        criterion score is selected as the optimal solution.
 
         Raises
         ------
@@ -61,13 +61,14 @@ class Flash(Algorithm):
             If no generalization satisfying k-anonymity is found.
         """
         heap = PriorityQueue()
-        heap_optims = PriorityQueue()
+        self.__best_score = None
+        self.__best_df = None
 
         for level in range(self.__lattice.max_height + 1):
             for node in self.__lattice.get_nodes_at_height(level):
                 if not node.tagged:
                     path = self.__find_path(node)
-                    self.__check_path(path, heap, heap_optims)
+                    self.__check_path(path, heap)
 
                     while not heap.empty():
                         failed_node = heap.get()
@@ -78,14 +79,14 @@ class Flash(Algorithm):
                             child = self.__lattice[idx]
                             if not child.tagged:
                                 path = self.__find_path(child)
-                                self.__check_path(path, heap, heap_optims)
+                                self.__check_path(path, heap)
 
-        if heap_optims.empty():
+        if self.__best_df is None:
             raise RuntimeError("No generalization satisfies k-anonymity.")
 
-        best_node = heap_optims.get()
-        generalized_df = self.__apply_generalization(best_node.generalization_tuple)
-        self._construct_anon_data(generalized_df.values, columns=list(generalized_df))
+        self._construct_anon_data(
+            self.__best_df.values, columns=list(self.__best_df)
+        )
 
     def __apply_generalization(self, generalization_tuple: tuple):
         """
@@ -158,14 +159,14 @@ class Flash(Algorithm):
         self,
         path: List[Node],
         heap: PriorityQueue,
-        heap_optims: PriorityQueue,
     ) -> None:
         """
         Binary search on a path to locate the k-anonymity boundary.
 
         Nodes that fail k-anonymity are added to ``heap`` as candidates
-        for further exploration. The best k-anonymous node found on this
-        path is added to ``heap_optims``.
+        for further exploration. When a k-anonymous node is found, its
+        criterion score is compared against the current best and the
+        global optimum is updated if it is lower.
 
         Parameters
         ----------
@@ -173,11 +174,8 @@ class Flash(Algorithm):
             The path to search (lower index = less generalized).
         heap : PriorityQueue
             Queue collecting non-k-anonymous nodes for further exploration.
-        heap_optims : PriorityQueue
-            Queue collecting the best k-anonymous node per path.
         """
         low, high = 0, len(path) - 1
-        optim: Node = None
 
         while low <= high:
             mid = (low + high) // 2
@@ -188,17 +186,16 @@ class Flash(Algorithm):
             k_ano = is_k_anonymous(generalized_df, self.k, self.__qids_idx)
 
             if k_ano:
-                optim = node
                 node.check_as_k_ano()
                 self.__tagging_upper_nodes(node)
+                if self.__best_score is None or node.criterion < self.__best_score:
+                    self.__best_score = node.criterion
+                    self.__best_df = generalized_df
                 high = mid - 1
             else:
                 heap.put(node)
                 self.__tagging_lower_nodes(node)
                 low = mid + 1
-
-        if optim is not None:
-            heap_optims.put(optim)
 
     def __tagging_upper_nodes(self, start_node: Node) -> set[Node]:
         """
