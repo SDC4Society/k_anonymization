@@ -11,7 +11,7 @@
    {%- elif objname == "full_generalization" %}
    .. rubric:: {{ _('Type Alias') }}
 
-   .. include:: /_manual_api_reference/UtilityMetric.rst
+   .. include:: /_manual_api_reference/GeneralizationScoring.rst
 
    {% endif %}
    {%- endblock %}
