@@ -1,7 +1,7 @@
 __all__ = ["GroupAnonymization", "GroupAnonymizationBuiltIn", "LocalRecodingAlgorithm"]
 
 from abc import abstractmethod
-from typing import Callable, Collection
+from typing import Callable, Collection, TypeAlias
 
 from numpy import arange
 
@@ -10,7 +10,7 @@ from k_anonymization.core.dataset import Dataset
 
 from ._utils import get_max_ranges
 
-type GroupAnonymization = Callable[
+GroupAnonymization: TypeAlias = Callable[
     [Collection[Collection], dict], Collection[Collection]
 ]
 """
