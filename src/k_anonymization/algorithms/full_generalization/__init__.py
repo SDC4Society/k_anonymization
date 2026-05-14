@@ -10,6 +10,7 @@ hierarchy, which helps achieving `k`-anonymity.
 
 from ._generalization_scoring import GeneralizationScoring, GeneralizationScoringBuiltIn
 from .datafly import Datafly
+from .flash import Flash
 from .incognito import Incognito
 
-__all__ = ["Datafly", "Incognito", "GeneralizationScoring", "GeneralizationScoringBuiltIn"]
+__all__ = ["Datafly", "Incognito", "Flash", "GeneralizationScoring", "GeneralizationScoringBuiltIn"]
