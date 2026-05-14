@@ -1,4 +1,4 @@
-__all__ = ["UtilityMetric", "UtilityMetricBuiltIn"]
+__all__ = ["GeneralizationScoring", "GeneralizationScoringBuiltIn"]
 
 from typing import Any, Callable, TypeAlias
 
@@ -7,11 +7,11 @@ from pandas import DataFrame
 from k_anonymization.core.algorithm import Algorithm
 from k_anonymization.evaluation.data_utility import CAVG, NCP, Discernibility
 
-UtilityMetric: TypeAlias = Callable[[DataFrame, Algorithm], Any]
+GeneralizationScoring: TypeAlias = Callable[[DataFrame, Algorithm], Any]
 """
-Prototype of a utility metric for full-domain generalization algorithms.
+Prototype of a scoring function for full-domain generalization algorithms.
 
-A utility metric assigns a score to a generalized candidate, enabling
+A scoring function assigns a score to a generalized candidate, enabling
 algorithms to rank or order candidates during search or solution selection.
 The return value must support the ``<`` operator — typically a ``float``,
 but n-dimensional vectors or any other comparable type are equally valid.
@@ -32,14 +32,14 @@ Any
 
 See Also
 --------
-UtilityMetricBuiltIn :
-    A set of built-in ``UtilityMetric`` implementations.
+GeneralizationScoringBuiltIn :
+    A set of built-in ``GeneralizationScoring`` implementations.
 """
 
 
-class UtilityMetricBuiltIn:
+class GeneralizationScoringBuiltIn:
     """
-    A set of built-in ``UtilityMetric`` implementations.
+    A set of built-in ``GeneralizationScoring`` implementations.
 
     Each static method is a thin adapter that routes the unified
     ``(generalized_df, algo)`` call signature to the corresponding
@@ -48,8 +48,8 @@ class UtilityMetricBuiltIn:
 
     See Also
     --------
-    UtilityMetric :
-        The type prototype for utility metrics.
+    GeneralizationScoring :
+        The type prototype for generalization scoring functions.
     """
 
     @staticmethod

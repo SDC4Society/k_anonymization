@@ -1,8 +1,8 @@
 from queue import PriorityQueue
 
-from k_anonymization.algorithms.full_generalization._utility_metric import (
-    UtilityMetric,
-    UtilityMetricBuiltIn,
+from k_anonymization.algorithms.full_generalization._generalization_scoring import (
+    GeneralizationScoring,
+    GeneralizationScoringBuiltIn,
 )
 from k_anonymization.algorithms.utils import generalize_column
 from k_anonymization.core import Algorithm, Dataset
@@ -30,27 +30,28 @@ class Incognito(Algorithm):
         The Dataset object holding the original data and its metadata.
     k : int
         The privacy parameter `k`.
-    utility_metric : UtilityMetric
-        The metric used to select the best solution among all valid anonymizations.
-        It is possible to use a built-in from ``UtilityMetricBuiltIn``, or provide a
-        custom function
-        ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
-        Default: ``UtilityMetricBuiltIn.NCP``
+    generalization_scoring : GeneralizationScoring
+        The scoring function used to select the best solution among all valid
+        anonymizations.
+        It is possible to use a built-in from ``GeneralizationScoringBuiltIn``, or
+        provide a custom function
+        ``custom_scoring(generalized_df: DataFrame, algo: Algorithm) -> Any``.
+        Default: ``GeneralizationScoringBuiltIn.NCP``
 
     Attributes
     ----------
     solutions : list[ITableDF]
         All anonymized tables that satisfy k-anonymity. The best solution
-        (lowest score under ``utility_metric``) is stored in ``anon_data``.
-    utility_metric : UtilityMetric
-        The utility metric used to select the best solution.
+        (lowest score under ``generalization_scoring``) is stored in ``anon_data``.
+    generalization_scoring : GeneralizationScoring
+        The scoring function used to select the best solution.
     """
 
     def __init__(
         self,
         dataset: Dataset,
         k: int,
-        utility_metric: UtilityMetric = UtilityMetricBuiltIn.NCP,
+        generalization_scoring: GeneralizationScoring = GeneralizationScoringBuiltIn.NCP,
     ):
         """
         Initialize the Incognito algorithm.
@@ -61,15 +62,16 @@ class Incognito(Algorithm):
             The Dataset object holding the original data and its metadata.
         k : int
             The privacy parameter `k`.
-        utility_metric : UtilityMetric
-            The metric used to select the best solution among all valid anonymizations.
-            It is possible to use a built-in from ``UtilityMetricBuiltIn``, or provide a
-            custom function
-        ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
-            Default: ``UtilityMetricBuiltIn.NCP``
+        generalization_scoring : GeneralizationScoring
+            The scoring function used to select the best solution among all valid
+            anonymizations.
+            It is possible to use a built-in from ``GeneralizationScoringBuiltIn``,
+            or provide a custom function
+        ``custom_scoring(generalized_df: DataFrame, algo: Algorithm) -> Any``.
+            Default: ``GeneralizationScoringBuiltIn.NCP``
         """
         super().__init__(dataset, k)
-        self.utility_metric = utility_metric
+        self.generalization_scoring = generalization_scoring
         self.solutions: list[ITableDF] = []
         self.__lattice: Lattice = Lattice(dataset)
         self.__num_qids: int = len(dataset.qids)
@@ -130,7 +132,7 @@ class Incognito(Algorithm):
                         self.__pqueue.put(dst_node)
                     node.delete()
 
-        # Gather all valid solutions and select the best by utility_metric.
+        # Gather all valid solutions and select the best by generalization_scoring.
         best_df = None
         best_score = None
         for node in self.__lattice.nodes:
@@ -145,7 +147,7 @@ class Incognito(Algorithm):
             )
             self.solutions.append(solution_df)
 
-            score = self.utility_metric(generalized_df, self)
+            score = self.generalization_scoring(generalized_df, self)
             if best_score is None or score < best_score:
                 best_score = score
                 best_df = generalized_df
