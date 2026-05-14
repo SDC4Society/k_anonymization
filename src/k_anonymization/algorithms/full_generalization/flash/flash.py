@@ -33,9 +33,12 @@ class Flash(Algorithm):
         The privacy parameter `k`.
     generalization_scoring : GeneralizationScoring
         The metric used to select the best solution among all valid
-        anonymizations.
+        anonymizations. Must be monotonic: a more generalized state must
+        never produce a lower (better) score than a less generalized one.
+        All built-in metrics satisfy this requirement.
         It is possible to use a built-in from
-        ``GeneralizationScoringBuiltIn``, or provide a custom function
+        ``GeneralizationScoringBuiltIn``, or provide a custom monotonic
+        function
         ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
         Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
 
@@ -62,9 +65,13 @@ class Flash(Algorithm):
             The privacy parameter `k`.
         generalization_scoring : GeneralizationScoring
             The metric used to select the best solution among all valid
-            anonymizations.
+            anonymizations. Must be monotonic: a more generalized state
+            must never produce a lower (better) score than a less
+            generalized one. All built-in metrics satisfy this
+            requirement.
             It is possible to use a built-in from
-            ``GeneralizationScoringBuiltIn``, or provide a custom function
+            ``GeneralizationScoringBuiltIn``, or provide a custom
+            monotonic function
             ``custom_metric(generalized_df: DataFrame, algo: Algorithm)
             -> Any``.
             Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
