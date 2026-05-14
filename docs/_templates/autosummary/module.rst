@@ -5,9 +5,14 @@
    {% block types %}
    {%- if objname == "local_recoding" %}
    .. rubric:: {{ _('Type Alias') }}
-   
+
    .. include:: /_manual_api_reference/GroupAnonymization.rst
-         
+
+   {%- elif objname == "full_generalization" %}
+   .. rubric:: {{ _('Type Alias') }}
+
+   .. include:: /_manual_api_reference/UtilityMetric.rst
+
    {% endif %}
    {%- endblock %}
 
