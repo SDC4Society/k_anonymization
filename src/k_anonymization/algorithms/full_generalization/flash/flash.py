@@ -1,6 +1,10 @@
 from queue import PriorityQueue
 from typing import List
 
+from k_anonymization.algorithms.full_generalization._generalization_scoring import (
+    GeneralizationScoring,
+    GeneralizationScoringBuiltIn,
+)
 from k_anonymization.algorithms.utils import generalize_column
 from k_anonymization.core import Algorithm, Dataset
 from k_anonymization.evaluation.anonymity import is_k_anonymous
@@ -15,8 +19,7 @@ class Flash(Algorithm):
 
     Flash explores the generalization lattice using a combination of
     bottom-up breadth-first traversal and binary search along greedy
-    paths to efficiently find the optimal k-anonymous generalization
-    with the lowest criterion score.
+    paths to efficiently find the optimal k-anonymous generalization.
 
     The search leverages the monotonicity property of generalization:
     if a node satisfies k-anonymity, all of its ancestors do as well;
@@ -28,9 +31,29 @@ class Flash(Algorithm):
         The Dataset object holding the original data and its metadata.
     k : int
         The privacy parameter `k`.
+    generalization_scoring : GeneralizationScoring
+        The metric used to select the best solution among all valid
+        anonymizations. Must be monotonic: a more generalized state must
+        never produce a lower (better) score than a less generalized one.
+        All built-in metrics satisfy this requirement.
+        It is possible to use a built-in from
+        ``GeneralizationScoringBuiltIn``, or provide a custom monotonic
+        function
+        ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
+        Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
+
+    Attributes
+    ----------
+    generalization_scoring : GeneralizationScoring
+        The metric used to select the best solution.
     """
 
-    def __init__(self, dataset: Dataset, k: int):
+    def __init__(
+        self,
+        dataset: Dataset,
+        k: int,
+        generalization_scoring: GeneralizationScoring = GeneralizationScoringBuiltIn.DISCERNIBILITY,
+    ):
         """
         Initialize the Flash algorithm.
 
@@ -40,8 +63,21 @@ class Flash(Algorithm):
             The Dataset object holding the original data and its metadata.
         k : int
             The privacy parameter `k`.
+        generalization_scoring : GeneralizationScoring
+            The metric used to select the best solution among all valid
+            anonymizations. Must be monotonic: a more generalized state
+            must never produce a lower (better) score than a less
+            generalized one. All built-in metrics satisfy this
+            requirement.
+            It is possible to use a built-in from
+            ``GeneralizationScoringBuiltIn``, or provide a custom
+            monotonic function
+            ``custom_metric(generalized_df: DataFrame, algo: Algorithm)
+            -> Any``.
+            Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
         """
         super().__init__(dataset, k)
+        self.generalization_scoring = generalization_scoring
         self.__lattice: Lattice = Lattice(dataset)
         self.__qids: list[str] = dataset.qids
         self.__qids_idx: list[int] = dataset.qids_idx
@@ -52,8 +88,8 @@ class Flash(Algorithm):
 
         Explores the generalization lattice bottom-up, constructing greedy
         paths and applying binary search on each path to locate the
-        k-anonymity boundary. The node with the lowest criterion score
-        among all k-anonymous nodes is selected as the optimal solution.
+        k-anonymity boundary. The k-anonymous node with the lowest
+        ``generalization_scoring`` score is selected as the optimal solution.
 
         Raises
         ------
@@ -61,13 +97,14 @@ class Flash(Algorithm):
             If no generalization satisfying k-anonymity is found.
         """
         heap = PriorityQueue()
-        heap_optims = PriorityQueue()
+        self.__best_score = None
+        self.__best_generalization = None
 
         for level in range(self.__lattice.max_height + 1):
             for node in self.__lattice.get_nodes_at_height(level):
                 if not node.tagged:
                     path = self.__find_path(node)
-                    self.__check_path(path, heap, heap_optims)
+                    self.__check_path(path, heap)
 
                     while not heap.empty():
                         failed_node = heap.get()
@@ -78,14 +115,13 @@ class Flash(Algorithm):
                             child = self.__lattice[idx]
                             if not child.tagged:
                                 path = self.__find_path(child)
-                                self.__check_path(path, heap, heap_optims)
+                                self.__check_path(path, heap)
 
-        if heap_optims.empty():
+        if self.__best_generalization is None:
             raise RuntimeError("No generalization satisfies k-anonymity.")
 
-        best_node = heap_optims.get()
-        generalized_df = self.__apply_generalization(best_node.generalization_tuple)
-        self._construct_anon_data(generalized_df.values, columns=list(generalized_df))
+        best_df = self.__apply_generalization(self.__best_generalization)
+        self._construct_anon_data(best_df.values, columns=list(best_df))
 
     def __apply_generalization(self, generalization_tuple: tuple):
         """
@@ -158,14 +194,14 @@ class Flash(Algorithm):
         self,
         path: List[Node],
         heap: PriorityQueue,
-        heap_optims: PriorityQueue,
     ) -> None:
         """
         Binary search on a path to locate the k-anonymity boundary.
 
         Nodes that fail k-anonymity are added to ``heap`` as candidates
-        for further exploration. The best k-anonymous node found on this
-        path is added to ``heap_optims``.
+        for further exploration. When a k-anonymous node is found, it is
+        scored with ``generalization_scoring`` and the global optimum is updated
+        if the score is lower.
 
         Parameters
         ----------
@@ -173,11 +209,8 @@ class Flash(Algorithm):
             The path to search (lower index = less generalized).
         heap : PriorityQueue
             Queue collecting non-k-anonymous nodes for further exploration.
-        heap_optims : PriorityQueue
-            Queue collecting the best k-anonymous node per path.
         """
         low, high = 0, len(path) - 1
-        optim: Node = None
 
         while low <= high:
             mid = (low + high) // 2
@@ -188,17 +221,17 @@ class Flash(Algorithm):
             k_ano = is_k_anonymous(generalized_df, self.k, self.__qids_idx)
 
             if k_ano:
-                optim = node
                 node.check_as_k_ano()
                 self.__tagging_upper_nodes(node)
+                score = self.generalization_scoring(generalized_df, self)
+                if self.__best_score is None or score < self.__best_score:
+                    self.__best_score = score
+                    self.__best_generalization = node.generalization_tuple
                 high = mid - 1
             else:
                 heap.put(node)
                 self.__tagging_lower_nodes(node)
                 low = mid + 1
-
-        if optim is not None:
-            heap_optims.put(optim)
 
     def __tagging_upper_nodes(self, start_node: Node) -> set[Node]:
         """
