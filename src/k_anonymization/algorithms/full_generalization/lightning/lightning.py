@@ -124,17 +124,18 @@ class Lightning(Algorithm):
         search_queue.put(bottom_node)
         step = 0
 
-        while not search_queue.empty():
-            next_node = search_queue.get()
+        with ThreadPoolExecutor(max_workers=self.__max_workers) as executor:
+            while not search_queue.empty():
+                next_node = search_queue.get()
 
-            if self.__should_prune(next_node):
-                continue
+                if self.__should_prune(next_node):
+                    continue
 
-            step += 1
-            if step % self.__greedy_interval == 0:
-                self.__greedy(next_node, search_queue)
-            else:
-                self.__expand(next_node, search_queue)
+                step += 1
+                if step % self.__greedy_interval == 0:
+                    self.__greedy(next_node, search_queue, executor)
+                else:
+                    self.__expand(next_node, search_queue, executor)
 
         if self.__best_generalization is None:
             raise RuntimeError("No generalization satisfies k-anonymity.")
@@ -169,6 +170,7 @@ class Lightning(Algorithm):
         self,
         node: LightningNode,
         search_queue: PriorityQueue,
+        executor: ThreadPoolExecutor,
     ) -> None:
         """
         Expand a node by checking all unvisited upper neighbors.
@@ -182,6 +184,8 @@ class Lightning(Algorithm):
             The node to expand.
         search_queue : PriorityQueue
             The global search queue to add discovered nodes to.
+        executor : ThreadPoolExecutor
+            The executor to use for parallel node checking.
         """
         node.mark_as_expanded()
         successors = [
@@ -190,23 +194,23 @@ class Lightning(Algorithm):
         ]
         to_check = [s for s in successors if not s.tagged and not s.expanded]
 
-        with ThreadPoolExecutor(max_workers=self.__max_workers) as executor:
-            future_to_node = {
-                executor.submit(self.__check, successor): successor
-                for successor in to_check
-            }
-            for future in as_completed(future_to_node):
-                successor = future_to_node[future]
-                future.result()
-                with self.__state_lock:
-                    if not successor.tagged:
-                        successor.tag()
-                        search_queue.put(successor)
+        future_to_node = {
+            executor.submit(self.__check, successor): successor
+            for successor in to_check
+        }
+        for future in as_completed(future_to_node):
+            successor = future_to_node[future]
+            future.result()
+            with self.__state_lock:
+                if not successor.tagged:
+                    successor.tag()
+                    search_queue.put(successor)
 
     def __greedy(
         self,
         node: LightningNode,
         search_queue: PriorityQueue,
+        executor: ThreadPoolExecutor,
     ) -> None:
         """
         Perform a greedy depth-first search from the given node.
@@ -221,13 +225,15 @@ class Lightning(Algorithm):
             The starting node for greedy search.
         search_queue : PriorityQueue
             The global search queue to return remaining nodes to.
+        executor : ThreadPoolExecutor
+            The executor to use for parallel node checking.
         """
         local_queue = PriorityQueue()
-        self.__expand(node, local_queue)
+        self.__expand(node, local_queue, executor)
 
         if not local_queue.empty():
             next_node = local_queue.get()
-            self.__greedy(next_node, search_queue)
+            self.__greedy(next_node, search_queue, executor)
 
         while not local_queue.empty():
             search_queue.put(local_queue.get())
