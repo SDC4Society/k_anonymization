@@ -37,8 +37,6 @@ class Lightning(Algorithm):
         k-anonymous candidates found during search.
         If ``None`` (default), the internal criterion vector is used for
         solution selection, reproducing the original Lightning behavior.
-        If provided, the scoring function is used instead, and
-        criterion-based pruning is disabled.
     greedy_interval : int
         Frequency of greedy (depth-first) steps. A greedy step is
         performed every ``greedy_interval`` steps; all other steps use
@@ -71,10 +69,10 @@ class Lightning(Algorithm):
         k : int
             The privacy parameter ``k``.
         generalization_scoring : GeneralizationScoring or None
-            The scoring function used to select the best solution among all
-            k-anonymous candidates found during search.
-            If ``None`` (default), the internal criterion vector is used,
-            reproducing the original Lightning behavior.
+            The scoring function used to select the best solution among
+            all k-anonymous candidates found during search.
+            If ``None`` (default), the internal criterion vector is
+            used, reproducing the original Lightning behavior.
         greedy_interval : int
             Frequency of greedy (depth-first) steps. Default: 3.
         max_workers : int
@@ -98,8 +96,7 @@ class Lightning(Algorithm):
 
         Explores the generalization lattice using a priority queue.
         Every ``greedy_interval`` steps, switches from best-first
-        expansion to greedy depth-first search. When
-        ``generalization_scoring`` is ``None``, criterion-based pruning
+        expansion to greedy depth-first search. Criterion-based pruning
         is applied to skip nodes that cannot improve upon the current
         best solution.
 
@@ -137,10 +134,10 @@ class Lightning(Algorithm):
         """
         Check whether a node can be pruned from the search.
 
-        Pruning is only applied when ``generalization_scoring`` is
-        ``None``. A node is pruned if a k-anonymous
-        solution has already been found and the node's criterion is
-        worse (higher) than the current best.
+        A node is pruned if a k-anonymous solution has already been
+        found and the node's criterion is worse (higher) than the
+        current best. Pruning is always based on criterion, regardless
+        of whether ``generalization_scoring`` is set.
 
         Parameters
         ----------
@@ -152,8 +149,6 @@ class Lightning(Algorithm):
         bool
             Whether the node should be skipped.
         """
-        if self.generalization_scoring is not None:
-            return False
         return (
             self.__best_criterion is not None
             and node.criterion > self.__best_criterion
@@ -231,12 +226,10 @@ class Lightning(Algorithm):
         Check a node for k-anonymity and update the best solution.
 
         Applies the generalization defined by the node's tuple, checks
-        k-anonymity, and updates the best solution if this node improves
-        upon the current best.
-
-        When ``generalization_scoring`` is ``None``, the node's criterion
-        vector is used for comparison (lower is better). Otherwise, the
-        provided scoring function is used.
+        k-anonymity, and updates the criterion bound for pruning.
+        The best solution is selected by criterion (when
+        ``generalization_scoring`` is ``None``) or by the provided
+        scoring function.
 
         Parameters
         ----------
@@ -252,12 +245,15 @@ class Lightning(Algorithm):
         node.check_as_k_ano()
 
         with self.__state_lock:
+            is_new_best = (
+                self.__best_criterion is None
+                or node.criterion < self.__best_criterion
+            )
+            if is_new_best:
+                self.__best_criterion = node.criterion
+
             if self.generalization_scoring is None:
-                if (
-                    self.__best_criterion is None
-                    or node.criterion < self.__best_criterion
-                ):
-                    self.__best_criterion = node.criterion
+                if is_new_best:
                     self.__best_generalization = node.generalization_tuple
             else:
                 score = self.generalization_scoring(generalized_df, self)
