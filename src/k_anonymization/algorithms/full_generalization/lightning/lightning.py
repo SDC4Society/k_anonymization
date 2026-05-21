@@ -128,7 +128,7 @@ class Lightning(Algorithm):
         Check whether a node can be pruned from the search.
 
         Pruning is only applied when ``generalization_scoring`` is
-        ``None`` (criterion mode). A node is pruned if a k-anonymous
+        ``None``. A node is pruned if a k-anonymous
         solution has already been found and the node's criterion is
         worse (higher) than the current best.
 
