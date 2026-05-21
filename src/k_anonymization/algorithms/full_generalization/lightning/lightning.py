@@ -154,8 +154,7 @@ class Lightning(Algorithm):
             Whether the node should be skipped.
         """
         return (
-            self.__best_criterion is not None
-            and node.criterion > self.__best_criterion
+            self.__best_criterion is not None and node.criterion > self.__best_criterion
         )
 
     def __expand(
@@ -250,8 +249,7 @@ class Lightning(Algorithm):
 
         with self.__state_lock:
             is_new_best = (
-                self.__best_criterion is None
-                or node.criterion < self.__best_criterion
+                self.__best_criterion is None or node.criterion < self.__best_criterion
             )
             if is_new_best:
                 self.__best_criterion = node.criterion
