@@ -22,8 +22,9 @@ class Lightning(Algorithm):
     a k-anonymous generalization with high data utility.
 
     The search alternates between expansion steps (best-first) and greedy
-    steps (depth-first), switching every 3 steps. Nodes are ordered by a
-    criterion vector ``(c1, c2, c3)`` that favors less generalized states.
+    steps (depth-first), switching every ``greedy_interval`` steps. Nodes
+    are ordered by a criterion vector ``(c1, c2, c3)`` that favors less
+    generalized states.
 
     Parameters
     ----------
@@ -38,6 +39,10 @@ class Lightning(Algorithm):
         solution selection, reproducing the original Lightning behavior.
         If provided, the scoring function is used instead, and
         criterion-based pruning is disabled.
+    greedy_interval : int
+        Frequency of greedy (depth-first) steps. A greedy step is
+        performed every ``greedy_interval`` steps; all other steps use
+        best-first expansion. Default: 3.
     max_workers : int
         Number of parallel workers for node checking during expansion.
         Set to 1 for sequential execution. Default: 1.
@@ -53,6 +58,7 @@ class Lightning(Algorithm):
         dataset: Dataset,
         k: int,
         generalization_scoring: GeneralizationScoring | None = None,
+        greedy_interval: int = 3,
         max_workers: int = 1,
     ):
         """
@@ -69,11 +75,14 @@ class Lightning(Algorithm):
             k-anonymous candidates found during search.
             If ``None`` (default), the internal criterion vector is used,
             reproducing the original Lightning behavior.
+        greedy_interval : int
+            Frequency of greedy (depth-first) steps. Default: 3.
         max_workers : int
             Number of parallel workers for node checking. Default: 1.
         """
         super().__init__(dataset, k)
         self.generalization_scoring = generalization_scoring
+        self.__greedy_interval: int = greedy_interval
         self.__lattice: Lattice = Lattice(dataset)
         self.__qids: list[str] = dataset.qids
         self.__qids_idx: list[int] = dataset.qids_idx
@@ -88,10 +97,11 @@ class Lightning(Algorithm):
         Run the Lightning algorithm.
 
         Explores the generalization lattice using a priority queue.
-        Every 3 steps, switches from best-first expansion to greedy
-        depth-first search. When ``generalization_scoring`` is ``None``,
-        criterion-based pruning is applied to skip nodes that cannot
-        improve upon the current best solution.
+        Every ``greedy_interval`` steps, switches from best-first
+        expansion to greedy depth-first search. When
+        ``generalization_scoring`` is ``None``, criterion-based pruning
+        is applied to skip nodes that cannot improve upon the current
+        best solution.
 
         Raises
         ------
@@ -112,7 +122,7 @@ class Lightning(Algorithm):
                 continue
 
             step += 1
-            if step % 3 == 0:
+            if step % self.__greedy_interval == 0:
                 self.__greedy(next_node, search_queue)
             else:
                 self.__expand(next_node, search_queue)
