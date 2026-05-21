@@ -40,7 +40,11 @@ class Lightning(Algorithm):
     greedy_interval : int
         Frequency of greedy (depth-first) steps. A greedy step is
         performed every ``greedy_interval`` steps; all other steps use
-        best-first expansion. Default: 3.
+        best-first expansion. Smaller values increase depth-first
+        exploration, pushing the search toward higher lattice heights
+        more aggressively. Larger values favor breadth-first expansion,
+        exploring more nodes at each height before moving up.
+        Default: 3.
     max_workers : int
         Number of parallel workers for node checking during expansion.
         Set to 1 for sequential execution. Default: 1.
