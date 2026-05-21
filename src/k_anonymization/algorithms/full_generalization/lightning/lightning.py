@@ -1,4 +1,5 @@
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from queue import PriorityQueue
 
@@ -49,6 +50,12 @@ class Lightning(Algorithm):
         more aggressively. Larger values favor breadth-first expansion,
         exploring more nodes at each height before moving up.
         Default: lattice height (as suggested in the paper).
+    time_limit : float or None
+        Maximum search time in seconds. When the time limit is reached,
+        the best solution found so far is returned. If no k-anonymous
+        solution has been found, ``RuntimeError`` is raised.
+        If ``None`` (default), the search runs until the queue is
+        exhausted.
     max_workers : int
         Number of parallel workers for node checking during expansion.
         Set to 1 for sequential execution. Default: 1.
@@ -65,6 +72,7 @@ class Lightning(Algorithm):
         k: int,
         generalization_scoring: GeneralizationScoring | None = None,
         greedy_interval: int | None = None,
+        time_limit: float | None = None,
         max_workers: int = 1,
     ):
         """
@@ -87,6 +95,8 @@ class Lightning(Algorithm):
         greedy_interval : int or None
             Frequency of greedy (depth-first) steps.
             Default: ``None`` (lattice height).
+        time_limit : float or None
+            Maximum search time in seconds. Default: ``None``.
         max_workers : int
             Number of parallel workers for node checking. Default: 1.
         """
@@ -97,6 +107,7 @@ class Lightning(Algorithm):
             greedy_interval if greedy_interval is not None else self.__lattice.max_height
         )
         assert self.__greedy_interval >= 1, "greedy_interval must be >= 1"
+        self.__time_limit: float | None = time_limit
         self.__qids: list[str] = dataset.qids
         self.__qids_idx: list[int] = dataset.qids_idx
         self.__max_workers: int = max_workers
@@ -113,12 +124,15 @@ class Lightning(Algorithm):
         Every ``greedy_interval`` steps, switches from best-first
         expansion to greedy depth-first search. Criterion-based pruning
         is applied to skip nodes that cannot improve upon the current
-        best solution.
+        best solution. The search stops when the queue is exhausted or
+        ``time_limit`` is reached.
 
         Raises
         ------
         RuntimeError
-            If no generalization satisfying k-anonymity is found.
+            If no generalization satisfying k-anonymity is found
+            (including when the time limit is reached without a
+            solution).
         """
         search_queue = PriorityQueue()
 
@@ -126,9 +140,15 @@ class Lightning(Algorithm):
         self.__check(bottom_node)
         search_queue.put(bottom_node)
         step = 0
+        start_time = time.monotonic()
 
         with ThreadPoolExecutor(max_workers=self.__max_workers) as executor:
             while not search_queue.empty():
+                if self.__time_limit is not None and (
+                    time.monotonic() - start_time >= self.__time_limit
+                ):
+                    break
+
                 next_node = search_queue.get()
 
                 if self.__should_prune(next_node):
