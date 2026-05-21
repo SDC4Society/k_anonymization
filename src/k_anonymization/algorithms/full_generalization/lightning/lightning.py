@@ -89,6 +89,7 @@ class Lightning(Algorithm):
         max_workers : int
             Number of parallel workers for node checking. Default: 1.
         """
+        assert greedy_interval >= 1, "greedy_interval must be >= 1"
         super().__init__(dataset, k)
         self.generalization_scoring = generalization_scoring
         self.__greedy_interval: int = greedy_interval
