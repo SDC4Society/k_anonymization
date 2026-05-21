@@ -248,12 +248,14 @@ class Lightning(Algorithm):
         node.check_as_k_ano()
 
         with self.__state_lock:
+            # Update pruning bound (always criterion-based; see __should_prune)
             is_new_best = (
                 self.__best_criterion is None or node.criterion < self.__best_criterion
             )
             if is_new_best:
                 self.__best_criterion = node.criterion
 
+            # Select best solution among k-anonymous candidates
             if self.generalization_scoring is None:
                 if is_new_best:
                     self.__best_generalization = node.generalization_tuple
