@@ -41,14 +41,14 @@ class Lightning(Algorithm):
         If ``None`` (default), the internal criterion vector is used
         for solution selection, reproducing the original Lightning
         behavior.
-    greedy_interval : int
+    greedy_interval : int or None
         Frequency of greedy (depth-first) steps. A greedy step is
         performed every ``greedy_interval`` steps; all other steps use
         best-first expansion. Smaller values increase depth-first
         exploration, pushing the search toward higher lattice heights
         more aggressively. Larger values favor breadth-first expansion,
         exploring more nodes at each height before moving up.
-        Default: 3.
+        Default: lattice height (as suggested in the paper).
     max_workers : int
         Number of parallel workers for node checking during expansion.
         Set to 1 for sequential execution. Default: 1.
@@ -64,7 +64,7 @@ class Lightning(Algorithm):
         dataset: Dataset,
         k: int,
         generalization_scoring: GeneralizationScoring | None = None,
-        greedy_interval: int = 3,
+        greedy_interval: int | None = None,
         max_workers: int = 1,
     ):
         """
@@ -84,16 +84,19 @@ class Lightning(Algorithm):
             built-in metrics satisfy this requirement.
             If ``None`` (default), the internal criterion vector is
             used, reproducing the original Lightning behavior.
-        greedy_interval : int
-            Frequency of greedy (depth-first) steps. Default: 3.
+        greedy_interval : int or None
+            Frequency of greedy (depth-first) steps.
+            Default: ``None`` (lattice height).
         max_workers : int
             Number of parallel workers for node checking. Default: 1.
         """
-        assert greedy_interval >= 1, "greedy_interval must be >= 1"
         super().__init__(dataset, k)
         self.generalization_scoring = generalization_scoring
-        self.__greedy_interval: int = greedy_interval
         self.__lattice: Lattice = Lattice(dataset)
+        self.__greedy_interval: int = (
+            greedy_interval if greedy_interval is not None else self.__lattice.max_height
+        )
+        assert self.__greedy_interval >= 1, "greedy_interval must be >= 1"
         self.__qids: list[str] = dataset.qids
         self.__qids_idx: list[int] = dataset.qids_idx
         self.__max_workers: int = max_workers
