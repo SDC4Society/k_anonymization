@@ -2,7 +2,7 @@
 Data utility metrics.
 """
 
-from numpy import ndarray
+import numpy as np
 from pandas import DataFrame
 
 from k_anonymization.core import HierarchiesDict, Hierarchy
@@ -30,7 +30,7 @@ class Discernibility:
 
     @staticmethod
     def calculate(
-        data: DataFrame | ndarray,
+        data: DataFrame | np.ndarray,
         qids_idx: list,
         suppression_counts: int = 0,
     ):
@@ -151,7 +151,7 @@ class CAVG:
 
     @staticmethod
     def calculate(
-        data: DataFrame | ndarray,
+        data: DataFrame | np.ndarray,
         qids_idx: list,
         k: int,
     ):
@@ -465,3 +465,22 @@ class NCP:
 
         _all_penalties += (org_data.shape[0] - _sum_groups_sizes) * len(qids_idx)
         return _all_penalties / (len(qids_idx) * org_data.shape[0])
+
+
+class CM:
+    """
+    Classification penalty (Classification Metrics)
+    """
+
+    @staticmethod
+    def calculate(
+        data,
+        qids: list,
+        target: str,
+    ):
+        return (
+            data.groupby(qids)[target]
+            .agg(lambda x: np.min(x.value_counts()) if x.nunique() > 1 else 0)
+            .sum()
+            / data.shape[0]
+        ).item()
