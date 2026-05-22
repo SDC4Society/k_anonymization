@@ -17,7 +17,7 @@ from .local_recoding_algorithm import (
     LocalRecodingAlgorithm,
 )
 from .mondrian import ClassicMondrian
-from .oka.oka import OKA
+from .oka.oka import OKA, OKAUnOptimized
 
 __all__ = [
     "LocalRecodingAlgorithm",
@@ -27,4 +27,5 @@ __all__ = [
     "KMember",
     "KMemberUnOptimized",
     "OKA",
+    "OKAUnOptimized",
 ]

@@ -47,7 +47,8 @@ class OKA_Cluster(object):
                 self.is_categorical,
                 self.max_ranges,
                 self.hierarchies,
-            )
+            ),
+            reverse=True,
         )
 
     def __update_centroid(self):
