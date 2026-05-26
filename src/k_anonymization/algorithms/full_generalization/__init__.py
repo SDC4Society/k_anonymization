@@ -12,5 +12,6 @@ from ._generalization_scoring import GeneralizationScoring, GeneralizationScorin
 from .datafly import Datafly
 from .flash import Flash
 from .incognito import Incognito
+from .lightning import Lightning
 
-__all__ = ["Datafly", "Incognito", "Flash", "GeneralizationScoring", "GeneralizationScoringBuiltIn"]
+__all__ = ["Datafly", "Incognito", "Flash", "Lightning", "GeneralizationScoring", "GeneralizationScoringBuiltIn"]
