@@ -5,6 +5,7 @@ from queue import PriorityQueue
 
 from k_anonymization.algorithms.full_generalization._generalization_scoring import (
     GeneralizationScoring,
+    GeneralizationScoringBuiltIn,
 )
 from k_anonymization.algorithms.utils import generalize_column
 from k_anonymization.core import Algorithm, Dataset
@@ -33,15 +34,13 @@ class Lightning(Algorithm):
         The Dataset object holding the original data and its metadata.
     k : int
         The privacy parameter ``k``.
-    generalization_scoring : GeneralizationScoring or None
+    generalization_scoring : GeneralizationScoring
         The scoring function used to select the best solution among
         all k-anonymous candidates found during search. Must be
         monotonic: a more generalized state must never produce a
         lower (better) score than a less generalized one. All
         built-in metrics satisfy this requirement.
-        If ``None`` (default), the internal criterion vector is used
-        for solution selection, reproducing the original Lightning
-        behavior.
+        Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
     greedy_interval : int or None
         Frequency of greedy (depth-first) steps. A greedy step is
         performed every ``greedy_interval`` steps; all other steps use
@@ -62,7 +61,7 @@ class Lightning(Algorithm):
 
     Attributes
     ----------
-    generalization_scoring : GeneralizationScoring or None
+    generalization_scoring : GeneralizationScoring
         The scoring function used to select the best solution.
     """
 
@@ -70,7 +69,7 @@ class Lightning(Algorithm):
         self,
         dataset: Dataset,
         k: int,
-        generalization_scoring: GeneralizationScoring | None = None,
+        generalization_scoring: GeneralizationScoring = GeneralizationScoringBuiltIn.DISCERNIBILITY,
         greedy_interval: int | None = None,
         time_limit: float | None = None,
         max_workers: int = 1,
@@ -84,14 +83,13 @@ class Lightning(Algorithm):
             The Dataset object holding the original data and its metadata.
         k : int
             The privacy parameter ``k``.
-        generalization_scoring : GeneralizationScoring or None
+        generalization_scoring : GeneralizationScoring
             The scoring function used to select the best solution among
             all k-anonymous candidates found during search. Must be
             monotonic: a more generalized state must never produce a
             lower (better) score than a less generalized one. All
             built-in metrics satisfy this requirement.
-            If ``None`` (default), the internal criterion vector is
-            used, reproducing the original Lightning behavior.
+            Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
         greedy_interval : int or None
             Frequency of greedy (depth-first) steps.
             Default: ``None`` (lattice height).
@@ -172,8 +170,8 @@ class Lightning(Algorithm):
 
         A node is pruned if a k-anonymous solution has already been
         found and the node's criterion is worse (higher) than the
-        current best. Pruning is always based on criterion, regardless
-        of whether ``generalization_scoring`` is set.
+        current best. Pruning is always based on criterion, independent
+        of ``generalization_scoring``.
 
         Parameters
         ----------
@@ -267,9 +265,7 @@ class Lightning(Algorithm):
 
         Applies the generalization defined by the node's tuple, checks
         k-anonymity, and updates the criterion bound for pruning.
-        The best solution is selected by criterion (when
-        ``generalization_scoring`` is ``None``) or by the provided
-        scoring function.
+        The best solution is selected by ``generalization_scoring``.
 
         Parameters
         ----------
@@ -284,6 +280,8 @@ class Lightning(Algorithm):
 
         node.check_as_k_ano()
 
+        score = self.generalization_scoring(generalized_df, self)
+
         with self.__state_lock:
             # Update pruning bound (always criterion-based; see __should_prune)
             is_new_best = (
@@ -293,14 +291,9 @@ class Lightning(Algorithm):
                 self.__best_criterion = node.criterion
 
             # Select best solution among k-anonymous candidates
-            if self.generalization_scoring is None:
-                if is_new_best:
-                    self.__best_generalization = node.generalization_tuple
-            else:
-                score = self.generalization_scoring(generalized_df, self)
-                if self.__best_score is None or score < self.__best_score:
-                    self.__best_score = score
-                    self.__best_generalization = node.generalization_tuple
+            if self.__best_score is None or score < self.__best_score:
+                self.__best_score = score
+                self.__best_generalization = node.generalization_tuple
 
     def __apply_generalization(self, generalization_tuple: tuple):
         """
