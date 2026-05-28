@@ -5,6 +5,7 @@ from queue import PriorityQueue
 
 from k_anonymization.algorithms.full_generalization._generalization_scoring import (
     GeneralizationScoring,
+    GeneralizationScoringBuiltIn,
 )
 from k_anonymization.algorithms.utils import generalize_column
 from k_anonymization.core import Algorithm, Dataset
@@ -33,15 +34,13 @@ class Lightning(Algorithm):
         The Dataset object holding the original data and its metadata.
     k : int
         The privacy parameter ``k``.
-    generalization_scoring : GeneralizationScoring or None
+    generalization_scoring : GeneralizationScoring
         The scoring function used to select the best solution among
         all k-anonymous candidates found during search. Must be
         monotonic: a more generalized state must never produce a
         lower (better) score than a less generalized one. All
         built-in metrics satisfy this requirement.
-        If ``None`` (default), the internal criterion vector is used
-        for solution selection, reproducing the original Lightning
-        behavior.
+        Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
     greedy_interval : int or None
         Frequency of greedy (depth-first) steps. A greedy step is
         performed every ``greedy_interval`` steps; all other steps use
@@ -62,7 +61,7 @@ class Lightning(Algorithm):
 
     Attributes
     ----------
-    generalization_scoring : GeneralizationScoring or None
+    generalization_scoring : GeneralizationScoring
         The scoring function used to select the best solution.
     """
 
@@ -70,7 +69,7 @@ class Lightning(Algorithm):
         self,
         dataset: Dataset,
         k: int,
-        generalization_scoring: GeneralizationScoring | None = None,
+        generalization_scoring: GeneralizationScoring = GeneralizationScoringBuiltIn.DISCERNIBILITY,
         greedy_interval: int | None = None,
         time_limit: float | None = None,
         max_workers: int = 1,
@@ -84,14 +83,13 @@ class Lightning(Algorithm):
             The Dataset object holding the original data and its metadata.
         k : int
             The privacy parameter ``k``.
-        generalization_scoring : GeneralizationScoring or None
+        generalization_scoring : GeneralizationScoring
             The scoring function used to select the best solution among
             all k-anonymous candidates found during search. Must be
             monotonic: a more generalized state must never produce a
             lower (better) score than a less generalized one. All
             built-in metrics satisfy this requirement.
-            If ``None`` (default), the internal criterion vector is
-            used, reproducing the original Lightning behavior.
+            Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
         greedy_interval : int or None
             Frequency of greedy (depth-first) steps.
             Default: ``None`` (lattice height).
