@@ -36,7 +36,7 @@ class Incognito(Algorithm):
         It is possible to use a built-in from ``GeneralizationScoringBuiltIn``, or
         provide a custom function
         ``custom_scoring(generalized_df: DataFrame, algo: Algorithm) -> Any``.
-        Default: ``GeneralizationScoringBuiltIn.NCP``
+        Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
 
     Attributes
     ----------
@@ -51,7 +51,7 @@ class Incognito(Algorithm):
         self,
         dataset: Dataset,
         k: int,
-        generalization_scoring: GeneralizationScoring = GeneralizationScoringBuiltIn.NCP,
+        generalization_scoring: GeneralizationScoring = GeneralizationScoringBuiltIn.DISCERNIBILITY,
     ):
         """
         Initialize the Incognito algorithm.
@@ -68,7 +68,7 @@ class Incognito(Algorithm):
             It is possible to use a built-in from ``GeneralizationScoringBuiltIn``,
             or provide a custom function
         ``custom_scoring(generalized_df: DataFrame, algo: Algorithm) -> Any``.
-            Default: ``GeneralizationScoringBuiltIn.NCP``
+            Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
         """
         super().__init__(dataset, k)
         self.generalization_scoring = generalization_scoring
