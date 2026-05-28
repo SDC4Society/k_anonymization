@@ -170,8 +170,8 @@ class Lightning(Algorithm):
 
         A node is pruned if a k-anonymous solution has already been
         found and the node's criterion is worse (higher) than the
-        current best. Pruning is always based on criterion, regardless
-        of whether ``generalization_scoring`` is set.
+        current best. Pruning is always based on criterion, independent
+        of ``generalization_scoring``.
 
         Parameters
         ----------
@@ -265,9 +265,7 @@ class Lightning(Algorithm):
 
         Applies the generalization defined by the node's tuple, checks
         k-anonymity, and updates the criterion bound for pruning.
-        The best solution is selected by criterion (when
-        ``generalization_scoring`` is ``None``) or by the provided
-        scoring function.
+        The best solution is selected by ``generalization_scoring``.
 
         Parameters
         ----------
@@ -291,14 +289,10 @@ class Lightning(Algorithm):
                 self.__best_criterion = node.criterion
 
             # Select best solution among k-anonymous candidates
-            if self.generalization_scoring is None:
-                if is_new_best:
-                    self.__best_generalization = node.generalization_tuple
-            else:
-                score = self.generalization_scoring(generalized_df, self)
-                if self.__best_score is None or score < self.__best_score:
-                    self.__best_score = score
-                    self.__best_generalization = node.generalization_tuple
+            score = self.generalization_scoring(generalized_df, self)
+            if self.__best_score is None or score < self.__best_score:
+                self.__best_score = score
+                self.__best_generalization = node.generalization_tuple
 
     def __apply_generalization(self, generalization_tuple: tuple):
         """
