@@ -280,6 +280,8 @@ class Lightning(Algorithm):
 
         node.check_as_k_ano()
 
+        score = self.generalization_scoring(generalized_df, self)
+
         with self.__state_lock:
             # Update pruning bound (always criterion-based; see __should_prune)
             is_new_best = (
@@ -289,7 +291,6 @@ class Lightning(Algorithm):
                 self.__best_criterion = node.criterion
 
             # Select best solution among k-anonymous candidates
-            score = self.generalization_scoring(generalized_df, self)
             if self.__best_score is None or score < self.__best_score:
                 self.__best_score = score
                 self.__best_generalization = node.generalization_tuple
