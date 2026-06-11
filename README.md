@@ -12,6 +12,7 @@ The following algorithms have been implemented and tested:
 - k-Member [[6]](#references)
 - One-pass K-Means (OKA) [[7]](#references)
 - Perturbation [[8-9]](#references)
+- SafePub [[10]](#references)
 
 Before using/developing the module, run the following command to install dependencies and the module itself.
 
@@ -37,3 +38,5 @@ pip install -e .
 [8] I. Dai, C. Koji, and T. Katsumi. “k-匿名性の確率的指標への拡張とその適用例.” In コンピュータセキュリティシンポジウム2009 (CSS2009) 論文集, vol. 2009, pp. 1–6. 情報処理学会, 2011. https://ipsj.ixsq.nii.ac.jp/records/74904.
 
 [9] I. Dai, C. Koji, and T. Katsumi. “数値属性における, k-匿名性を満たすランダム化手法.” In コンピュータセキュリティシンポジウム2011 (CSS2011) 論文集,vol. 2011, pp. 450–455. 情報処理学会, 2011. https://ipsj.ixsq.nii.ac.jp/records/77972.
+
+[10] Bild, Raffael, Klaus A. Kuhn, and Fabian Prasser. “SafePub: A Truthful Data Anonymization Algorithm With Strong Privacy Guarantees.” Proceedings on Privacy Enhancing Technologies 2018.1 (2018): 67–87. https://doi.org/10.1515/popets-2018-0004.
