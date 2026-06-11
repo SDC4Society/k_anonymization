@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, Generic, Hashable, TypeVar
 
-from .exponential_mechanism import ExponentialMechanism
+from ._exponential_mechanism import ExponentialMechanism
 
 
 TransformationID = TypeVar("TransformationID", bound=Hashable)

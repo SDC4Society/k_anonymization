@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import random
 from typing import Iterable
 
-from .parameters import ParameterCalculation, SafePubParameters
+from ._parameters import ParameterCalculation, SafePubParameters
 
 DEFAULT_SEARCH_BUDGET_RATIO = 0.10
 

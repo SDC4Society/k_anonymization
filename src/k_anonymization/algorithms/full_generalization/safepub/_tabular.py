@@ -7,9 +7,9 @@ from dataclasses import dataclass
 from math import floor, prod
 from typing import Mapping, Sequence
 
-from .criterion import EDDifferentialPrivacy
-from .search import DataDependentEDDPSearch, SearchResult
-from .utility import (
+from ._criterion import EDDifferentialPrivacy
+from ._search import DataDependentEDDPSearch, SearchResult
+from ._utility import (
     UtilityResult,
     arx_aecs_dp_score,
     arx_discernibility_dp_score,
