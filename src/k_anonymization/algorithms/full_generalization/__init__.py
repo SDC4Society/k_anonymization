@@ -13,5 +13,6 @@ from .datafly import Datafly
 from .flash import Flash
 from .incognito import Incognito
 from .lightning import Lightning
+from .safepub import SafePub
 
-__all__ = ["Datafly", "Incognito", "Flash", "Lightning", "GeneralizationScoring", "GeneralizationScoringBuiltIn"]
+__all__ = ["Datafly", "Incognito", "Flash", "Lightning", "SafePub", "GeneralizationScoring", "GeneralizationScoringBuiltIn"]
