@@ -336,17 +336,31 @@ def equivalence_class_counts(
     levels: Levels,
     indices: Sequence[int] | None = None,
 ) -> Counter[tuple[str, ...]]:
-    """Count equivalence classes for the selected row indices."""
+    """Count equivalence classes for the selected row indices.
+
+    Generalization is computed column by column, caching the generalized
+    value of each distinct raw value, so `generalize_value` runs once per
+    distinct value per column instead of once per cell. The equivalence
+    class keys and their counts are then built with `zip` and `Counter`,
+    both implemented in C.
+    """
 
     selected_indices = range(len(data)) if indices is None else indices
-    counts: Counter[tuple[str, ...]] = Counter()
-    for index in selected_indices:
-        key = tuple(
-            generalize_value(data[index][attribute], hierarchies[attribute], level)
-            for attribute, level in zip(quasi_identifiers, levels)
-        )
-        counts[key] += 1
-    return counts
+    generalized_columns: list[list[str]] = []
+    for attribute, level in zip(quasi_identifiers, levels):
+        hierarchy = hierarchies[attribute]
+        value_cache: dict[str, str] = {}
+        column: list[str] = []
+        for index in selected_indices:
+            raw_value = data[index][attribute]
+            generalized = value_cache.get(raw_value)
+            if generalized is None:
+                generalized = generalize_value(raw_value, hierarchy, level)
+                value_cache[raw_value] = generalized
+            column.append(generalized)
+        generalized_columns.append(column)
+
+    return Counter(zip(*generalized_columns))
 
 
 def calculate_utility(
