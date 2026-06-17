@@ -56,10 +56,32 @@ class SafePub(Algorithm):
         Fraction of epsilon reserved for the data-dependent search.
         Mutually exclusive with ``dp_search_budget``.
     search_expansion_limit : int or None, default None
-        Maximum number of data-dependent search expansions. Defaults to
-        the size of the generalization lattice minus one, which is only
-        practical for small lattices; supply an explicit limit (for
-        example 30) when many QID attributes are involved.
+        Number of data-dependent search expansions — the steps of the
+        exponential mechanism, i.e. how many generalizations the search
+        evaluates. More expansions explore more of the lattice and tend
+        to find a better (higher-scoring) generalization, at a
+        proportional cost in runtime.
+
+        - **Recommended range: 10–100**, following the values used in
+          ARX's own data-dependent differential-privacy tests
+          (``TestAnonymizationDifferentialPrivacy``).
+        - **Upper bound: the size of the generalization lattice** — the
+          product of ``(height + 1)`` over all QID hierarchies. Beyond
+          this there are no further transformations to reach, so larger
+          values have no effect (cf. ARX's ``Example37``: "the number of
+          steps should not be more than the product of the hierarchy
+          heights").
+        - **If None (the default), it is set to the lattice size minus
+          one**, i.e. the largest meaningful search. This is exhaustive
+          for the local lattice but can be slow for many QID attributes,
+          so set an explicit value (e.g. ``100``) for large lattices.
+
+        This is ARX's step limit in ``EXPANSIONS`` semantics
+        (``setHeuristicSearchStepLimit(n, SearchStepSemantics.EXPANSIONS)``),
+        which maps one-to-one to this argument. The ARX GUI's "Limited
+        number of steps" uses ``CHECKS`` semantics and is divided by the
+        number of QIDs internally, so GUI value ``1000`` with 8 QIDs
+        equals ``search_expansion_limit = 125``.
     generalization_levels : dict or None, default None
         Fixed generalization level per QID attribute name
         (data-independent mode).
@@ -157,7 +179,10 @@ class SafePub(Algorithm):
             Fraction of epsilon reserved for the search. Mutually
             exclusive with ``dp_search_budget``.
         search_expansion_limit : int, optional
-            Maximum number of data-dependent search expansions.
+            Number of data-dependent search expansions (exponential
+            mechanism steps). Recommended range 10–100; upper bound is
+            the lattice size (product of each hierarchy's height + 1).
+            Defaults to the lattice size minus one when omitted.
         generalization_levels : dict, optional
             Fixed generalization level per QID attribute name
             (data-independent mode).
