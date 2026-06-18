@@ -61,9 +61,16 @@ class Lattice:
             )
 
             # Encode the original (level-0) column to integer codes.
-            categories, row_codes = np.unique(
-                dataset.df[qid].to_numpy(), return_inverse=True
-            )
+            # Missing values cannot be encoded (NaN is not a usable key for the
+            # level lookup, and groupby/np.unique disagree on NaN handling), so
+            # reject them explicitly rather than fail late or change semantics.
+            column = dataset.df[qid]
+            if column.isna().any():
+                raise ValueError(
+                    f"QID '{qid}' contains missing values (NaN/NA); Lightning's "
+                    "integer-encoded k-anonymity check requires complete QID columns."
+                )
+            categories, row_codes = np.unique(column.to_numpy(), return_inverse=True)
             self._row_codes.append(row_codes.astype(np.int64))
 
             # For each level, map a level-0 code to the integer code of the
