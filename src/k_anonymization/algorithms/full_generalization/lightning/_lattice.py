@@ -145,7 +145,7 @@ class Lattice:
         for j, level in enumerate(generalization_tuple):
             generalized = self._level_lut[j][level][self._row_codes[j]]
             columns.append(generalized)
-            radices.append(int(self._level_lut[j][level].max()) + 1)
+            radices.append(self.distinct_counts[j][level])
 
         product = 1
         for radix in radices:
