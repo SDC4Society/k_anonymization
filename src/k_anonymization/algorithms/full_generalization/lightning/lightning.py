@@ -9,7 +9,6 @@ from k_anonymization.algorithms.full_generalization._generalization_scoring impo
 )
 from k_anonymization.algorithms.utils import generalize_column
 from k_anonymization.core import Algorithm, Dataset
-from k_anonymization.evaluation.anonymity import is_k_anonymous
 
 from ._lattice import Lattice
 from ._node import LightningNode
@@ -107,7 +106,6 @@ class Lightning(Algorithm):
         assert self.__greedy_interval >= 1, "greedy_interval must be >= 1"
         self.__time_limit: float | None = time_limit
         self.__qids: list[str] = dataset.qids
-        self.__qids_idx: list[int] = dataset.qids_idx
         self.__max_workers: int = max_workers
         self.__best_score = None
         self.__best_criterion: tuple | None = None
@@ -272,14 +270,16 @@ class Lightning(Algorithm):
         node : LightningNode
             The node to check.
         """
-        generalized_df = self.__apply_generalization(node.generalization_tuple)
-        k_ano = is_k_anonymous(generalized_df, self.k, self.__qids_idx)
-
-        if not k_ano:
+        # Integer-encoded k-anonymity check avoids building a string
+        # DataFrame for the (vast majority of) non-k-anonymous nodes.
+        if self.__lattice.k_anonymity(node.generalization_tuple) < self.k:
             return
 
         node.check_as_k_ano()
 
+        # Only k-anonymous nodes reach here; build the generalized DataFrame
+        # for scoring.
+        generalized_df = self.__apply_generalization(node.generalization_tuple)
         score = self.generalization_scoring(generalized_df, self)
 
         with self.__state_lock:
