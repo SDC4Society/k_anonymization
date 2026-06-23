@@ -30,6 +30,12 @@ class Lattice:
     distinct_counts : list[list[int]]
         ``distinct_counts[j][level]`` is the number of distinct values
         at the given generalization level for the j-th QID.
+    _row_codes : list[numpy.ndarray]
+        ``_row_codes[j]`` holds the integer code of each row's level-0
+        value for the j-th QID. Used for DataFrame-free k-anonymity checks.
+    _level_lut : list[list[numpy.ndarray]]
+        ``_level_lut[j][level][c]`` is the integer code of the generalized
+        value at the given level for the level-0 code ``c`` of the j-th QID.
     shape : tuple
         Shape of the lattice array.
     max_height : int
@@ -43,11 +49,32 @@ class Lattice:
         hierarchies = [dataset.hierarchies[qid] for qid in self.qids]
         self.max_levels: list[int] = [h.height for h in hierarchies]
         self.distinct_counts: list[list[int]] = []
-        for hierarchy, max_level in zip(hierarchies, self.max_levels):
+        self._row_codes: list[np.ndarray] = []
+        self._level_lut: list[list[np.ndarray]] = []
+        for qid, hierarchy, max_level in zip(self.qids, hierarchies, self.max_levels):
             h_df = hierarchy.hierarchy_df
             self.distinct_counts.append(
                 [h_df[level].nunique() for level in range(max_level + 1)]
             )
+
+            column = dataset.df[qid]
+            if column.isna().any():
+                raise ValueError(
+                    f"QID '{qid}' contains missing values (NaN/NA); Flash's "
+                    "integer-encoded k-anonymity check requires complete QID columns."
+                )
+            categories, row_codes = np.unique(column.to_numpy(), return_inverse=True)
+            self._row_codes.append(row_codes.astype(np.int64))
+
+            luts: list[np.ndarray] = []
+            for level in range(max_level + 1):
+                level_map = dict(zip(h_df[0], h_df[level]))
+                generalized = np.array(
+                    [level_map[value] for value in categories], dtype=object
+                )
+                _, generalized_codes = np.unique(generalized, return_inverse=True)
+                luts.append(generalized_codes.astype(np.int64))
+            self._level_lut.append(luts)
 
         self.shape: tuple = tuple(ml + 1 for ml in self.max_levels)
         self.max_height: int = sum(self.max_levels)
