@@ -7,7 +7,6 @@ from k_anonymization.algorithms.full_generalization._generalization_scoring impo
 )
 from k_anonymization.algorithms.utils import generalize_column
 from k_anonymization.core import Algorithm, Dataset
-from k_anonymization.evaluation.anonymity import is_k_anonymous
 
 from ._lattice import Lattice
 from ._node import Node
@@ -80,7 +79,6 @@ class Flash(Algorithm):
         self.generalization_scoring = generalization_scoring
         self.__lattice: Lattice = Lattice(dataset)
         self.__qids: list[str] = dataset.qids
-        self.__qids_idx: list[int] = dataset.qids_idx
 
     def anonymize(self):
         """
@@ -217,12 +215,16 @@ class Flash(Algorithm):
             node = path[mid]
             node.tag()
 
-            generalized_df = self.__apply_generalization(node.generalization_tuple)
-            k_ano = is_k_anonymous(generalized_df, self.k, self.__qids_idx)
+            k_ano = (
+                self.__lattice.k_anonymity(node.generalization_tuple) >= self.k
+            )
 
             if k_ano:
                 node.check_as_k_ano()
                 self.__tagging_upper_nodes(node)
+                generalized_df = self.__apply_generalization(
+                    node.generalization_tuple
+                )
                 score = self.generalization_scoring(generalized_df, self)
                 if self.__best_score is None or score < self.__best_score:
                     self.__best_score = score
