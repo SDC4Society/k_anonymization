@@ -1,6 +1,8 @@
 import itertools
 from typing import List
 
+import numpy as np
+
 from ._node import Node
 from k_anonymization.core import Dataset, HierarchiesDict
 
@@ -14,6 +16,23 @@ class Lattice:
     generated combinatorially from the previous dimension's active nodes
     and connected via directed edges that encode the partial order of
     generalization (lower -> higher).
+
+    Attributes
+    ----------
+    _qid_pos : dict[str, int]
+        Maps a QID name to its position in ``self.qids``. Used to look up
+        ``distinct_counts``/``_row_codes``/``_level_lut`` by name, since
+        Incognito's nodes reference QIDs by name over a variable-length
+        subset rather than by a fixed position (unlike Flash/Lightning).
+    distinct_counts : list[list[int]]
+        ``distinct_counts[j][level]`` is the number of distinct values
+        at the given generalization level for the j-th QID.
+    _row_codes : list[numpy.ndarray]
+        ``_row_codes[j]`` holds the integer code of each row's level-0
+        value for the j-th QID. Used for DataFrame-free k-anonymity checks.
+    _level_lut : list[list[numpy.ndarray]]
+        ``_level_lut[j][level][c]`` is the integer code of the generalized
+        value at the given level for the level-0 code ``c`` of the j-th QID.
     """
 
     def __init__(self, dataset: Dataset) -> None:
@@ -21,6 +40,39 @@ class Lattice:
         self.qids: List[str] = dataset.qids
         self.hierarchy: HierarchiesDict = dataset.hierarchies
         self.attributes: int = 0
+
+        # --- integer encoding for DataFrame-free k-anonymity checks ---
+        self._qid_pos: dict = {qid: j for j, qid in enumerate(self.qids)}
+        hierarchies = [self.hierarchy[qid] for qid in self.qids]
+        self.max_levels: list = [h.height for h in hierarchies]
+        self.distinct_counts: list = []
+        self._row_codes: list = []
+        self._level_lut: list = []
+        for qid, hierarchy, max_level in zip(self.qids, hierarchies, self.max_levels):
+            h_df = hierarchy.hierarchy_df
+            self.distinct_counts.append(
+                [h_df[level].nunique() for level in range(max_level + 1)]
+            )
+
+            column = dataset.df[qid]
+            if column.isna().any():
+                raise ValueError(
+                    f"QID '{qid}' contains missing values (NaN/NA); Incognito's "
+                    "integer-encoded k-anonymity check requires complete QID columns."
+                )
+            categories, row_codes = np.unique(column.to_numpy(), return_inverse=True)
+            self._row_codes.append(row_codes.astype(np.int64))
+
+            luts: list = []
+            for level in range(max_level + 1):
+                level_map = dict(zip(h_df[0], h_df[level]))
+                generalized = np.array(
+                    [level_map[value] for value in categories], dtype=object
+                )
+                _, generalized_codes = np.unique(generalized, return_inverse=True)
+                luts.append(generalized_codes.astype(np.int64))
+            self._level_lut.append(luts)
+        # --- end integer encoding ---
 
     def __single_attribute_initialization(self) -> None:
         """Initialize the lattice with single-attribute generalization chains.
