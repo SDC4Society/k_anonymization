@@ -113,9 +113,7 @@ class Incognito(Algorithm):
                 if node.is_marked() or node.deleted:
                     continue
 
-                k_anonymous = (
-                    self.__lattice.k_anonymity(node.generalization) >= self.k
-                )
+                k_anonymous = self.__lattice.k_anonymity(node.generalization) >= self.k
 
                 if k_anonymous:
                     node.mark()
