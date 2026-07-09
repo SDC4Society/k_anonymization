@@ -7,7 +7,6 @@ from k_anonymization.algorithms.full_generalization._generalization_scoring impo
 from k_anonymization.algorithms.utils import generalize_column
 from k_anonymization.core import Algorithm, Dataset
 from k_anonymization.core.frame import ITableDF
-from k_anonymization.evaluation.anonymity import is_k_anonymous
 
 from ._lattice import Lattice
 
@@ -76,9 +75,6 @@ class Incognito(Algorithm):
         self.__lattice: Lattice = Lattice(dataset)
         self.__num_qids: int = len(dataset.qids)
         self.__pqueue = PriorityQueue()
-        self.__qids_idx_map = {
-            qid: dataset.qids_idx[pos] for pos, qid in enumerate(dataset.qids)
-        }
 
     def __apply_node_generalization(self, generalization: list[tuple[str, int]]):
         """Apply one lattice node's full-domain generalization to original data."""
@@ -117,11 +113,7 @@ class Incognito(Algorithm):
                 if node.is_marked() or node.deleted:
                     continue
 
-                generalized_df = self.__apply_node_generalization(node.generalization)
-                node_qids_idx = [
-                    self.__qids_idx_map[qid] for qid, _ in node.generalization
-                ]
-                k_anonymous = is_k_anonymous(generalized_df, self.k, node_qids_idx)
+                k_anonymous = self.__lattice.k_anonymity(node.generalization) >= self.k
 
                 if k_anonymous:
                     node.mark()
