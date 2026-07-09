@@ -42,12 +42,12 @@ class Lattice:
         self.attributes: int = 0
 
         # --- integer encoding for DataFrame-free k-anonymity checks ---
-        self._qid_pos: dict = {qid: j for j, qid in enumerate(self.qids)}
+        self._qid_pos: dict[str, int] = {qid: j for j, qid in enumerate(self.qids)}
         hierarchies = [self.hierarchy[qid] for qid in self.qids]
-        self.max_levels: list = [h.height for h in hierarchies]
-        self.distinct_counts: list = []
-        self._row_codes: list = []
-        self._level_lut: list = []
+        self.max_levels: list[int] = [h.height for h in hierarchies]
+        self.distinct_counts: list[list[int]] = []
+        self._row_codes: list[np.ndarray] = []
+        self._level_lut: list[list[np.ndarray]] = []
         for qid, hierarchy, max_level in zip(self.qids, hierarchies, self.max_levels):
             h_df = hierarchy.hierarchy_df
             self.distinct_counts.append(
@@ -63,7 +63,7 @@ class Lattice:
             categories, row_codes = np.unique(column.to_numpy(), return_inverse=True)
             self._row_codes.append(row_codes.astype(np.int64))
 
-            luts: list = []
+            luts: list[np.ndarray] = []
             for level in range(max_level + 1):
                 level_map = dict(zip(h_df[0], h_df[level]))
                 generalized = np.array(
@@ -194,7 +194,7 @@ class Lattice:
             self.__graph_generation()
         self.attributes += 1
 
-    def k_anonymity(self, generalization: List[tuple]) -> int:
+    def k_anonymity(self, generalization: List[tuple[str, int]]) -> int:
         """
         Compute the k-anonymity of a generalization via integer encoding.
 
