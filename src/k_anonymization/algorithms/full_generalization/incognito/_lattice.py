@@ -193,3 +193,59 @@ class Lattice:
         else:
             self.__graph_generation()
         self.attributes += 1
+
+    def k_anonymity(self, generalization: List[tuple]) -> int:
+        """
+        Compute the k-anonymity of a generalization via integer encoding.
+
+        Returns the size of the smallest equivalence class produced by
+        generalizing the QID subset named in ``generalization`` (a
+        variable-length, named subset -- Incognito's nodes don't always
+        cover all dataset QIDs, unlike Flash/Lightning's fixed-length
+        generalization tuples), without materializing a (string) DataFrame.
+
+        Each named QID is reduced to its precomputed generalized integer
+        codes (``_level_lut[j][level][_row_codes[j]]``); the per-QID codes
+        are combined into a single key (mixed-radix when it fits in int64,
+        otherwise a structured row view) and equivalence-class sizes are
+        counted with ``numpy``. Because the per-level encoding is bijective,
+        the resulting size multiset is identical to
+        ``df.groupby(qids).size()`` on the generalized string data.
+
+        Parameters
+        ----------
+        generalization : list[tuple[str, int]]
+            The (QID name, generalization level) pairs to check.
+
+        Returns
+        -------
+        int
+            The minimum equivalence-class size (the level of k-anonymity).
+        """
+        columns = []
+        radices = []
+        for qid, level in generalization:
+            j = self._qid_pos[qid]
+            generalized = self._level_lut[j][level][self._row_codes[j]]
+            columns.append(generalized)
+            radices.append(self.distinct_counts[j][level])
+
+        product = 1
+        for radix in radices:
+            product *= radix
+
+        if product < (1 << 62):
+            key = columns[0].copy()
+            for column, radix in zip(columns[1:], radices[1:]):
+                key = key * radix + column
+            if product < (1 << 22):
+                counts = np.bincount(key)
+                return int(counts[counts > 0].min())
+            counts = np.unique(key, return_counts=True)[1]
+            return int(counts.min())
+
+        stacked = np.stack(columns, axis=1)
+        view = np.ascontiguousarray(stacked).view(
+            [("", stacked.dtype)] * stacked.shape[1]
+        )
+        return int(np.unique(view, return_counts=True)[1].min())
