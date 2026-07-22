@@ -8,8 +8,10 @@ become identical as they share a common ancestor on their generalization
 hierarchy, which helps achieving `k`-anonymity.
 """
 
-from ._utility_metric import UtilityMetric, UtilityMetricBuiltIn
+from ._generalization_scoring import GeneralizationScoring, GeneralizationScoringBuiltIn
 from .datafly import Datafly
+from .flash import Flash
 from .incognito import Incognito
+from .lightning import Lightning
 
-__all__ = ["Datafly", "Incognito", "UtilityMetric", "UtilityMetricBuiltIn"]
+__all__ = ["Datafly", "Incognito", "Flash", "Lightning", "GeneralizationScoring", "GeneralizationScoringBuiltIn"]

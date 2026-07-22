@@ -1,13 +1,12 @@
 from queue import PriorityQueue
 
-from k_anonymization.algorithms.full_generalization._utility_metric import (
-    UtilityMetric,
-    UtilityMetricBuiltIn,
+from k_anonymization.algorithms.full_generalization._generalization_scoring import (
+    GeneralizationScoring,
+    GeneralizationScoringBuiltIn,
 )
 from k_anonymization.algorithms.utils import generalize_column
 from k_anonymization.core import Algorithm, Dataset
 from k_anonymization.core.frame import ITableDF
-from k_anonymization.evaluation.anonymity import is_k_anonymous
 
 from ._lattice import Lattice
 
@@ -30,27 +29,28 @@ class Incognito(Algorithm):
         The Dataset object holding the original data and its metadata.
     k : int
         The privacy parameter `k`.
-    utility_metric : UtilityMetric
-        The metric used to select the best solution among all valid anonymizations.
-        It is possible to use a built-in from ``UtilityMetricBuiltIn``, or provide a
-        custom function
-        ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
-        Default: ``UtilityMetricBuiltIn.NCP``
+    generalization_scoring : GeneralizationScoring
+        The scoring function used to select the best solution among all valid
+        anonymizations.
+        It is possible to use a built-in from ``GeneralizationScoringBuiltIn``, or
+        provide a custom function
+        ``custom_scoring(generalized_df: DataFrame, algo: Algorithm) -> Any``.
+        Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
 
     Attributes
     ----------
     solutions : list[ITableDF]
         All anonymized tables that satisfy k-anonymity. The best solution
-        (lowest score under ``utility_metric``) is stored in ``anon_data``.
-    utility_metric : UtilityMetric
-        The utility metric used to select the best solution.
+        (lowest score under ``generalization_scoring``) is stored in ``anon_data``.
+    generalization_scoring : GeneralizationScoring
+        The scoring function used to select the best solution.
     """
 
     def __init__(
         self,
         dataset: Dataset,
         k: int,
-        utility_metric: UtilityMetric = UtilityMetricBuiltIn.NCP,
+        generalization_scoring: GeneralizationScoring = GeneralizationScoringBuiltIn.DISCERNIBILITY,
     ):
         """
         Initialize the Incognito algorithm.
@@ -61,22 +61,20 @@ class Incognito(Algorithm):
             The Dataset object holding the original data and its metadata.
         k : int
             The privacy parameter `k`.
-        utility_metric : UtilityMetric
-            The metric used to select the best solution among all valid anonymizations.
-            It is possible to use a built-in from ``UtilityMetricBuiltIn``, or provide a
-            custom function
-        ``custom_metric(generalized_df: DataFrame, algo: Algorithm) -> Any``.
-            Default: ``UtilityMetricBuiltIn.NCP``
+        generalization_scoring : GeneralizationScoring
+            The scoring function used to select the best solution among all valid
+            anonymizations.
+            It is possible to use a built-in from ``GeneralizationScoringBuiltIn``,
+            or provide a custom function
+        ``custom_scoring(generalized_df: DataFrame, algo: Algorithm) -> Any``.
+            Default: ``GeneralizationScoringBuiltIn.DISCERNIBILITY``
         """
         super().__init__(dataset, k)
-        self.utility_metric = utility_metric
+        self.generalization_scoring = generalization_scoring
         self.solutions: list[ITableDF] = []
         self.__lattice: Lattice = Lattice(dataset)
         self.__num_qids: int = len(dataset.qids)
         self.__pqueue = PriorityQueue()
-        self.__qids_idx_map = {
-            qid: dataset.qids_idx[pos] for pos, qid in enumerate(dataset.qids)
-        }
 
     def __apply_node_generalization(self, generalization: list[tuple[str, int]]):
         """Apply one lattice node's full-domain generalization to original data."""
@@ -115,11 +113,7 @@ class Incognito(Algorithm):
                 if node.is_marked() or node.deleted:
                     continue
 
-                generalized_df = self.__apply_node_generalization(node.generalization)
-                node_qids_idx = [
-                    self.__qids_idx_map[qid] for qid, _ in node.generalization
-                ]
-                k_anonymous = is_k_anonymous(generalized_df, self.k, node_qids_idx)
+                k_anonymous = self.__lattice.k_anonymity(node.generalization) >= self.k
 
                 if k_anonymous:
                     node.mark()
@@ -141,10 +135,7 @@ class Incognito(Algorithm):
                 continue
 
             generalized_df = self.__apply_node_generalization(node.generalization)
-            # sorted_gen = sorted(node.generalization, key=lambda x: x[0])
-            sorted_gen = sorted(
-                node.generalization, key=lambda x: self.dataset.qids.index(x[0])
-            )
+            sorted_gen = sorted(node.generalization, key=lambda x: x[0])
             _num_local_range = []
             for qid, level in sorted_gen:
                 if (
@@ -168,7 +159,7 @@ class Incognito(Algorithm):
             # )
             self.solutions.append(generalized_df)
 
-            score = self.utility_metric(generalized_df, self)
+            score = self.generalization_scoring(generalized_df, self)
             self.score_list.append(score)
             self.gen_list.append(sorted_gen)
             if best_score is None or score < best_score:
