@@ -337,6 +337,76 @@ class NCP:
         return _all_penalties / (len(qids_idx) * org_data.shape[0])
 
     @staticmethod
+    def calculate_for_generalization_psd(
+        org_data: DataFrame,
+        anon_data: DataFrame,
+        hierarchies: HierarchiesDict,
+        qids_idx: list,
+        is_categorical: list,
+        num_local_ranges: list[int],
+    ):
+        r"""
+        Calculate NCP for generalization anonymization.
+
+        When a numerical value is generalized to a (local) numerical range,
+        it becomes ambiguous in such a range.
+        Thus, :math:`P_{num} = \frac{local\_range}{global\_range}`.
+
+        For categorical value, it becomes ambiguous among the leaves under
+        the common ancestor for its equivalence class.
+        Thus :math:`P_{cat} = \frac{leaves\_under\_common\_ancestor}{all\_leaves}`.
+
+        Parameters
+        ----------
+        org_data : DataFrame
+            The original data.
+        anon_data : DataFrame
+            The anonymized data.
+        hierarchies : HierarchiesDict
+            Hierarchy definitions for the QID attributes.
+        qids_idx : list
+            The column indices of the QID attributes.
+        is_categorical : list
+            A list of booleans indicating if a QID attribute is categorical.
+
+        Returns
+        -------
+        float
+            The NCP score.
+        """
+        equivalence_classes = get_equivalence_classes(anon_data, qids_idx)
+
+        _all_penalties = 0.0
+        _max_ranges = {}
+
+        def get_penalty_cat(value, hierarchy: Hierarchy):
+            return len(hierarchy.get_leaves_under_node(value)) / len(hierarchy.leaves)
+
+        for qid in equivalence_classes:
+            _penalty = 0.0
+            _size = qid["count"]
+            for pos, val in enumerate(qid["qid"]):
+                if val == "*":
+                    _penalty += 1
+                elif is_categorical[pos]:
+                    _penalty += get_penalty_cat(val, hierarchies[qids_idx[pos]])
+                else:
+                    if pos not in _max_ranges:
+                        org_low = org_data.iloc[:, qids_idx[pos]].min()
+                        org_high = org_data.iloc[:, qids_idx[pos]].max()
+                        _max_ranges[pos] = org_high - org_low
+                    _penalty += num_local_ranges[pos] / _max_ranges[pos]
+
+                    # elif val.endswith("*"):
+                    # TODO: If numerical value is generalized by removing tailing digit(s)
+                    #       For example: Zip code (12345 -> 1234*)
+
+            _all_penalties += _penalty * _size
+
+        _all_penalties += (org_data.shape[0] - anon_data.shape[0]) * len(qids_idx)
+        return _all_penalties / (len(qids_idx) * org_data.shape[0])
+
+    @staticmethod
     def calculate_for_local_recoding_mean_mode(
         org_data: DataFrame,
         groups: list,
@@ -469,7 +539,7 @@ class NCP:
 
 class CM:
     """
-    Classification penalty (Classification Metrics)
+    Classification penalty (Classification Metric)
     """
 
     @staticmethod
@@ -479,8 +549,25 @@ class CM:
         target: str,
     ):
         return (
-            data.groupby(qids)[target]
-            .agg(lambda x: np.min(x.value_counts()) if x.nunique() > 1 else 0)
+            data.groupby(qids, observed=True)[target]
+            .agg(
+                lambda x: x.count() - np.max(x.value_counts()) if x.nunique() > 1 else 0
+            )
             .sum()
             / data.shape[0]
-        ).item()
+        )
+
+
+class RM:
+    """
+    Regression penalty (Regression Metric)
+    """
+
+    @staticmethod
+    def calculate(df: DataFrame, qids: list, target: str):
+        max_range = df[target].max() - df[target].min()
+        return (
+            df.groupby(qids, observed=True)[target]
+            .agg(lambda x: (x.std() / max_range))
+            .mean()
+        )

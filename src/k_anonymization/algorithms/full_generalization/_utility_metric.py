@@ -61,12 +61,14 @@ class UtilityMetricBuiltIn:
         --------
         k_anonymization.evaluation.data_utility.NCP.calculate_for_generalization
         """
-        return NCP.calculate_for_generalization(
+
+        return NCP.calculate_for_generalization_psd(
             algo.org_data,
             generalized_df,
             algo.dataset.hierarchies,
             algo.dataset.qids_idx,
             algo.dataset.is_categorical,
+            algo.num_local_range,
         )
 
     @staticmethod

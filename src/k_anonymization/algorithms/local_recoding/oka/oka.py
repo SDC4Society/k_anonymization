@@ -249,7 +249,7 @@ class OKA(LocalRecodingAlgorithm):
         def put_record_to_suitable_cluster(r_idx, considered_clusters=None):
             r_num = self.ts_num[r_idx] if has_num_qids else None
             r_cat = self.ts_cat[r_idx] if has_cat_qids else None
-            r_cat_h1 = self.ts_cat_h1[r_idx] if has_cat_h1_qids is not None else None
+            r_cat_h1 = self.ts_cat_h1[r_idx] if has_cat_h1_qids else None
 
             # If considered_clusters is not specified, calculate distance to all clusters
             # Use if-else to prevent slowing down due to indexing

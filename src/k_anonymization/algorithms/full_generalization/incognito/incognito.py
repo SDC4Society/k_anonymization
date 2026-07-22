@@ -133,22 +133,49 @@ class Incognito(Algorithm):
         # Gather all valid solutions and select the best by utility_metric.
         best_df = None
         best_score = None
+        self.num_local_range_list = []
+        self.score_list = []
+        self.gen_list = []
         for node in self.__lattice.nodes:
             if node.deleted:
                 continue
 
             generalized_df = self.__apply_node_generalization(node.generalization)
-            sorted_gen = sorted(node.generalization, key=lambda x: x[0])
-            solution_df = ITableDF(
-                generalized_df,
-                table_name=f"Incognito solution: {sorted_gen}",
+            # sorted_gen = sorted(node.generalization, key=lambda x: x[0])
+            sorted_gen = sorted(
+                node.generalization, key=lambda x: self.dataset.qids.index(x[0])
             )
-            self.solutions.append(solution_df)
+            _num_local_range = []
+            for qid, level in sorted_gen:
+                if (
+                    qid not in self.dataset.qids_numerical
+                    or level >= self.dataset.hierarchies[qid].height
+                ):
+                    _num_local_range.append(None)
+                else:
+                    if level == 0:
+                        _num_local_range.append(0)
+                    else:
+                        _u = self.dataset.hierarchies[qid].hierarchy_df[level].unique()
+                        _num_local_range.append(_u[1] - _u[0])
+
+            self.num_local_range = _num_local_range
+            self.num_local_range_list.append(_num_local_range)
+
+            # solution_df = ITableDF(
+            #     generalized_df,
+            #     table_name=f"Incognito solution: {sorted_gen}",
+            # )
+            self.solutions.append(generalized_df)
 
             score = self.utility_metric(generalized_df, self)
+            self.score_list.append(score)
+            self.gen_list.append(sorted_gen)
             if best_score is None or score < best_score:
                 best_score = score
                 best_df = generalized_df
+                self.best_generalization_solution = sorted_gen.copy()
 
         if best_df is not None:
+            self.best_score = best_score
             self._construct_anon_data(best_df.values, columns=list(best_df))

@@ -1,0 +1,10 @@
+{
+  "name": "longitude",
+  "lambda": [
+    "lambda x: round(x, 1)",
+    "lambda x: round(x, 0)",
+    "lambda x: x // 5 * 5",
+    "lambda x: x // 10 * 10",
+    "lambda x: '*'"
+  ]
+}

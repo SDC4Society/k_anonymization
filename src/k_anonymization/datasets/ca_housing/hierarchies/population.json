@@ -1,0 +1,8 @@
+{
+  "name": "population",
+  "lambda": [
+    "lambda x: 6000 if x >= 6000 else x // 500 * 500 + 500",
+    "lambda x: 6000 if x >= 6000 else x // 1000 * 1000 + 1000",
+    "lambda x: '*'"
+  ]
+}

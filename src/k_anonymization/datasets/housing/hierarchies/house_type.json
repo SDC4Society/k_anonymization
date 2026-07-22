@@ -1,0 +1,38 @@
+{
+  "name": "house_type",
+  "tree": [
+    {
+      "is_suppressed": false,
+      "values": [
+        {
+          "original": ["flat"],
+          "generalized": "shared-walls-no-floor"
+        },
+        {
+          "original": ["terraced", "semi-detached"],
+          "generalized": "shared-walls-has-floor"
+        },
+        {
+          "original": ["detached"],
+          "generalized": "private-house"
+        }
+      ]
+    },
+    {
+      "is_suppressed": false,
+      "values": [
+        {
+          "original": ["shared-walls-no-floor", "shared-walls-has-floor"],
+          "generalized": "shared-walls"
+        },
+        {
+          "original": ["private-house"],
+          "generalized": "private"
+        }
+      ]
+    },
+    {
+      "is_suppressed": true
+    }
+  ]
+}

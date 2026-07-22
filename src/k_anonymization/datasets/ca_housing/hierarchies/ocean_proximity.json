@@ -1,0 +1,7 @@
+{
+  "name": "ocean_proximity",
+  "lambda": [
+    "lambda x: 'INLAND_2' if x == 'INLAND' else 'NEAR OCEAN_2'",
+    "lambda x: '*'"
+  ]
+}

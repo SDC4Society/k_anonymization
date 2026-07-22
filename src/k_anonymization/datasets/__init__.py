@@ -2,6 +2,8 @@ from k_anonymization.core import Dataset
 
 ADULT = Dataset("adult")
 LONDON_HOUSE_PRICE = Dataset("london_house_price")
+HOUSING = Dataset("housing")
+CA_HOUSING = Dataset("ca_housing")
 MINI_CRIME = Dataset("mini_crime")
 MINI_PATIENT = Dataset("mini_patient")
 

@@ -8,8 +8,6 @@ from numpy import arange
 from k_anonymization.core.algorithm import Algorithm
 from k_anonymization.core.dataset import Dataset
 
-from ._utils import get_max_ranges
-
 GroupAnonymization: TypeAlias = Callable[
     [Collection[Collection], dict], Collection[Collection]
 ]
@@ -208,7 +206,7 @@ class LocalRecodingAlgorithm(Algorithm):
         self.qids_idx = dataset.qids_idx
         self.is_categorical = dataset.is_categorical
         self.hierarchies = dataset.hierarchies
-        self.max_ranges = get_max_ranges(dataset)
+        # self.max_ranges = get_max_ranges(dataset)
         super().__init__(dataset, k)
 
     def anonymize(self):

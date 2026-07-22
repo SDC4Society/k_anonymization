@@ -1,0 +1,10 @@
+{
+  "name": "total_bedrooms",
+  "lambda": [
+    "lambda x: 12000 if x >= 12000 else x // 50 * 50 + 50",
+    "lambda x: 12000 if x >= 12000 else x // 100 * 100 + 100",
+    "lambda x: 12000 if x >= 12000 else x // 500 * 500 + 500",
+    "lambda x: 12000 if x >= 12000 else x // 1000 * 1000 + 1000",
+    "lambda x: '*'"
+  ]
+}

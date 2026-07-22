@@ -39,7 +39,7 @@ def find_not_k_anonymous_qids(
 
     return [
         {"qid": key, "count": value}
-        for key, value in _df.groupby(_qids).size().items()
+        for key, value in _df.groupby(_qids, observed=False).size().items()
         if value < k
     ]
 
@@ -113,4 +113,4 @@ def get_k_anonymity(data: DataFrame | ndarray, qids_idx: list = []):
     else:
         _qids = _df.keys().values[qids_idx].tolist()
 
-    return _df.groupby(_qids).size().min()
+    return _df.groupby(_qids, observed=False).size().min()
