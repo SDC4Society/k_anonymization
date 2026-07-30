@@ -141,9 +141,9 @@ class Dataset:
         return self.props["target"]
 
     @cached_property
-    def qids_categorial(self):
+    def qids_categorical(self):
         """
-        A list of names of the cateforical QID attributes.
+        A list of names of the categorical QID attributes.
 
         Returns
         -------
@@ -165,7 +165,7 @@ class Dataset:
         ]
 
     @cached_property
-    def qids_idx_categorial(self):
+    def qids_idx_categorical(self):
         """
         The column indices of the categorical QID attributes.
 
@@ -191,9 +191,9 @@ class Dataset:
         ]
 
     # TODO: Update other modules to use
-    # - qids_categorial
+    # - qids_categorical
     # - qids_numerical
-    # - qids_idx_categorial
+    # - qids_idx_categorical
     # - qids_idx_numerical
 
     @cached_property

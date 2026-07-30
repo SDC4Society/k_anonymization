@@ -70,10 +70,11 @@ class GroupAnonymizationBuiltIn:
         def summarize(values, is_cat):
             anon_value = None
             if is_cat:
+                unique = sorted(set(values))
                 try:
-                    anon_value = " & ".join(set(values))
+                    anon_value = " & ".join(unique)
                 except:
-                    anon_value = " & ".join([str(x) for x in set(values)])
+                    anon_value = " & ".join([str(x) for x in unique])
             else:
                 if len(set(values)) == 1:
                     anon_value = f"{values[0]}"
