@@ -19,6 +19,14 @@ Before using/developing the module, run the following command to install depende
 pip install -e .
 ```
 
+## AI Declaration
+
+In general, this repository was developed __WITHOUT__ the involvement of generative AI tools, __EXCEPT__ the doctrings and the following modules/directories:
+
+| Module/Directory | Tool used | How it was used |
+| :--- | :---: | :--- |
+| `algorithms.local_recoding.kmember.KMember` | Gemini 3 Flash | Gathered implementation ideas about tensorizing `KMember` for speed improvement. The final codes were self-written. |
+
 ## References
 [1] Sweeney, Latanya. “Datafly: A system for providing anonymity in medical data.” Database Security XI. IFIP Advances in Information and Communication Technology. Springer, 1998. https://doi.org/10.1007/978-0-387-35285-5_22
 
