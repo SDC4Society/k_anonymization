@@ -50,7 +50,7 @@ class Incognito(Algorithm):
         self,
         dataset: Dataset,
         k: int,
-        generalization_scoring: GeneralizationScoring = GeneralizationScoringBuiltIn.DISCERNIBILITY,
+        generalization_scoring: GeneralizationScoring = GeneralizationScoringBuiltIn.NCP,
     ):
         """
         Initialize the Incognito algorithm.

@@ -38,7 +38,7 @@ def find_not_k_anonymous_qids(
         _qids = _df.keys().values[qids_idx].tolist()
 
     return [
-        {"qid": key, "count": value}
+        {"qid": key if isinstance(key, tuple) else tuple([key]), "count": value}
         for key, value in _df.groupby(_qids, observed=False).size().items()
         if value < k
     ]

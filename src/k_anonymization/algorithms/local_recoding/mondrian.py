@@ -41,6 +41,7 @@ class ClassicMondrian(LocalRecodingAlgorithm):
         dataset: Dataset,
         k: int,
         group_anonymization: GroupAnonymization = GroupAnonymizationBuiltIn.SUMMARIZATION,
+        seed: int = None,
     ):
         """
         Initialize Classic Mondrian.
