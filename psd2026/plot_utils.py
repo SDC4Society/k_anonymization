@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from scipy.stats import hmean
 
 # Set specific label sizes
 mpl.rcParams["axes.labelsize"] = 20  # x and y labels
@@ -38,6 +39,21 @@ METRICS_SPECS = {
     "UT_RM": {"name": r"$\mathcal{L}_{REG}$", "marker": "o", "color": "tab:blue"},
     "UT_CM_BIN": {"name": r"$\mathcal{L}_{BIN}$", "marker": "X", "color": "tab:orange"},
     "UT_CM_MUL": {"name": r"$\mathcal{L}_{MUL}$", "marker": "^", "color": "tab:purple"},
+    "UT_RM+NCP": {
+        "name": r"m$(\mathcal{L}_{REG},NCP)$",
+        "marker": "o",
+        "color": "tab:blue",
+    },
+    "UT_CM_BIN+NCP": {
+        "name": r"m$(\mathcal{L}_{BIN},NCP)$",
+        "marker": "X",
+        "color": "tab:orange",
+    },
+    "UT_CM_MUL+NCP": {
+        "name": r"m$(\mathcal{L}_{MUL,NCP)}$",
+        "marker": "^",
+        "color": "tab:purple",
+    },
     "ML_REG_RMSE": {"name": r"$\mathcal{E}_{REG}$", "marker": "o", "color": "tab:blue"},
     "ML_CLS_BIN_F1_LOSS": {
         "name": r"$\mathcal{E}_{BIN}$",
@@ -78,6 +94,11 @@ def load_results(dataset_name: str):
     results_df = pd.read_csv(f"./results/{dataset_name}/results_summary.csv")
     results_df["ML_CLS_BIN_F1_LOSS"] = 1 - results_df["ML_CLS_BIN_F1"]
     results_df["ML_CLS_MUL_F1_LOSS"] = 1 - results_df["ML_CLS_MUL_F1"]
+
+    results_df["UT_RM+NCP"] = hmean([results_df["UT_RM"], results_df["UT_NCP"]])
+    results_df["UT_CM_BIN+NCP"] = hmean([results_df["UT_CM_BIN"], results_df["UT_NCP"]])
+    results_df["UT_CM_MUL+NCP"] = hmean([results_df["UT_CM_MUL"], results_df["UT_NCP"]])
+
     results = {}
     for algo in results_df.METHOD.unique():
         result = (
@@ -85,7 +106,7 @@ def load_results(dataset_name: str):
             .sort_values("K")
             .reset_index(drop=False)
         )
-        results[algo] = result
+        results[algo] = result.copy()
     return results
 
 
