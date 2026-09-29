@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from scipy.stats import hmean
+from scipy.stats import linregress
 
 # Set specific label sizes
 mpl.rcParams["axes.labelsize"] = 20  # x and y labels
@@ -19,7 +19,8 @@ mpl.rcParams["grid.linewidth"] = 1.5
 mpl.rcParams["lines.linewidth"] = 2.5
 mpl.rcParams["axes.linewidth"] = 1.5
 
-K = [2, 10] + list(range(20, 101, 10))
+K = [2, 5, 10] + list(range(20, 101, 10))
+K_TICKS = [2, 10] + list(range(20, 101, 10))
 
 ALPHA = 0.7
 WIDTH = 5
@@ -30,7 +31,7 @@ CMAP_ORANGE = colors.LinearSegmentedColormap.from_list(
     "orange_seq", ["navajowhite", "chocolate"]
 )
 CMAP_PURPLE = colors.LinearSegmentedColormap.from_list("purple_seq", ["pink", "purple"])
-NOTES = {"row": ["i", "ii", "iii", "iv"], "col": ["a", "b", "c", "d"]}
+NOTES = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p"]
 
 METRICS_SPECS = {
     "UT_CAVG": {"name": r"$C_{AVG}$"},
@@ -87,17 +88,64 @@ CORR_SPECS = [
         "color": "tab:purple",
         "cmap": CMAP_PURPLE,
     },
+    {
+        "marker": "s",
+        "note": "◼",
+        "color": "tab:red",
+        "cmap": colors.LinearSegmentedColormap.from_list(
+            "red_seq", ["lightcoral", "crimson"]
+        ),
+    },
 ]
+
+
+def draw_trend_line(AX, X, Y, fit: str = "linear", xlim=None, ylim=None):
+    x_flatten = [item for sublist in X for item in sublist]
+    x_trend = (
+        np.linspace(np.min(x_flatten), np.max(x_flatten), 100)
+        if xlim is None
+        else np.linspace(xlim[0], xlim[1], 100)
+    )
+
+    y_flatten = [item for sublist in Y for item in sublist]
+
+    if fit == "linear":
+        res = linregress(x_flatten, y_flatten)
+        y_trend = res.slope * x_trend + res.intercept
+    elif fit == "logarithmic":
+        _x = np.log(x_flatten)
+        y_trend = (
+            np.linspace(np.min(y_flatten), np.max(y_flatten), 100)
+            if ylim is None
+            else np.linspace(ylim[0], ylim[1], 100)
+        )
+        res = linregress(y_flatten, _x)
+        x_trend = np.exp(res.intercept) * np.exp(y_trend * res.slope)
+    elif fit == "exponential":
+        _y = np.log(y_flatten)
+        res = linregress(x_flatten, _y)
+        y_trend = np.exp(res.intercept) * np.exp(x_trend * res.slope)
+    elif fit == "power":
+        _x = np.log(x_flatten)
+        _y = np.log(y_flatten)
+        res = linregress(_x, _y)
+        y_trend = np.exp(res.intercept) * x_trend**res.slope
+
+    AX.plot(
+        x_trend,
+        y_trend,
+        color="tab:red",
+        alpha=ALPHA,
+        zorder=0.8,
+        label=f"{r'$r^2$'}={res.rvalue**2:.2f}, "
+        + f"p={f'{res.pvalue:.2e}' if res.pvalue < 0.001 else f'{res.pvalue:.3f}'}",
+    )
 
 
 def load_results(dataset_name: str):
     results_df = pd.read_csv(f"./results/{dataset_name}/results_summary.csv")
     results_df["ML_CLS_BIN_F1_LOSS"] = 1 - results_df["ML_CLS_BIN_F1"]
     results_df["ML_CLS_MUL_F1_LOSS"] = 1 - results_df["ML_CLS_MUL_F1"]
-
-    results_df["UT_RM+NCP"] = hmean([results_df["UT_RM"], results_df["UT_NCP"]])
-    results_df["UT_CM_BIN+NCP"] = hmean([results_df["UT_CM_BIN"], results_df["UT_NCP"]])
-    results_df["UT_CM_MUL+NCP"] = hmean([results_df["UT_CM_MUL"], results_df["UT_NCP"]])
 
     results = {}
     for algo in results_df.METHOD.unique():
@@ -139,8 +187,10 @@ def plot_single_vs_k(
         nrows, ncols, figsize=[ncols * WIDTH, nrows * HEIGHT], dpi=150
     )
 
+    i_subplot = -1
     for i_row, row in enumerate(draw_specs):
         for i_col, col in enumerate(row):
+            i_subplot += 1
             axis = ax[i_row, i_col]
             for metric in col["metrics"]:
                 draw(
@@ -181,12 +231,12 @@ def plot_single_vs_k(
                 else METRICS_SPECS[col["metrics"][0]]["name"]
             )
             axis.set_title(
-                f"({NOTES['row'][i_row]}-{NOTES['col'][i_col]}) {caption}",
+                f"({NOTES[i_subplot]}) {caption}",
                 y=ax_title_offset,
             )
             axis.set_xlabel("k")
             axis.set_xlim([0, 102])
-            axis.set_xticks(K)
+            axis.set_xticks(K_TICKS)
             axis.set_ylabel(caption)
 
             if "ylim" in col:
@@ -209,8 +259,9 @@ def plot_corr(
     wspace=0.25,
     hspace=0.5,
 ):
-    def draw(_axis, _X, _Y, _cmap=CMAP_BLUE, _marker="o"):
-        _axis.plot(_X, _Y, zorder=0.8, linestyle=":", color="k", alpha=alpha)
+    def draw(_axis, _X, _Y, _cmap=CMAP_BLUE, _marker="o", c=K, dotted=True):
+        if dotted:
+            _axis.plot(_X, _Y, zorder=0.8, linestyle=":", color="k", alpha=alpha)
         _axis.scatter(
             _X,
             _Y,
@@ -219,7 +270,7 @@ def plot_corr(
             linewidths=1,
             alpha=alpha,
             s=150,
-            c=K,
+            c=c,
             cmap=_cmap,
             vmin=2,
             vmax=100,
@@ -231,31 +282,81 @@ def plot_corr(
     fig, ax = plt.subplots(
         nrows, ncols, figsize=[ncols * WIDTH, nrows * HEIGHT], dpi=150
     )
+    i_subplot = -1
     for i_row, row in enumerate(draw_pairs):
         for i_col, col in enumerate(row):
+            i_subplot += 1
             axis = ax[i_row, i_col]
             if col["X"] != "LEGEND":
+                results_X = (
+                    [result[col["X"]].tolist() for result in results]
+                    if "filter" not in col
+                    else [
+                        result[col["X"]][col["filter"][0] : col["filter"][1]].tolist()
+                        for result in results
+                    ]
+                )
+                results_Y = (
+                    [result[col["Y"]].tolist() for result in results]
+                    if "filter" not in col
+                    else [
+                        result[col["Y"]][col["filter"][0] : col["filter"][1]].tolist()
+                        for result in results
+                    ]
+                )
+                _c = (
+                    K if "filter" not in col else K[col["filter"][0] : col["filter"][1]]
+                )
+                if "fit" in col:
+                    draw_trend_line(
+                        axis,
+                        results_X,
+                        results_Y,
+                        fit=None if "fit" not in col else col["fit"],
+                        xlim=(
+                            col["xlim"]
+                            if "xlim" in col
+                            else draw_specs[col["X"]]["lim"]
+                        ),
+                        ylim=(
+                            col["ylim"]
+                            if "ylim" in col
+                            else draw_specs[col["Y"]]["lim"]
+                        ),
+                    )
+                    axis.legend()
                 for i_result, result in enumerate(results):
                     draw(
                         axis,
-                        result[col["X"]],
-                        result[col["Y"]],
+                        results_X[i_result],
+                        results_Y[i_result],
                         _cmap=CORR_SPECS[i_result]["cmap"],
                         _marker=CORR_SPECS[i_result]["marker"],
+                        c=_c,
+                        dotted=col["dotted"] if "dotted" in col else True,
                     )
                 X_name = METRICS_SPECS[col["X"]]["name"]
                 Y_name = METRICS_SPECS[col["Y"]]["name"]
                 axis.set_title(
-                    f"({NOTES['row'][i_row]}-{NOTES['col'][i_col]}) {X_name} VS {Y_name}",
+                    f"({NOTES[i_subplot]}) {X_name} vs {Y_name}"
+                    + f"{' (' + col['note'] + ')' if 'note' in col else ''}",
                     y=ax_title_offset,
                 )
                 axis.set_xlabel(X_name)
-                axis.set_xlim(draw_specs[col["X"]]["lim"])
-                axis.set_xticks(draw_specs[col["X"]]["ticks"])
+                axis.set_xlim(
+                    col["xlim"] if "xlim" in col else draw_specs[col["X"]]["lim"]
+                )
+                axis.set_xticks(
+                    col["xticks"] if "xticks" in col else draw_specs[col["X"]]["ticks"]
+                )
 
                 axis.set_ylabel(Y_name)
-                axis.set_ylim(draw_specs[col["Y"]]["lim"])
-                axis.set_yticks(draw_specs[col["Y"]]["ticks"])
+                axis.set_ylim(
+                    col["ylim"] if "ylim" in col else draw_specs[col["Y"]]["lim"]
+                )
+                axis.set_yticks(
+                    col["yticks"] if "yticks" in col else draw_specs[col["Y"]]["ticks"]
+                )
                 axis.grid(linestyle=":")
             else:
                 ax_color_top = ax[i_row, i_col]
@@ -286,85 +387,6 @@ def plot_corr(
                         shrink=1,
                     )
                     ax_color.set_xticklabels(["k=2", "k=50", "k=100"])
-
-    fig.tight_layout(rect=[0, 0, 1, 0.98])
-    fig.subplots_adjust(wspace=wspace, hspace=hspace)
-    return fig
-
-
-def plot_corr_1_algo_1_dataset(
-    dataset_algo_results: pd.DataFrame,
-    draw_pairs: list[list[dict]],
-    draw_specs: dict,
-    alpha=0.7,
-    ax_title_offset=-0.4,
-    wspace=0.25,
-    hspace=0.5,
-):
-    def draw(_axis, _X, _Y, _cmap=CMAP_BLUE, _marker="o"):
-        _axis.plot(_X, _Y, zorder=0.8, linestyle=":", color="k", alpha=alpha)
-        _axis.scatter(
-            _X,
-            _Y,
-            marker=_marker,
-            edgecolors="k",
-            linewidths=1,
-            alpha=alpha,
-            s=150,
-            c=K,
-            cmap=_cmap,
-            vmin=2,
-            vmax=100,
-        )
-
-    nrows = len(draw_pairs)
-    ncols = max([len(r) for r in draw_pairs])
-
-    fig, ax = plt.subplots(
-        nrows, ncols, figsize=[ncols * WIDTH, nrows * HEIGHT], dpi=150
-    )
-    for i_row, row in enumerate(draw_pairs):
-        for i_col, col in enumerate(row):
-            axis = ax[i_row, i_col]
-            if col["X"] != "LEGEND":
-                draw(
-                    axis,
-                    dataset_algo_results[col["X"]],
-                    dataset_algo_results[col["Y"]],
-                )
-                X_name = METRICS_SPECS[col["X"]]["name"]
-                Y_name = METRICS_SPECS[col["Y"]]["name"]
-                axis.set_title(
-                    f"({NOTES['row'][i_row]}-{NOTES['col'][i_col]}) {X_name} VS {Y_name}",
-                    y=ax_title_offset,
-                )
-                axis.set_xlabel(X_name)
-                axis.set_xlim(draw_specs[col["X"]]["lim"])
-                axis.set_xticks(draw_specs[col["X"]]["ticks"])
-
-                axis.set_ylabel(Y_name)
-                axis.set_ylim(draw_specs[col["Y"]]["lim"])
-                axis.set_yticks(draw_specs[col["Y"]]["ticks"])
-                axis.grid(linestyle=":")
-            else:
-                ax_color_top = ax[i_row, i_col]
-                divider = make_axes_locatable(ax_color_top)
-                ax_color_mid = divider.append_axes("bottom", size="100%", pad=0.9)
-                fig.add_axes(ax_color_mid)
-                ax_color_bot = divider.append_axes("bottom", size="100%", pad=0.9)
-                fig.add_axes(ax_color_bot)
-                ax_color_top.set_visible(False)
-                ax_color_bot.set_visible(False)
-
-                fig.colorbar(
-                    mpl.cm.ScalarMappable(norm=NORM, cmap=CMAP_BLUE),
-                    cax=ax_color_mid,
-                    orientation="horizontal",
-                    label=col["Y"],
-                    ticks=[2, 50, 100],
-                    shrink=1,
-                )
-                ax_color_mid.set_xticklabels(["k=2", "k=50", "k=100"])
 
     fig.tight_layout(rect=[0, 0, 1, 0.98])
     fig.subplots_adjust(wspace=wspace, hspace=hspace)

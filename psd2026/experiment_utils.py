@@ -45,7 +45,7 @@ def create_unique_df(dataset: Dataset, features: list, target: str):
     unique_df = (
         dataset.df.groupby(features, as_index=False, observed=False)
         .count()
-        .query(f"{target} == 1")
+        .query(f"`{target}` == 1")
         .reset_index(drop=True)
     )
     return pd.merge(
@@ -167,7 +167,7 @@ def generalize_df(df, generalization, hierarchies, qids_numerical):
     for attr, level in generalization:
         if level == 0:
             continue
-        if level == -1:
+        if level == -1 or level >= hierarchies[attr].height:
             if attr in qids_numerical:
                 _df[attr] = 0
             else:
@@ -211,8 +211,11 @@ def get_DBRL_attack_result(
 
 
 def get_data(base_dataset: Dataset, split: dict):
-    SAMPLE = SampleDataset(base_dataset, base_dataset.df.loc[split["train_idx"]].copy())
-    VALIDATION = base_dataset.df.loc[split["test_idx"]].copy()
+    SAMPLE = SampleDataset(
+        base_dataset,
+        base_dataset.df.loc[split["train_idx"]].reset_index(drop=True).copy(),
+    )
+    VALIDATION = base_dataset.df.loc[split["test_idx"]].reset_index(drop=True).copy()
     SAMPLE.df[SAMPLE.qids_categorical] = SAMPLE.df[SAMPLE.qids_categorical].astype(
         "category"
     )
@@ -223,13 +226,19 @@ def get_data(base_dataset: Dataset, split: dict):
     return (SAMPLE, VALIDATION)
 
 
-def anonymize_data(algo_class: Algorithm, dataset: Dataset, k: int, seed: int = None):
+def anonymize_data(
+    algo_class: Algorithm,
+    dataset: Dataset,
+    k: int,
+    seed: int = None,
+    group_anon=GroupAnonymizationBuiltIn.MEAN_MODE,
+):
     time_start = time.perf_counter()
     if issubclass(algo_class, LocalRecodingAlgorithm):
         ALGO = algo_class(
             dataset,
             k,
-            group_anonymization=GroupAnonymizationBuiltIn.MEAN_MODE,
+            group_anonymization=group_anon,
             seed=seed,
         )
     else:
@@ -250,6 +259,8 @@ def get_ut_and_ml_metrics(
     results = {}
     cat_qids = algo.dataset.qids_categorical.copy()
 
+    anon_df = algo.anon_data.copy()
+
     if generalization is not None:
         VALIDATION_DF = generalize_df(
             validation_df,
@@ -259,11 +270,13 @@ def get_ut_and_ml_metrics(
         )
         for attr, level in generalization:
             if (attr in algo.dataset.qids_numerical) and (level != 0):
-                cat_qids.append(attr)
+                if level == -1 or level >= algo.dataset.hierarchies[attr].height:
+                    anon_df[attr] = 0
+                else:
+                    cat_qids.append(attr)
     else:
         VALIDATION_DF = validation_df
 
-    anon_df = algo.anon_data.copy()
     anon_df[cat_qids] = anon_df[cat_qids].astype("category")
     VALIDATION_DF[cat_qids] = VALIDATION_DF[cat_qids].astype("category")
 
@@ -289,7 +302,7 @@ def get_attack_results(
     generalization: list[tuple] = None,
     seed: int = None,
 ):
-    NUM_COLS = dataset.qids_numerical
+    NUM_COLS = dataset.qids_numerical.copy()
     if generalization is not None:
         SAMPLE = SampleDataset(
             dataset,
@@ -297,7 +310,7 @@ def get_attack_results(
                 dataset.df,
                 generalization,
                 algo.dataset.hierarchies,
-                algo.dataset.qids_numerical,
+                NUM_COLS,
             ),
         )
         for attr, level in generalization:
