@@ -19,6 +19,18 @@ Before using/developing the module, run the following command to install depende
 pip install -e .
 ```
 
+## AI Declaration
+
+In general, this repository was developed __WITHOUT__ the involvement of generative AI tools, __EXCEPT__ the doctrings and the following modules/directories:
+
+| Module/Directory | Tool used | How it was used |
+| :--- | :---: | :--- |
+| `algorithms.local_recoding.kmember.KMember` | Gemini 3 Flash | Gathered implementation ideas about tensorizing `KMember` for speed improvement. The final codes were self-written. |
+| `algorithms.full_generalization.incognito` | Claude (Opus, Sonnet) | Used for design discussions, consistency checks against the reference paper [3], implementation, and performance improvements. All generated output was reviewed and verified. |
+| `algorithms.full_generalization.flash` | Claude (Opus, Sonnet) | Used for design discussions, consistency checks against the reference paper [2], implementation, and performance improvements. All generated output was reviewed and verified. |
+| `algorithms.full_generalization.lightning` | Claude (Opus, Sonnet) | Used for design discussions, consistency checks against the reference paper [4], implementation, and performance improvements. All generated output was reviewed and verified. |
+| `algorithms.full_generalization._generalization_scoring` | Claude (Opus, Sonnet) | Used for design discussions and implementation of the pluggable scoring interface shared by the full-domain generalization algorithms. All generated output was reviewed and verified. |
+
 ## References
 [1] Sweeney, Latanya. “Datafly: A system for providing anonymity in medical data.” Database Security XI. IFIP Advances in Information and Communication Technology. Springer, 1998. https://doi.org/10.1007/978-0-387-35285-5_22
 

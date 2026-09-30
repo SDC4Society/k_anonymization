@@ -23,6 +23,7 @@ dependencies = [
     "packaging",
     "ipywidgets",
     "itables[widget]",
+    "torch",
 ]
 dynamic = ["version"]
 

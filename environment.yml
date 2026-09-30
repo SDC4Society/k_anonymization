@@ -3,10 +3,14 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - pandas
-  - numpy
-  - tqdm
-  - scikit-learn
-  - itables==2.5.2
-  - ipywidgets
-  - "itables[widget]"
+  - pip
+  - pip:
+    - torch
+    - pandas
+    - numpy
+    - tqdm
+    - scikit-learn
+    - itables==2.5.2
+    - packaging
+    - ipywidgets
+    - "itables[widget]"

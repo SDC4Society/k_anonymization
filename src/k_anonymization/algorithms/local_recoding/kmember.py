@@ -3,7 +3,7 @@ from functools import partial
 
 import torch
 from numpy import argmax, argmin, array
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from k_anonymization.core import Dataset, Parallel
 
