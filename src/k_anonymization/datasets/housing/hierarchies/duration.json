@@ -1,0 +1,11 @@
+{
+  "name": "duration",
+  "lambda": [
+    "lambda x: '*'"
+  ],
+  "tree": [
+      {
+          "is_suppressed": true
+      }
+  ] 
+}

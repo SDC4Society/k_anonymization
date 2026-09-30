@@ -14,11 +14,7 @@ from .local_recoding_algorithm import (
     LocalRecodingAlgorithm,
 )
 
-try:
-    __IPYTHON__  # type: ignore # noqa: F821
-    _bar_format = None
-except:
-    _bar_format = "{l_bar}{bar:20}|{n_fmt}/{total_fmt} [{elapsed}]"
+BAR_FORMAT = "{desc}: {percentage:6.2f}% |{bar}| [{elapsed}, {rate_fmt}]"
 
 
 class KMember(LocalRecodingAlgorithm):
@@ -117,9 +113,9 @@ class KMember(LocalRecodingAlgorithm):
             self.device = torch.device(device)
         else:
             self.device = torch.device("cpu")
-            print(f"This machine only has these devices available: {
-                    ', '.join(_available_devices)
-                    }")
+            print(
+                f"This machine only has these devices available: {', '.join(_available_devices)}"
+            )
             print("Fall back to cpu.")
 
         self._prepare_tensors()
@@ -428,11 +424,11 @@ class KMember(LocalRecodingAlgorithm):
 
         is_picked = torch.zeros(self.data_size, dtype=torch.bool, device=self.device)
 
-        progress_bar = tqdm(
-            total=self.data_size,
-            desc="   Clustering Progress",
-            bar_format=_bar_format,
-        )
+        # progress_bar = tqdm(
+        #     total=self.data_size,
+        #     desc="Clustering",
+        #     bar_format=BAR_FORMAT,
+        # )
 
         for this_cluster_r_idxs in all_clusters_r_idxs:
             if r_i_idx is None:
@@ -452,7 +448,7 @@ class KMember(LocalRecodingAlgorithm):
                 this_cluster_r_idxs[i] = r_j_idx
 
             information_losses.append(this_information_loss)
-            progress_bar.update(self.k)
+            # progress_bar.update(self.k)
 
         orphaned_idxs = torch.nonzero(~is_picked).flatten(0).tolist()
         for pos, r_idx in enumerate(orphaned_idxs):
@@ -461,10 +457,10 @@ class KMember(LocalRecodingAlgorithm):
             )
             information_losses[best_cluster_idx] = new_information_loss
             all_clusters_r_idxs[best_cluster_idx, pos + self.k] = r_idx
-            progress_bar.update(1)
+            # progress_bar.update(1)
 
         self.information_loss = sum(information_losses)
-        progress_bar.close()
+        # progress_bar.close()
 
         clusters = []
         for cluster_idxs in all_clusters_r_idxs.tolist():
@@ -696,7 +692,7 @@ class KMemberUnOptimized(LocalRecodingAlgorithm):
         progress_bar = tqdm(
             total=len(data),
             desc="   Clustering Progress",
-            bar_format=_bar_format,
+            bar_format=BAR_FORMAT,
         )
 
         while len(data) >= self.k:

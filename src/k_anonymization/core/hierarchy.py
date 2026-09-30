@@ -87,7 +87,7 @@ class Hierarchy:
         json_path : str
             Path to the JSON configuration file.
         """
-        hierarchy_df = pd.DataFrame({0: org_column.unique()})
+        hierarchy_df = pd.DataFrame({0: org_column.astype("O").unique()})
         try:
             with open(json_path) as f:
                 props = json.load(f)

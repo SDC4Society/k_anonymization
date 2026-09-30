@@ -1,0 +1,8 @@
+{
+  "name": "housing_median_age",
+  "lambda": [
+    "lambda x: x // 5 * 5 + 5",
+    "lambda x: x // 10 * 10 + 10",
+    "lambda x: '*'"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "year",
+  "lambda": [
+    "lambda x: f'{int(x/10)}{int(x%10/5)*5}~{int(x/10)}{int(x%10/5)*5+4}'",
+    "lambda x: '1990~1999' if x == '1995~1999' else '2000~2009'",
+    "lambda x: '*'"
+  ],
+  "tree": [
+    {
+      "is_suppressed": false,
+      "values": [
+        {
+          "original": [1995, 1996, 1997, 1998, 1999],
+          "generalized": "1995~1999"
+        },
+        {
+          "original": [2000, 2001, 2002, 2003, 2004],
+          "generalized": "2000~2004"
+        },
+        {
+          "original": [2005, 2006, 2007, 2008, 2009],
+          "generalized": "2005~2009"
+        }
+      ]
+    },
+    {
+      "is_suppressed": false,
+      "values": [
+        {
+          "original": ["1995~1999"],
+          "generalized": "1990~1999"
+        },
+        {
+          "original": ["2000~2004", "2005~2009"],
+          "generalized": "2000~2009"
+        }
+      ]
+    },
+    {
+      "is_suppressed": true
+    }
+  ]
+}

@@ -2,6 +2,7 @@ from k_anonymization.algorithms.full_generalization._generalization_scoring impo
     GeneralizationScoring,
     GeneralizationScoringBuiltIn,
 )
+
 from .incognito import Incognito
 
 __all__ = ["Incognito", "GeneralizationScoring", "GeneralizationScoringBuiltIn"]

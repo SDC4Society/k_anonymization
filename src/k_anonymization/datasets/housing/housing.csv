@@ -1,0 +1,1150 @@
+year,month,district,house_type,is_new,duration,price,price_binary,price_multiclass
+2002,1,BARNET,flat,False,freehold,120000.0,<=200k,<=150k
+2002,1,BARNET,flat,False,leasehold,156288.33333333334,<=200k,150k~200k
+2002,1,BARNET,flat,True,leasehold,360300.0,>200k,>300k
+2002,1,BARNET,semi-detached,False,freehold,92500.0,<=200k,<=150k
+2002,1,BARNET,semi-detached,False,leasehold,212000.0,>200k,200k~300k
+2002,1,BRENT,detached,False,leasehold,165000.0,<=200k,150k~200k
+2002,1,BRENT,flat,False,leasehold,164192.56896551725,<=200k,150k~200k
+2002,1,BRENT,flat,True,leasehold,229666.66666666666,>200k,200k~300k
+2002,1,BROMLEY,flat,False,leasehold,107317.5,<=200k,<=150k
+2002,1,BROMLEY,flat,True,leasehold,182995.0,<=200k,150k~200k
+2002,1,CAMDEN,flat,False,leasehold,281316.9285714286,>200k,200k~300k
+2002,1,CAMDEN,flat,True,leasehold,320642.85714285716,>200k,>300k
+2002,1,CAMDEN,terraced,False,freehold,685000.0,>200k,>300k
+2002,1,CITY OF LONDON,flat,False,leasehold,213144.44444444444,>200k,200k~300k
+2002,1,CITY OF LONDON,flat,True,leasehold,213750.0,>200k,200k~300k
+2002,1,CITY OF WESTMINSTER,flat,False,leasehold,342023.9283018868,>200k,>300k
+2002,1,CITY OF WESTMINSTER,flat,True,leasehold,445033.3333333333,>200k,>300k
+2002,1,CITY OF WESTMINSTER,terraced,False,freehold,112500.0,<=200k,<=150k
+2002,1,CITY OF WESTMINSTER,terraced,False,leasehold,177166.66666666666,<=200k,150k~200k
+2002,1,CROYDON,flat,False,leasehold,94876.92857142857,<=200k,<=150k
+2002,1,CROYDON,terraced,False,freehold,229000.0,>200k,200k~300k
+2002,1,EALING,flat,False,freehold,160000.0,<=200k,150k~200k
+2002,1,EALING,flat,False,leasehold,180848.18181818182,<=200k,150k~200k
+2002,1,EALING,flat,True,leasehold,169983.33333333334,<=200k,150k~200k
+2002,1,ENFIELD,flat,False,leasehold,128595.76923076923,<=200k,<=150k
+2002,1,ENFIELD,terraced,False,leasehold,118150.0,<=200k,<=150k
+2002,1,GREENWICH,detached,False,leasehold,162000.0,<=200k,150k~200k
+2002,1,GREENWICH,flat,False,freehold,238000.0,>200k,200k~300k
+2002,1,GREENWICH,flat,False,leasehold,128082.77777777778,<=200k,<=150k
+2002,1,GREENWICH,flat,True,leasehold,269725.0,>200k,200k~300k
+2002,1,GREENWICH,terraced,False,leasehold,88000.0,<=200k,<=150k
+2002,1,HACKNEY,flat,False,leasehold,165214.2857142857,<=200k,150k~200k
+2002,1,HACKNEY,flat,True,leasehold,215751.15384615384,>200k,200k~300k
+2002,1,HACKNEY,terraced,False,leasehold,120000.0,<=200k,<=150k
+2002,1,HAMMERSMITH AND FULHAM,flat,False,freehold,175000.0,<=200k,150k~200k
+2002,1,HAMMERSMITH AND FULHAM,flat,False,leasehold,244705.69620253163,>200k,200k~300k
+2002,1,HAMMERSMITH AND FULHAM,flat,True,leasehold,146000.0,<=200k,<=150k
+2002,1,HAMMERSMITH AND FULHAM,semi-detached,False,freehold,581500.0,>200k,>300k
+2002,1,HAMMERSMITH AND FULHAM,terraced,False,freehold,125000.0,<=200k,<=150k
+2002,1,HAMMERSMITH AND FULHAM,terraced,False,leasehold,196000.0,<=200k,150k~200k
+2002,1,HARINGEY,flat,False,leasehold,161278.26530612246,<=200k,150k~200k
+2002,1,HARINGEY,flat,True,leasehold,116000.0,<=200k,<=150k
+2002,1,HARINGEY,terraced,True,freehold,225000.0,>200k,200k~300k
+2002,1,HAVERING,flat,False,leasehold,155500.0,<=200k,150k~200k
+2002,1,HOUNSLOW,detached,False,freehold,1400000.0,>200k,>300k
+2002,1,HOUNSLOW,flat,False,leasehold,252216.55555555556,>200k,200k~300k
+2002,1,HOUNSLOW,flat,True,leasehold,317125.0,>200k,>300k
+2002,1,HOUNSLOW,terraced,False,leasehold,250000.0,>200k,200k~300k
+2002,1,ISLINGTON,flat,False,freehold,286500.0,>200k,200k~300k
+2002,1,ISLINGTON,flat,False,leasehold,214584.14084507042,>200k,200k~300k
+2002,1,ISLINGTON,flat,True,leasehold,340334.5,>200k,>300k
+2002,1,ISLINGTON,semi-detached,False,leasehold,245000.0,>200k,200k~300k
+2002,1,ISLINGTON,terraced,False,freehold,213000.0,>200k,200k~300k
+2002,1,KENSINGTON AND CHELSEA,flat,False,leasehold,411325.09493670886,>200k,>300k
+2002,1,KENSINGTON AND CHELSEA,flat,True,leasehold,373323.82352941175,>200k,>300k
+2002,1,LAMBETH,flat,False,freehold,370000.0,>200k,>300k
+2002,1,LAMBETH,flat,False,leasehold,162978.9918699187,<=200k,150k~200k
+2002,1,LAMBETH,flat,True,leasehold,376506.6666666667,>200k,>300k
+2002,1,LAMBETH,terraced,False,freehold,245000.0,>200k,200k~300k
+2002,1,LEWISHAM,detached,False,freehold,502500.0,>200k,>300k
+2002,1,LEWISHAM,flat,False,freehold,88500.0,<=200k,<=150k
+2002,1,LEWISHAM,flat,False,leasehold,110847.46376811594,<=200k,<=150k
+2002,1,LEWISHAM,semi-detached,False,freehold,306000.0,>200k,>300k
+2002,1,LEWISHAM,terraced,False,freehold,332666.6666666667,>200k,>300k
+2002,1,LEWISHAM,terraced,False,leasehold,111500.0,<=200k,<=150k
+2002,1,MERTON,flat,False,leasehold,195962.73684210525,<=200k,150k~200k
+2002,1,MERTON,flat,True,leasehold,312736.84210526315,>200k,>300k
+2002,1,MERTON,terraced,True,freehold,475000.0,>200k,>300k
+2002,1,NEWHAM,flat,False,leasehold,173713.85714285713,<=200k,150k~200k
+2002,1,NEWHAM,flat,True,leasehold,143970.58823529413,<=200k,<=150k
+2002,1,REDBRIDGE,flat,False,leasehold,118368.125,<=200k,<=150k
+2002,1,RICHMOND UPON THAMES,flat,False,leasehold,318230.76923076925,>200k,>300k
+2002,1,SOUTHWARK,flat,False,freehold,90000.0,<=200k,<=150k
+2002,1,SOUTHWARK,flat,False,leasehold,185592.59663865546,<=200k,150k~200k
+2002,1,SOUTHWARK,flat,True,leasehold,210319.66666666666,>200k,200k~300k
+2002,1,SOUTHWARK,semi-detached,False,freehold,150000.0,<=200k,<=150k
+2002,1,SOUTHWARK,terraced,False,freehold,226166.66666666666,>200k,200k~300k
+2002,1,TOWER HAMLETS,detached,False,freehold,65000.0,<=200k,<=150k
+2002,1,TOWER HAMLETS,flat,False,freehold,185000.0,<=200k,150k~200k
+2002,1,TOWER HAMLETS,flat,False,leasehold,195989.78494623656,<=200k,150k~200k
+2002,1,TOWER HAMLETS,flat,True,leasehold,268181.70454545453,>200k,200k~300k
+2002,1,WALTHAM FOREST,flat,False,leasehold,99578.26923076923,<=200k,<=150k
+2002,1,WALTHAM FOREST,flat,True,leasehold,122225.0,<=200k,<=150k
+2002,1,WALTHAM FOREST,semi-detached,False,freehold,160000.0,<=200k,150k~200k
+2002,1,WALTHAM FOREST,terraced,False,leasehold,85000.0,<=200k,<=150k
+2002,1,WANDSWORTH,flat,False,leasehold,190807.12121212122,<=200k,150k~200k
+2002,1,WANDSWORTH,flat,True,leasehold,307666.6666666667,>200k,>300k
+2002,1,WANDSWORTH,terraced,False,freehold,225000.0,>200k,200k~300k
+2002,2,BARNET,detached,False,freehold,177500.0,<=200k,150k~200k
+2002,2,BARNET,flat,False,freehold,121000.0,<=200k,<=150k
+2002,2,BARNET,flat,False,leasehold,167840.14084507042,<=200k,150k~200k
+2002,2,BARNET,flat,True,leasehold,358374.6875,>200k,>300k
+2002,2,BARNET,semi-detached,False,leasehold,132000.0,<=200k,<=150k
+2002,2,BARNET,terraced,False,freehold,159237.5,<=200k,150k~200k
+2002,2,BARNET,terraced,False,leasehold,293600.0,>200k,200k~300k
+2002,2,BRENT,detached,False,freehold,400000.0,>200k,>300k
+2002,2,BRENT,flat,False,leasehold,150054.0483870968,<=200k,150k~200k
+2002,2,BRENT,flat,True,leasehold,278750.0,>200k,200k~300k
+2002,2,BRENT,semi-detached,False,leasehold,115000.0,<=200k,<=150k
+2002,2,BROMLEY,flat,False,leasehold,102970.0,<=200k,<=150k
+2002,2,BROMLEY,flat,True,leasehold,131995.0,<=200k,<=150k
+2002,2,CAMDEN,flat,False,freehold,850000.0,>200k,>300k
+2002,2,CAMDEN,flat,False,leasehold,268565.9103448276,>200k,200k~300k
+2002,2,CAMDEN,flat,True,leasehold,356357.14285714284,>200k,>300k
+2002,2,CAMDEN,semi-detached,False,freehold,1000000.0,>200k,>300k
+2002,2,CAMDEN,terraced,False,freehold,440625.0,>200k,>300k
+2002,2,CITY OF LONDON,flat,False,leasehold,274250.0,>200k,200k~300k
+2002,2,CITY OF WESTMINSTER,flat,False,leasehold,381545.01754385966,>200k,>300k
+2002,2,CITY OF WESTMINSTER,flat,True,leasehold,398451.3125,>200k,>300k
+2002,2,CITY OF WESTMINSTER,terraced,False,freehold,252200.0,>200k,200k~300k
+2002,2,CITY OF WESTMINSTER,terraced,False,leasehold,226000.0,>200k,200k~300k
+2002,2,CROYDON,flat,False,leasehold,95892.05128205128,<=200k,<=150k
+2002,2,CROYDON,terraced,False,freehold,100000.0,<=200k,<=150k
+2002,2,EALING,flat,False,leasehold,176539.625,<=200k,150k~200k
+2002,2,EALING,flat,True,leasehold,201250.0,>200k,200k~300k
+2002,2,EALING,semi-detached,False,freehold,450000.0,>200k,>300k
+2002,2,ENFIELD,flat,False,leasehold,140281.7857142857,<=200k,<=150k
+2002,2,ENFIELD,flat,True,leasehold,218987.25,>200k,200k~300k
+2002,2,ENFIELD,terraced,False,leasehold,147000.0,<=200k,<=150k
+2002,2,GREENWICH,flat,False,leasehold,141624.16666666666,<=200k,<=150k
+2002,2,GREENWICH,flat,True,leasehold,214152.67647058822,>200k,200k~300k
+2002,2,GREENWICH,terraced,True,leasehold,266247.5,>200k,200k~300k
+2002,2,HACKNEY,flat,False,leasehold,147103.5,<=200k,<=150k
+2002,2,HACKNEY,flat,True,leasehold,189000.0,<=200k,150k~200k
+2002,2,HACKNEY,terraced,False,freehold,400000.0,>200k,>300k
+2002,2,HACKNEY,terraced,False,leasehold,150000.0,<=200k,<=150k
+2002,2,HAMMERSMITH AND FULHAM,flat,False,freehold,292000.0,>200k,200k~300k
+2002,2,HAMMERSMITH AND FULHAM,flat,False,leasehold,231561.65555555557,>200k,200k~300k
+2002,2,HAMMERSMITH AND FULHAM,flat,True,leasehold,199995.0,<=200k,150k~200k
+2002,2,HAMMERSMITH AND FULHAM,terraced,False,freehold,280000.0,>200k,200k~300k
+2002,2,HAMMERSMITH AND FULHAM,terraced,False,leasehold,194000.0,<=200k,150k~200k
+2002,2,HARINGEY,flat,False,leasehold,153796.9411764706,<=200k,150k~200k
+2002,2,HARINGEY,semi-detached,False,freehold,90000.0,<=200k,<=150k
+2002,2,HARINGEY,semi-detached,False,leasehold,119500.0,<=200k,<=150k
+2002,2,HARINGEY,terraced,False,freehold,153000.0,<=200k,150k~200k
+2002,2,HOUNSLOW,flat,False,leasehold,229247.25,>200k,200k~300k
+2002,2,ISLINGTON,flat,False,freehold,270000.0,>200k,200k~300k
+2002,2,ISLINGTON,flat,False,leasehold,214712.10843373495,>200k,200k~300k
+2002,2,ISLINGTON,flat,True,leasehold,321852.64705882355,>200k,>300k
+2002,2,ISLINGTON,terraced,False,freehold,494000.0,>200k,>300k
+2002,2,KENSINGTON AND CHELSEA,flat,False,leasehold,416413.04069767444,>200k,>300k
+2002,2,KENSINGTON AND CHELSEA,flat,True,leasehold,306901.375,>200k,>300k
+2002,2,KENSINGTON AND CHELSEA,semi-detached,False,leasehold,1600000.0,>200k,>300k
+2002,2,KENSINGTON AND CHELSEA,terraced,False,freehold,760000.0,>200k,>300k
+2002,2,KENSINGTON AND CHELSEA,terraced,False,leasehold,826000.0,>200k,>300k
+2002,2,LAMBETH,flat,False,leasehold,155620.14925373133,<=200k,150k~200k
+2002,2,LAMBETH,flat,True,leasehold,396908.3333333333,>200k,>300k
+2002,2,LEWISHAM,flat,False,leasehold,113908.25842696629,<=200k,<=150k
+2002,2,LEWISHAM,flat,True,leasehold,116975.0,<=200k,<=150k
+2002,2,LEWISHAM,terraced,False,freehold,160000.0,<=200k,150k~200k
+2002,2,MERTON,flat,False,leasehold,189781.4705882353,<=200k,150k~200k
+2002,2,MERTON,semi-detached,False,leasehold,380000.0,>200k,>300k
+2002,2,NEWHAM,flat,False,leasehold,116646.66666666667,<=200k,<=150k
+2002,2,NEWHAM,flat,True,leasehold,143638.88888888888,<=200k,<=150k
+2002,2,NEWHAM,terraced,False,leasehold,105000.0,<=200k,<=150k
+2002,2,REDBRIDGE,flat,False,leasehold,143649.625,<=200k,<=150k
+2002,2,RICHMOND UPON THAMES,flat,False,leasehold,232360.0,>200k,200k~300k
+2002,2,SOUTHWARK,flat,False,leasehold,184709.04166666666,<=200k,150k~200k
+2002,2,SOUTHWARK,flat,True,leasehold,288746.5625,>200k,200k~300k
+2002,2,SOUTHWARK,terraced,False,freehold,166500.0,<=200k,150k~200k
+2002,2,SOUTHWARK,terraced,False,leasehold,122500.0,<=200k,<=150k
+2002,2,TOWER HAMLETS,flat,False,leasehold,210846.66666666666,>200k,200k~300k
+2002,2,TOWER HAMLETS,flat,True,leasehold,251710.88,>200k,200k~300k
+2002,2,TOWER HAMLETS,terraced,False,freehold,230000.0,>200k,200k~300k
+2002,2,WALTHAM FOREST,detached,False,leasehold,115000.0,<=200k,<=150k
+2002,2,WALTHAM FOREST,flat,False,leasehold,103043.82352941176,<=200k,<=150k
+2002,2,WALTHAM FOREST,flat,True,leasehold,105000.0,<=200k,<=150k
+2002,2,WALTHAM FOREST,terraced,False,freehold,141000.0,<=200k,<=150k
+2002,2,WANDSWORTH,flat,False,freehold,174950.0,<=200k,150k~200k
+2002,2,WANDSWORTH,flat,False,leasehold,202433.18181818182,>200k,200k~300k
+2002,2,WANDSWORTH,flat,True,leasehold,338768.1818181818,>200k,>300k
+2002,2,WANDSWORTH,semi-detached,False,leasehold,260000.0,>200k,200k~300k
+2002,2,WANDSWORTH,terraced,False,freehold,225000.0,>200k,200k~300k
+2002,2,WANDSWORTH,terraced,False,leasehold,200000.0,<=200k,150k~200k
+2002,2,WANDSWORTH,terraced,True,freehold,397000.0,>200k,>300k
+2002,3,BARNET,flat,False,leasehold,154476.45569620252,<=200k,150k~200k
+2002,3,BARNET,flat,True,leasehold,290875.0,>200k,200k~300k
+2002,3,BARNET,semi-detached,False,leasehold,125000.0,<=200k,<=150k
+2002,3,BARNET,terraced,False,leasehold,130000.0,<=200k,<=150k
+2002,3,BRENT,flat,False,leasehold,171329.4375,<=200k,150k~200k
+2002,3,BRENT,flat,True,leasehold,277500.0,>200k,200k~300k
+2002,3,BRENT,terraced,False,freehold,226000.0,>200k,200k~300k
+2002,3,BRENT,terraced,False,leasehold,187000.0,<=200k,150k~200k
+2002,3,BROMLEY,flat,False,leasehold,92227.04545454546,<=200k,<=150k
+2002,3,BROMLEY,terraced,False,freehold,130000.0,<=200k,<=150k
+2002,3,CAMDEN,detached,False,freehold,140000.0,<=200k,<=150k
+2002,3,CAMDEN,flat,False,freehold,226000.0,>200k,200k~300k
+2002,3,CAMDEN,flat,False,leasehold,283611.3333333333,>200k,200k~300k
+2002,3,CAMDEN,flat,True,leasehold,412966.6666666667,>200k,>300k
+2002,3,CAMDEN,semi-detached,False,freehold,700000.0,>200k,>300k
+2002,3,CAMDEN,terraced,False,freehold,107333.33333333333,<=200k,<=150k
+2002,3,CITY OF LONDON,flat,False,leasehold,197784.44444444444,<=200k,150k~200k
+2002,3,CITY OF LONDON,flat,True,leasehold,180000.0,<=200k,150k~200k
+2002,3,CITY OF WESTMINSTER,flat,False,freehold,657666.6666666666,>200k,>300k
+2002,3,CITY OF WESTMINSTER,flat,False,leasehold,358510.3168044077,>200k,>300k
+2002,3,CITY OF WESTMINSTER,flat,True,leasehold,517123.21428571426,>200k,>300k
+2002,3,CITY OF WESTMINSTER,terraced,False,freehold,937500.0,>200k,>300k
+2002,3,CITY OF WESTMINSTER,terraced,False,leasehold,443333.3333333333,>200k,>300k
+2002,3,CROYDON,flat,False,leasehold,102622.14285714286,<=200k,<=150k
+2002,3,CROYDON,flat,True,leasehold,179995.0,<=200k,150k~200k
+2002,3,CROYDON,terraced,False,freehold,154000.0,<=200k,150k~200k
+2002,3,EALING,flat,False,leasehold,176832.2857142857,<=200k,150k~200k
+2002,3,EALING,flat,True,leasehold,230250.0,>200k,200k~300k
+2002,3,EALING,terraced,False,freehold,299000.0,>200k,200k~300k
+2002,3,EALING,terraced,False,leasehold,155166.66666666666,<=200k,150k~200k
+2002,3,ENFIELD,flat,False,leasehold,133795.07692307694,<=200k,<=150k
+2002,3,ENFIELD,flat,True,leasehold,234316.66666666666,>200k,200k~300k
+2002,3,ENFIELD,terraced,False,freehold,115000.0,<=200k,<=150k
+2002,3,ENFIELD,terraced,False,leasehold,93000.0,<=200k,<=150k
+2002,3,GREENWICH,flat,False,leasehold,142748.97959183675,<=200k,<=150k
+2002,3,GREENWICH,flat,True,leasehold,276961.488372093,>200k,200k~300k
+2002,3,GREENWICH,terraced,False,leasehold,108000.0,<=200k,<=150k
+2002,3,HACKNEY,flat,False,leasehold,148274.71264367815,<=200k,<=150k
+2002,3,HACKNEY,flat,True,leasehold,216478.8,>200k,200k~300k
+2002,3,HACKNEY,terraced,False,freehold,160000.0,<=200k,150k~200k
+2002,3,HAMMERSMITH AND FULHAM,flat,False,leasehold,236375.06153846154,>200k,200k~300k
+2002,3,HAMMERSMITH AND FULHAM,flat,True,leasehold,225000.0,>200k,200k~300k
+2002,3,HAMMERSMITH AND FULHAM,terraced,False,freehold,742500.0,>200k,>300k
+2002,3,HAMMERSMITH AND FULHAM,terraced,False,leasehold,291975.0,>200k,200k~300k
+2002,3,HARINGEY,detached,False,leasehold,167500.0,<=200k,150k~200k
+2002,3,HARINGEY,flat,False,leasehold,173736.11842105264,<=200k,150k~200k
+2002,3,HARINGEY,flat,True,leasehold,174250.0,<=200k,150k~200k
+2002,3,HARINGEY,terraced,False,freehold,189950.0,<=200k,150k~200k
+2002,3,HOUNSLOW,flat,False,leasehold,227232.14285714287,>200k,200k~300k
+2002,3,HOUNSLOW,semi-detached,False,freehold,435500.0,>200k,>300k
+2002,3,HOUNSLOW,terraced,False,freehold,269000.0,>200k,200k~300k
+2002,3,ISLINGTON,flat,False,leasehold,231388.21359223302,>200k,200k~300k
+2002,3,ISLINGTON,flat,True,leasehold,249346.38888888888,>200k,200k~300k
+2002,3,ISLINGTON,terraced,False,freehold,403000.0,>200k,>300k
+2002,3,KENSINGTON AND CHELSEA,detached,False,leasehold,325000.0,>200k,>300k
+2002,3,KENSINGTON AND CHELSEA,flat,False,leasehold,428423.4623655914,>200k,>300k
+2002,3,KENSINGTON AND CHELSEA,flat,True,leasehold,422554.0588235294,>200k,>300k
+2002,3,KENSINGTON AND CHELSEA,terraced,False,freehold,510000.0,>200k,>300k
+2002,3,KENSINGTON AND CHELSEA,terraced,False,leasehold,325000.0,>200k,>300k
+2002,3,LAMBETH,flat,False,leasehold,159003.0920245399,<=200k,150k~200k
+2002,3,LAMBETH,flat,True,leasehold,357787.5,>200k,>300k
+2002,3,LAMBETH,terraced,False,freehold,160000.0,<=200k,150k~200k
+2002,3,LEWISHAM,detached,False,leasehold,111000.0,<=200k,<=150k
+2002,3,LEWISHAM,flat,False,leasehold,109796.51685393258,<=200k,<=150k
+2002,3,LEWISHAM,flat,True,leasehold,87500.0,<=200k,<=150k
+2002,3,LEWISHAM,terraced,False,freehold,235625.0,>200k,200k~300k
+2002,3,LEWISHAM,terraced,False,leasehold,110000.0,<=200k,<=150k
+2002,3,MERTON,flat,False,leasehold,210798.57142857142,>200k,200k~300k
+2002,3,MERTON,flat,True,leasehold,266383.07692307694,>200k,200k~300k
+2002,3,MERTON,semi-detached,False,leasehold,199000.0,<=200k,150k~200k
+2002,3,MERTON,terraced,True,freehold,495000.0,>200k,>300k
+2002,3,NEWHAM,flat,False,leasehold,116737.25,<=200k,<=150k
+2002,3,NEWHAM,flat,True,leasehold,199516.66666666666,<=200k,150k~200k
+2002,3,REDBRIDGE,flat,False,leasehold,119040.83333333333,<=200k,<=150k
+2002,3,RICHMOND UPON THAMES,flat,False,leasehold,236600.0,>200k,200k~300k
+2002,3,SOUTHWARK,flat,False,leasehold,190097.97931034482,<=200k,150k~200k
+2002,3,SOUTHWARK,flat,True,leasehold,341071.4285714286,>200k,>300k
+2002,3,SOUTHWARK,terraced,False,freehold,161000.0,<=200k,150k~200k
+2002,3,SOUTHWARK,terraced,False,leasehold,122990.0,<=200k,<=150k
+2002,3,TOWER HAMLETS,flat,False,leasehold,211147.34375,>200k,200k~300k
+2002,3,TOWER HAMLETS,flat,True,freehold,169416.66666666666,<=200k,150k~200k
+2002,3,TOWER HAMLETS,flat,True,leasehold,299166.234375,>200k,200k~300k
+2002,3,TOWER HAMLETS,terraced,False,freehold,190125.0,<=200k,150k~200k
+2002,3,TOWER HAMLETS,terraced,False,leasehold,86000.0,<=200k,<=150k
+2002,3,WALTHAM FOREST,flat,False,leasehold,94514.83333333333,<=200k,<=150k
+2002,3,WALTHAM FOREST,flat,True,leasehold,94000.0,<=200k,<=150k
+2002,3,WALTHAM FOREST,terraced,False,freehold,148000.0,<=200k,<=150k
+2002,3,WANDSWORTH,flat,False,freehold,308500.0,>200k,>300k
+2002,3,WANDSWORTH,flat,False,leasehold,192506.31937172776,<=200k,150k~200k
+2002,3,WANDSWORTH,flat,True,leasehold,324370.0,>200k,>300k
+2002,3,WANDSWORTH,terraced,False,freehold,206000.0,>200k,200k~300k
+2002,3,WANDSWORTH,terraced,False,leasehold,175000.0,<=200k,150k~200k
+2002,3,WANDSWORTH,terraced,True,freehold,269500.0,>200k,200k~300k
+2002,4,BARNET,detached,False,leasehold,246665.0,>200k,200k~300k
+2002,4,BARNET,flat,False,leasehold,174830.9239130435,<=200k,150k~200k
+2002,4,BARNET,flat,True,leasehold,285266.6666666667,>200k,200k~300k
+2002,4,BARNET,terraced,False,freehold,221500.0,>200k,200k~300k
+2002,4,BRENT,flat,False,leasehold,169928.51428571428,<=200k,150k~200k
+2002,4,BRENT,flat,True,leasehold,211666.66666666666,>200k,200k~300k
+2002,4,BRENT,terraced,False,leasehold,137500.0,<=200k,<=150k
+2002,4,BROMLEY,detached,False,freehold,385000.0,>200k,>300k
+2002,4,BROMLEY,flat,False,leasehold,102688.54838709677,<=200k,<=150k
+2002,4,CAMDEN,flat,False,leasehold,284037.1111111111,>200k,200k~300k
+2002,4,CAMDEN,flat,True,leasehold,367497.5,>200k,>300k
+2002,4,CAMDEN,semi-detached,False,freehold,130000.0,<=200k,<=150k
+2002,4,CAMDEN,terraced,True,freehold,535000.0,>200k,>300k
+2002,4,CITY OF LONDON,flat,False,leasehold,241866.66666666666,>200k,200k~300k
+2002,4,CITY OF WESTMINSTER,flat,False,leasehold,358625.9804400978,>200k,>300k
+2002,4,CITY OF WESTMINSTER,flat,True,leasehold,528132.3529411765,>200k,>300k
+2002,4,CITY OF WESTMINSTER,terraced,False,freehold,1385000.0,>200k,>300k
+2002,4,CITY OF WESTMINSTER,terraced,False,leasehold,1426166.6666666667,>200k,>300k
+2002,4,CROYDON,flat,False,leasehold,102818.15789473684,<=200k,<=150k
+2002,4,CROYDON,flat,True,leasehold,144331.66666666666,<=200k,<=150k
+2002,4,CROYDON,terraced,False,leasehold,85000.0,<=200k,<=150k
+2002,4,EALING,detached,False,freehold,790000.0,>200k,>300k
+2002,4,EALING,flat,False,leasehold,218460.65573770492,>200k,200k~300k
+2002,4,EALING,flat,True,leasehold,180737.5,<=200k,150k~200k
+2002,4,EALING,semi-detached,False,freehold,575000.0,>200k,>300k
+2002,4,ENFIELD,flat,False,freehold,51000.0,<=200k,<=150k
+2002,4,ENFIELD,flat,False,leasehold,139240.15625,<=200k,<=150k
+2002,4,ENFIELD,flat,True,leasehold,309800.0,>200k,>300k
+2002,4,ENFIELD,terraced,False,leasehold,75000.0,<=200k,<=150k
+2002,4,GREENWICH,flat,False,leasehold,138532.16216216216,<=200k,<=150k
+2002,4,GREENWICH,flat,True,leasehold,255256.85714285713,>200k,200k~300k
+2002,4,HACKNEY,flat,False,leasehold,148373.70588235295,<=200k,<=150k
+2002,4,HACKNEY,flat,True,leasehold,256112.5,>200k,200k~300k
+2002,4,HACKNEY,terraced,False,freehold,425000.0,>200k,>300k
+2002,4,HACKNEY,terraced,False,leasehold,145000.0,<=200k,<=150k
+2002,4,HAMMERSMITH AND FULHAM,flat,False,freehold,280000.0,>200k,200k~300k
+2002,4,HAMMERSMITH AND FULHAM,flat,False,leasehold,236853.17647058822,>200k,200k~300k
+2002,4,HAMMERSMITH AND FULHAM,terraced,False,freehold,92500.0,<=200k,<=150k
+2002,4,HAMMERSMITH AND FULHAM,terraced,False,leasehold,216799.0,>200k,200k~300k
+2002,4,HARINGEY,flat,False,leasehold,172614.02985074627,<=200k,150k~200k
+2002,4,HARINGEY,flat,True,leasehold,160166.66666666666,<=200k,150k~200k
+2002,4,HARINGEY,terraced,False,leasehold,171500.0,<=200k,150k~200k
+2002,4,HOUNSLOW,flat,False,leasehold,237626.19047619047,>200k,200k~300k
+2002,4,HOUNSLOW,flat,True,leasehold,375000.0,>200k,>300k
+2002,4,HOUNSLOW,terraced,False,freehold,435000.0,>200k,>300k
+2002,4,ISLINGTON,flat,False,leasehold,250741.36,>200k,200k~300k
+2002,4,ISLINGTON,flat,True,leasehold,275457.6923076923,>200k,200k~300k
+2002,4,ISLINGTON,terraced,False,freehold,219000.0,>200k,200k~300k
+2002,4,ISLINGTON,terraced,False,leasehold,238500.0,>200k,200k~300k
+2002,4,ISLINGTON,terraced,True,freehold,390000.0,>200k,>300k
+2002,4,KENSINGTON AND CHELSEA,flat,False,leasehold,469119.29752066114,>200k,>300k
+2002,4,KENSINGTON AND CHELSEA,flat,True,leasehold,451301.9,>200k,>300k
+2002,4,KENSINGTON AND CHELSEA,terraced,False,freehold,2378333.3333333335,>200k,>300k
+2002,4,KENSINGTON AND CHELSEA,terraced,False,leasehold,619000.0,>200k,>300k
+2002,4,KINGSTON UPON THAMES,detached,False,freehold,445800.0,>200k,>300k
+2002,4,LAMBETH,flat,False,leasehold,171871.92,<=200k,150k~200k
+2002,4,LAMBETH,flat,True,leasehold,412869.69696969696,>200k,>300k
+2002,4,LAMBETH,semi-detached,False,leasehold,203000.0,>200k,200k~300k
+2002,4,LAMBETH,terraced,False,freehold,420000.0,>200k,>300k
+2002,4,LAMBETH,terraced,False,leasehold,145000.0,<=200k,<=150k
+2002,4,LEWISHAM,detached,False,freehold,140000.0,<=200k,<=150k
+2002,4,LEWISHAM,flat,False,leasehold,123089.43902439025,<=200k,<=150k
+2002,4,LEWISHAM,flat,True,leasehold,158000.0,<=200k,150k~200k
+2002,4,LEWISHAM,terraced,False,freehold,158343.57142857142,<=200k,150k~200k
+2002,4,MERTON,flat,False,leasehold,211729.85714285713,>200k,200k~300k
+2002,4,MERTON,flat,True,leasehold,242443.88888888888,>200k,200k~300k
+2002,4,NEWHAM,flat,False,leasehold,124285.71428571429,<=200k,<=150k
+2002,4,NEWHAM,flat,True,leasehold,191972.22222222222,<=200k,150k~200k
+2002,4,NEWHAM,terraced,False,leasehold,112500.0,<=200k,<=150k
+2002,4,REDBRIDGE,flat,False,leasehold,136041.25,<=200k,<=150k
+2002,4,RICHMOND UPON THAMES,flat,False,leasehold,256000.0,>200k,200k~300k
+2002,4,RICHMOND UPON THAMES,flat,True,leasehold,240000.0,>200k,200k~300k
+2002,4,SOUTHWARK,flat,False,leasehold,213539.49664429532,>200k,200k~300k
+2002,4,SOUTHWARK,flat,True,leasehold,325269.23076923075,>200k,>300k
+2002,4,SOUTHWARK,terraced,False,leasehold,123000.0,<=200k,<=150k
+2002,4,TOWER HAMLETS,detached,False,leasehold,490000.0,>200k,>300k
+2002,4,TOWER HAMLETS,flat,False,leasehold,218252.34,>200k,200k~300k
+2002,4,TOWER HAMLETS,flat,True,leasehold,235303.44827586206,>200k,200k~300k
+2002,4,TOWER HAMLETS,terraced,False,freehold,245000.0,>200k,200k~300k
+2002,4,TOWER HAMLETS,terraced,True,freehold,312546.0,>200k,>300k
+2002,4,WALTHAM FOREST,detached,False,freehold,290000.0,>200k,200k~300k
+2002,4,WALTHAM FOREST,flat,False,leasehold,103974.23913043478,<=200k,<=150k
+2002,4,WALTHAM FOREST,flat,True,leasehold,118331.66666666667,<=200k,<=150k
+2002,4,WALTHAM FOREST,terraced,False,freehold,166500.0,<=200k,150k~200k
+2002,4,WANDSWORTH,flat,False,leasehold,207834.63636363635,>200k,200k~300k
+2002,4,WANDSWORTH,flat,True,leasehold,365290.0,>200k,>300k
+2002,4,WANDSWORTH,terraced,False,freehold,270500.0,>200k,200k~300k
+2002,4,WANDSWORTH,terraced,True,freehold,249999.0,>200k,200k~300k
+2002,5,BARNET,detached,False,leasehold,158000.0,<=200k,150k~200k
+2002,5,BARNET,flat,False,leasehold,172685.09259259258,<=200k,150k~200k
+2002,5,BARNET,flat,True,leasehold,367300.0,>200k,>300k
+2002,5,BARNET,semi-detached,False,freehold,480000.0,>200k,>300k
+2002,5,BARNET,semi-detached,False,leasehold,74300.0,<=200k,<=150k
+2002,5,BARNET,terraced,False,freehold,144000.0,<=200k,<=150k
+2002,5,BARNET,terraced,False,leasehold,170000.0,<=200k,150k~200k
+2002,5,BRENT,flat,False,leasehold,163082.07865168538,<=200k,150k~200k
+2002,5,BRENT,flat,True,leasehold,174950.0,<=200k,150k~200k
+2002,5,BRENT,semi-detached,False,leasehold,197500.0,<=200k,150k~200k
+2002,5,BRENT,terraced,False,leasehold,208975.0,>200k,200k~300k
+2002,5,BROMLEY,flat,False,leasehold,108973.13953488372,<=200k,<=150k
+2002,5,BROMLEY,flat,True,leasehold,88478.33333333333,<=200k,<=150k
+2002,5,BROMLEY,terraced,False,freehold,135000.0,<=200k,<=150k
+2002,5,CAMDEN,detached,False,freehold,436250.0,>200k,>300k
+2002,5,CAMDEN,flat,False,freehold,530000.0,>200k,>300k
+2002,5,CAMDEN,flat,False,leasehold,300797.5681818182,>200k,>300k
+2002,5,CAMDEN,semi-detached,False,freehold,774500.0,>200k,>300k
+2002,5,CAMDEN,terraced,False,freehold,575000.0,>200k,>300k
+2002,5,CITY OF LONDON,flat,False,leasehold,240333.07692307694,>200k,200k~300k
+2002,5,CITY OF LONDON,flat,True,leasehold,820000.0,>200k,>300k
+2002,5,CITY OF WESTMINSTER,detached,False,freehold,795000.0,>200k,>300k
+2002,5,CITY OF WESTMINSTER,flat,False,freehold,150000.0,<=200k,<=150k
+2002,5,CITY OF WESTMINSTER,flat,False,leasehold,367017.7390300231,>200k,>300k
+2002,5,CITY OF WESTMINSTER,flat,True,leasehold,340403.92307692306,>200k,>300k
+2002,5,CITY OF WESTMINSTER,semi-detached,False,leasehold,288000.0,>200k,200k~300k
+2002,5,CITY OF WESTMINSTER,terraced,False,freehold,341250.0,>200k,>300k
+2002,5,CITY OF WESTMINSTER,terraced,False,leasehold,530000.0,>200k,>300k
+2002,5,CROYDON,flat,False,leasehold,102244.56896551725,<=200k,<=150k
+2002,5,CROYDON,flat,True,leasehold,153998.75,<=200k,150k~200k
+2002,5,EALING,detached,False,leasehold,169000.0,<=200k,150k~200k
+2002,5,EALING,flat,False,leasehold,193393.79761904763,<=200k,150k~200k
+2002,5,EALING,flat,True,leasehold,188750.0,<=200k,150k~200k
+2002,5,EALING,semi-detached,False,freehold,700000.0,>200k,>300k
+2002,5,EALING,semi-detached,False,leasehold,202333.33333333334,>200k,200k~300k
+2002,5,EALING,terraced,False,leasehold,125000.0,<=200k,<=150k
+2002,5,ENFIELD,flat,False,leasehold,134043.06818181818,<=200k,<=150k
+2002,5,ENFIELD,flat,True,leasehold,160025.0,<=200k,150k~200k
+2002,5,ENFIELD,terraced,False,freehold,179000.0,<=200k,150k~200k
+2002,5,ENFIELD,terraced,False,leasehold,163000.0,<=200k,150k~200k
+2002,5,GREENWICH,flat,False,freehold,75000.0,<=200k,<=150k
+2002,5,GREENWICH,flat,False,leasehold,149485.14705882352,<=200k,<=150k
+2002,5,GREENWICH,flat,True,leasehold,255481.92857142858,>200k,200k~300k
+2002,5,GREENWICH,terraced,False,leasehold,153500.0,<=200k,150k~200k
+2002,5,HACKNEY,detached,False,freehold,335000.0,>200k,>300k
+2002,5,HACKNEY,flat,False,leasehold,150206.79130434783,<=200k,150k~200k
+2002,5,HACKNEY,flat,True,leasehold,252673.19444444444,>200k,200k~300k
+2002,5,HAMMERSMITH AND FULHAM,detached,False,leasehold,307000.0,>200k,>300k
+2002,5,HAMMERSMITH AND FULHAM,flat,False,freehold,95000.0,<=200k,<=150k
+2002,5,HAMMERSMITH AND FULHAM,flat,False,leasehold,248393.60773480663,>200k,200k~300k
+2002,5,HAMMERSMITH AND FULHAM,flat,True,leasehold,704076.4705882353,>200k,>300k
+2002,5,HAMMERSMITH AND FULHAM,terraced,False,freehold,325000.0,>200k,>300k
+2002,5,HAMMERSMITH AND FULHAM,terraced,False,leasehold,289166.3333333333,>200k,200k~300k
+2002,5,HARINGEY,detached,False,leasehold,288000.0,>200k,200k~300k
+2002,5,HARINGEY,flat,False,leasehold,173864.60563380283,<=200k,150k~200k
+2002,5,HARINGEY,flat,True,leasehold,104500.0,<=200k,<=150k
+2002,5,HARINGEY,terraced,False,freehold,85000.0,<=200k,<=150k
+2002,5,HOUNSLOW,detached,False,freehold,217500.0,>200k,200k~300k
+2002,5,HOUNSLOW,flat,False,leasehold,230590.0,>200k,200k~300k
+2002,5,HOUNSLOW,flat,True,leasehold,358166.6666666667,>200k,>300k
+2002,5,HOUNSLOW,terraced,False,leasehold,331250.0,>200k,>300k
+2002,5,ISLINGTON,detached,False,freehold,630000.0,>200k,>300k
+2002,5,ISLINGTON,detached,False,leasehold,235000.0,>200k,200k~300k
+2002,5,ISLINGTON,flat,False,freehold,271500.0,>200k,200k~300k
+2002,5,ISLINGTON,flat,False,leasehold,226434.88622754492,>200k,200k~300k
+2002,5,ISLINGTON,flat,True,leasehold,291450.0,>200k,200k~300k
+2002,5,ISLINGTON,semi-detached,False,freehold,300000.0,>200k,200k~300k
+2002,5,ISLINGTON,terraced,False,freehold,905500.0,>200k,>300k
+2002,5,ISLINGTON,terraced,True,freehold,327000.0,>200k,>300k
+2002,5,KENSINGTON AND CHELSEA,flat,False,leasehold,421198.8874598071,>200k,>300k
+2002,5,KENSINGTON AND CHELSEA,flat,True,leasehold,393795.0,>200k,>300k
+2002,5,KENSINGTON AND CHELSEA,terraced,False,freehold,1150000.0,>200k,>300k
+2002,5,LAMBETH,detached,False,freehold,588000.0,>200k,>300k
+2002,5,LAMBETH,detached,False,leasehold,128950.0,<=200k,<=150k
+2002,5,LAMBETH,flat,False,leasehold,185317.19815668202,<=200k,150k~200k
+2002,5,LAMBETH,flat,True,leasehold,436406.25,>200k,>300k
+2002,5,LAMBETH,terraced,False,freehold,381666.6666666667,>200k,>300k
+2002,5,LEWISHAM,detached,False,freehold,435000.0,>200k,>300k
+2002,5,LEWISHAM,flat,False,leasehold,125334.44444444444,<=200k,<=150k
+2002,5,LEWISHAM,flat,True,leasehold,131499.16666666666,<=200k,<=150k
+2002,5,LEWISHAM,semi-detached,False,freehold,400000.0,>200k,>300k
+2002,5,LEWISHAM,semi-detached,False,leasehold,128000.0,<=200k,<=150k
+2002,5,LEWISHAM,terraced,False,freehold,265000.0,>200k,200k~300k
+2002,5,LEWISHAM,terraced,False,leasehold,93500.0,<=200k,<=150k
+2002,5,MERTON,flat,False,leasehold,190577.27272727274,<=200k,150k~200k
+2002,5,MERTON,flat,True,leasehold,226150.0,>200k,200k~300k
+2002,5,MERTON,semi-detached,False,freehold,485000.0,>200k,>300k
+2002,5,MERTON,terraced,False,freehold,522000.0,>200k,>300k
+2002,5,MERTON,terraced,False,leasehold,228000.0,>200k,200k~300k
+2002,5,NEWHAM,flat,False,leasehold,140399.375,<=200k,<=150k
+2002,5,NEWHAM,flat,True,leasehold,239466.0,>200k,200k~300k
+2002,5,NEWHAM,terraced,True,freehold,173500.0,<=200k,150k~200k
+2002,5,REDBRIDGE,flat,False,leasehold,145310.0,<=200k,<=150k
+2002,5,REDBRIDGE,semi-detached,False,freehold,247500.0,>200k,200k~300k
+2002,5,RICHMOND UPON THAMES,flat,False,leasehold,260989.2857142857,>200k,200k~300k
+2002,5,RICHMOND UPON THAMES,terraced,False,freehold,175000.0,<=200k,150k~200k
+2002,5,SOUTHWARK,flat,False,freehold,206000.0,>200k,200k~300k
+2002,5,SOUTHWARK,flat,False,leasehold,201222.4189189189,>200k,200k~300k
+2002,5,SOUTHWARK,flat,True,leasehold,288081.8703703704,>200k,200k~300k
+2002,5,SOUTHWARK,semi-detached,False,freehold,290000.0,>200k,200k~300k
+2002,5,SOUTHWARK,semi-detached,False,leasehold,155000.0,<=200k,150k~200k
+2002,5,SOUTHWARK,terraced,False,freehold,316666.6666666667,>200k,>300k
+2002,5,SOUTHWARK,terraced,False,leasehold,248750.0,>200k,200k~300k
+2002,5,TOWER HAMLETS,flat,False,leasehold,244540.13875598085,>200k,200k~300k
+2002,5,TOWER HAMLETS,flat,True,leasehold,223255.61904761905,>200k,200k~300k
+2002,5,WALTHAM FOREST,flat,False,leasehold,110152.22222222222,<=200k,<=150k
+2002,5,WALTHAM FOREST,flat,True,leasehold,94950.0,<=200k,<=150k
+2002,5,WALTHAM FOREST,semi-detached,False,freehold,249995.0,>200k,200k~300k
+2002,5,WANDSWORTH,flat,False,freehold,325000.0,>200k,>300k
+2002,5,WANDSWORTH,flat,False,leasehold,210499.33201581027,>200k,200k~300k
+2002,5,WANDSWORTH,flat,True,leasehold,357550.0,>200k,>300k
+2002,5,WANDSWORTH,semi-detached,False,leasehold,150000.0,<=200k,<=150k
+2002,5,WANDSWORTH,terraced,False,freehold,273316.6666666667,>200k,200k~300k
+2002,5,WANDSWORTH,terraced,False,leasehold,220500.0,>200k,200k~300k
+2002,6,BARNET,detached,False,leasehold,193000.0,<=200k,150k~200k
+2002,6,BARNET,flat,False,freehold,212475.0,>200k,200k~300k
+2002,6,BARNET,flat,False,leasehold,182110.66326530612,<=200k,150k~200k
+2002,6,BARNET,flat,True,leasehold,295208.3333333333,>200k,200k~300k
+2002,6,BARNET,semi-detached,False,freehold,585000.0,>200k,>300k
+2002,6,BARNET,semi-detached,True,freehold,2150000.0,>200k,>300k
+2002,6,BARNET,terraced,False,leasehold,125000.0,<=200k,<=150k
+2002,6,BEXLEY,flat,False,leasehold,140000.0,<=200k,<=150k
+2002,6,BRENT,flat,False,leasehold,167637.0303030303,<=200k,150k~200k
+2002,6,BRENT,terraced,False,freehold,225000.0,>200k,200k~300k
+2002,6,BRENT,terraced,False,leasehold,192500.0,<=200k,150k~200k
+2002,6,BROMLEY,flat,False,leasehold,113019.09523809524,<=200k,<=150k
+2002,6,CAMDEN,flat,False,freehold,450000.0,>200k,>300k
+2002,6,CAMDEN,flat,False,leasehold,287916.56345177663,>200k,200k~300k
+2002,6,CAMDEN,flat,True,leasehold,360000.0,>200k,>300k
+2002,6,CAMDEN,semi-detached,False,leasehold,280000.0,>200k,200k~300k
+2002,6,CAMDEN,terraced,False,freehold,499950.0,>200k,>300k
+2002,6,CAMDEN,terraced,False,leasehold,419000.0,>200k,>300k
+2002,6,CITY OF LONDON,flat,False,leasehold,297143.75,>200k,200k~300k
+2002,6,CITY OF WESTMINSTER,flat,False,freehold,323500.0,>200k,>300k
+2002,6,CITY OF WESTMINSTER,flat,False,leasehold,398543.4936708861,>200k,>300k
+2002,6,CITY OF WESTMINSTER,flat,True,leasehold,403992.2413793103,>200k,>300k
+2002,6,CITY OF WESTMINSTER,terraced,False,freehold,1550000.0,>200k,>300k
+2002,6,CITY OF WESTMINSTER,terraced,False,leasehold,325000.0,>200k,>300k
+2002,6,CROYDON,detached,False,freehold,68000.0,<=200k,<=150k
+2002,6,CROYDON,flat,False,leasehold,104750.0,<=200k,<=150k
+2002,6,CROYDON,flat,True,leasehold,150000.0,<=200k,<=150k
+2002,6,EALING,detached,False,leasehold,175000.0,<=200k,150k~200k
+2002,6,EALING,flat,False,leasehold,210407.6923076923,>200k,200k~300k
+2002,6,EALING,flat,True,leasehold,197000.0,<=200k,150k~200k
+2002,6,EALING,semi-detached,False,leasehold,142000.0,<=200k,<=150k
+2002,6,EALING,terraced,False,leasehold,145000.0,<=200k,<=150k
+2002,6,ENFIELD,flat,False,leasehold,171290.88235294117,<=200k,150k~200k
+2002,6,ENFIELD,terraced,False,leasehold,71000.0,<=200k,<=150k
+2002,6,GREENWICH,flat,False,leasehold,174141.5625,<=200k,150k~200k
+2002,6,GREENWICH,flat,True,leasehold,267400.0,>200k,200k~300k
+2002,6,GREENWICH,terraced,False,leasehold,152000.0,<=200k,150k~200k
+2002,6,HACKNEY,flat,False,leasehold,187397.65,<=200k,150k~200k
+2002,6,HACKNEY,flat,True,leasehold,293927.275862069,>200k,200k~300k
+2002,6,HACKNEY,terraced,False,freehold,400000.0,>200k,>300k
+2002,6,HAMMERSMITH AND FULHAM,detached,False,leasehold,207500.0,>200k,200k~300k
+2002,6,HAMMERSMITH AND FULHAM,flat,False,leasehold,248792.96296296295,>200k,200k~300k
+2002,6,HAMMERSMITH AND FULHAM,flat,True,leasehold,720275.0,>200k,>300k
+2002,6,HAMMERSMITH AND FULHAM,terraced,False,freehold,442125.0,>200k,>300k
+2002,6,HAMMERSMITH AND FULHAM,terraced,False,leasehold,186000.0,<=200k,150k~200k
+2002,6,HARINGEY,detached,False,leasehold,315000.0,>200k,>300k
+2002,6,HARINGEY,flat,False,leasehold,217909.60784313726,>200k,200k~300k
+2002,6,HARINGEY,flat,True,leasehold,232966.45945945947,>200k,200k~300k
+2002,6,HARINGEY,semi-detached,False,leasehold,155000.0,<=200k,150k~200k
+2002,6,HARINGEY,terraced,False,leasehold,221250.0,>200k,200k~300k
+2002,6,HOUNSLOW,flat,False,leasehold,267895.8,>200k,200k~300k
+2002,6,HOUNSLOW,flat,True,leasehold,316833.3333333333,>200k,>300k
+2002,6,HOUNSLOW,terraced,False,leasehold,285000.0,>200k,200k~300k
+2002,6,ISLINGTON,flat,False,leasehold,237224.56435643564,>200k,200k~300k
+2002,6,ISLINGTON,flat,True,leasehold,271183.3,>200k,200k~300k
+2002,6,ISLINGTON,terraced,False,freehold,341666.6666666667,>200k,>300k
+2002,6,KENSINGTON AND CHELSEA,flat,False,leasehold,440236.3385826772,>200k,>300k
+2002,6,KENSINGTON AND CHELSEA,flat,True,leasehold,551395.8333333334,>200k,>300k
+2002,6,KENSINGTON AND CHELSEA,semi-detached,False,freehold,4250000.0,>200k,>300k
+2002,6,KENSINGTON AND CHELSEA,terraced,False,freehold,438577.3333333333,>200k,>300k
+2002,6,LAMBETH,flat,False,freehold,51000.0,<=200k,<=150k
+2002,6,LAMBETH,flat,False,leasehold,177740.0388888889,<=200k,150k~200k
+2002,6,LAMBETH,flat,True,leasehold,533758.5454545454,>200k,>300k
+2002,6,LAMBETH,semi-detached,False,freehold,528000.0,>200k,>300k
+2002,6,LAMBETH,terraced,False,freehold,275000.0,>200k,200k~300k
+2002,6,LAMBETH,terraced,False,leasehold,229250.0,>200k,200k~300k
+2002,6,LEWISHAM,flat,False,leasehold,118549.73626373627,<=200k,<=150k
+2002,6,LEWISHAM,flat,True,leasehold,149901.5625,<=200k,<=150k
+2002,6,LEWISHAM,semi-detached,False,freehold,249000.0,>200k,200k~300k
+2002,6,LEWISHAM,terraced,False,freehold,289666.6666666667,>200k,200k~300k
+2002,6,LEWISHAM,terraced,False,leasehold,223333.33333333334,>200k,200k~300k
+2002,6,MERTON,flat,False,leasehold,222288.54166666666,>200k,200k~300k
+2002,6,MERTON,flat,True,leasehold,229731.625,>200k,200k~300k
+2002,6,MERTON,terraced,False,freehold,283500.0,>200k,200k~300k
+2002,6,NEWHAM,flat,False,freehold,82500.0,<=200k,<=150k
+2002,6,NEWHAM,flat,False,leasehold,147211.63157894736,<=200k,<=150k
+2002,6,NEWHAM,flat,True,leasehold,250142.85714285713,>200k,200k~300k
+2002,6,NEWHAM,terraced,False,freehold,129290.0,<=200k,<=150k
+2002,6,NEWHAM,terraced,True,freehold,161430.0,<=200k,150k~200k
+2002,6,REDBRIDGE,flat,False,leasehold,149680.83333333334,<=200k,<=150k
+2002,6,RICHMOND UPON THAMES,flat,False,leasehold,244126.31578947368,>200k,200k~300k
+2002,6,RICHMOND UPON THAMES,flat,True,leasehold,150000.0,<=200k,<=150k
+2002,6,RICHMOND UPON THAMES,terraced,False,leasehold,295000.0,>200k,200k~300k
+2002,6,SOUTHWARK,flat,False,leasehold,213331.72727272726,>200k,200k~300k
+2002,6,SOUTHWARK,flat,True,leasehold,241366.35714285713,>200k,200k~300k
+2002,6,SOUTHWARK,semi-detached,False,freehold,153000.0,<=200k,150k~200k
+2002,6,SOUTHWARK,terraced,False,freehold,176666.66666666666,<=200k,150k~200k
+2002,6,SOUTHWARK,terraced,False,leasehold,180000.0,<=200k,150k~200k
+2002,6,TOWER HAMLETS,detached,True,freehold,190000.0,<=200k,150k~200k
+2002,6,TOWER HAMLETS,flat,False,freehold,195000.0,<=200k,150k~200k
+2002,6,TOWER HAMLETS,flat,False,leasehold,215369.86705202312,>200k,200k~300k
+2002,6,TOWER HAMLETS,flat,True,leasehold,265809.347826087,>200k,200k~300k
+2002,6,TOWER HAMLETS,terraced,True,freehold,346000.0,>200k,>300k
+2002,6,WALTHAM FOREST,flat,False,leasehold,105953.67647058824,<=200k,<=150k
+2002,6,WALTHAM FOREST,flat,True,leasehold,160000.0,<=200k,150k~200k
+2002,6,WALTHAM FOREST,terraced,False,freehold,225000.0,>200k,200k~300k
+2002,6,WALTHAM FOREST,terraced,False,leasehold,151000.0,<=200k,150k~200k
+2002,6,WANDSWORTH,detached,False,leasehold,280000.0,>200k,200k~300k
+2002,6,WANDSWORTH,flat,False,leasehold,227735.1725888325,>200k,200k~300k
+2002,6,WANDSWORTH,flat,True,leasehold,395726.4705882353,>200k,>300k
+2002,6,WANDSWORTH,terraced,False,freehold,355250.0,>200k,>300k
+2002,6,WANDSWORTH,terraced,False,leasehold,243333.33333333334,>200k,200k~300k
+2002,7,BARNET,flat,False,leasehold,191111.48,<=200k,150k~200k
+2002,7,BARNET,flat,True,leasehold,238666.66666666666,>200k,200k~300k
+2002,7,BARNET,semi-detached,False,freehold,474420.0,>200k,>300k
+2002,7,BARNET,semi-detached,False,leasehold,275000.0,>200k,200k~300k
+2002,7,BARNET,terraced,False,freehold,566000.0,>200k,>300k
+2002,7,BEXLEY,flat,False,leasehold,92497.5,<=200k,<=150k
+2002,7,BRENT,detached,False,freehold,785000.0,>200k,>300k
+2002,7,BRENT,flat,False,leasehold,192040.72602739726,<=200k,150k~200k
+2002,7,BRENT,flat,True,leasehold,230000.0,>200k,200k~300k
+2002,7,BRENT,semi-detached,False,leasehold,189916.66666666666,<=200k,150k~200k
+2002,7,BRENT,terraced,False,freehold,220000.0,>200k,200k~300k
+2002,7,BRENT,terraced,False,leasehold,191500.0,<=200k,150k~200k
+2002,7,BROMLEY,detached,False,freehold,725000.0,>200k,>300k
+2002,7,BROMLEY,flat,False,freehold,60000.0,<=200k,<=150k
+2002,7,BROMLEY,flat,False,leasehold,118556.54901960785,<=200k,<=150k
+2002,7,BROMLEY,flat,True,leasehold,157333.33333333334,<=200k,150k~200k
+2002,7,BROMLEY,terraced,False,freehold,270000.0,>200k,200k~300k
+2002,7,CAMDEN,flat,False,leasehold,319918.47807017545,>200k,>300k
+2002,7,CAMDEN,terraced,False,freehold,475000.0,>200k,>300k
+2002,7,CITY OF LONDON,flat,False,leasehold,295921.25,>200k,200k~300k
+2002,7,CITY OF WESTMINSTER,flat,False,leasehold,352362.84633027524,>200k,>300k
+2002,7,CITY OF WESTMINSTER,flat,True,leasehold,395796.4666666667,>200k,>300k
+2002,7,CITY OF WESTMINSTER,terraced,False,freehold,749000.0,>200k,>300k
+2002,7,CROYDON,flat,False,freehold,159950.0,<=200k,150k~200k
+2002,7,CROYDON,flat,False,leasehold,111666.875,<=200k,<=150k
+2002,7,CROYDON,semi-detached,False,leasehold,102000.0,<=200k,<=150k
+2002,7,EALING,detached,False,leasehold,215000.0,>200k,200k~300k
+2002,7,EALING,flat,False,leasehold,188901.7857142857,<=200k,150k~200k
+2002,7,EALING,flat,True,leasehold,181666.66666666666,<=200k,150k~200k
+2002,7,EALING,semi-detached,False,freehold,450000.0,>200k,>300k
+2002,7,EALING,semi-detached,False,leasehold,250000.0,>200k,200k~300k
+2002,7,EALING,terraced,False,freehold,159975.0,<=200k,150k~200k
+2002,7,EALING,terraced,False,leasehold,155000.0,<=200k,150k~200k
+2002,7,ENFIELD,detached,True,freehold,290000.0,>200k,200k~300k
+2002,7,ENFIELD,flat,False,leasehold,155039.5588235294,<=200k,150k~200k
+2002,7,ENFIELD,flat,True,leasehold,184650.0,<=200k,150k~200k
+2002,7,ENFIELD,terraced,False,freehold,370000.0,>200k,>300k
+2002,7,ENFIELD,terraced,False,leasehold,113000.0,<=200k,<=150k
+2002,7,GREENWICH,detached,True,freehold,465000.0,>200k,>300k
+2002,7,GREENWICH,flat,False,leasehold,164788.81818181818,<=200k,150k~200k
+2002,7,GREENWICH,flat,True,leasehold,265527.77777777775,>200k,200k~300k
+2002,7,GREENWICH,semi-detached,False,freehold,229950.0,>200k,200k~300k
+2002,7,GREENWICH,terraced,False,freehold,330000.0,>200k,>300k
+2002,7,HACKNEY,flat,False,leasehold,181217.16981132075,<=200k,150k~200k
+2002,7,HACKNEY,flat,True,leasehold,304740.4090909091,>200k,>300k
+2002,7,HACKNEY,terraced,False,freehold,535000.0,>200k,>300k
+2002,7,HACKNEY,terraced,False,leasehold,140000.0,<=200k,<=150k
+2002,7,HAMMERSMITH AND FULHAM,flat,False,freehold,480000.0,>200k,>300k
+2002,7,HAMMERSMITH AND FULHAM,flat,False,leasehold,261152.1843575419,>200k,200k~300k
+2002,7,HAMMERSMITH AND FULHAM,flat,True,leasehold,230000.0,>200k,200k~300k
+2002,7,HAMMERSMITH AND FULHAM,terraced,False,freehold,445750.0,>200k,>300k
+2002,7,HAMMERSMITH AND FULHAM,terraced,False,leasehold,190016.66666666666,<=200k,150k~200k
+2002,7,HARINGEY,flat,False,freehold,185500.0,<=200k,150k~200k
+2002,7,HARINGEY,flat,False,leasehold,167721.2,<=200k,150k~200k
+2002,7,HARINGEY,flat,True,leasehold,162500.0,<=200k,150k~200k
+2002,7,HARINGEY,terraced,False,leasehold,179000.0,<=200k,150k~200k
+2002,7,HOUNSLOW,flat,False,leasehold,218833.33333333334,>200k,200k~300k
+2002,7,HOUNSLOW,flat,True,leasehold,338500.0,>200k,>300k
+2002,7,HOUNSLOW,terraced,False,freehold,430000.0,>200k,>300k
+2002,7,ISLINGTON,flat,False,leasehold,254104.98857142858,>200k,200k~300k
+2002,7,ISLINGTON,flat,True,leasehold,230602.94736842104,>200k,200k~300k
+2002,7,ISLINGTON,semi-detached,False,freehold,552000.0,>200k,>300k
+2002,7,ISLINGTON,terraced,False,freehold,384237.5,>200k,>300k
+2002,7,KENSINGTON AND CHELSEA,flat,False,freehold,198000.0,<=200k,150k~200k
+2002,7,KENSINGTON AND CHELSEA,flat,False,leasehold,456606.9636363636,>200k,>300k
+2002,7,KENSINGTON AND CHELSEA,flat,True,leasehold,391700.0,>200k,>300k
+2002,7,KENSINGTON AND CHELSEA,semi-detached,False,leasehold,340000.0,>200k,>300k
+2002,7,KENSINGTON AND CHELSEA,terraced,False,freehold,750250.0,>200k,>300k
+2002,7,KINGSTON UPON THAMES,flat,False,leasehold,169950.0,<=200k,150k~200k
+2002,7,LAMBETH,flat,False,leasehold,186428.01673640168,<=200k,150k~200k
+2002,7,LAMBETH,flat,True,leasehold,363401.95454545453,>200k,>300k
+2002,7,LAMBETH,terraced,True,freehold,430000.0,>200k,>300k
+2002,7,LEWISHAM,flat,False,freehold,80000.0,<=200k,<=150k
+2002,7,LEWISHAM,flat,False,leasehold,127407.26984126984,<=200k,<=150k
+2002,7,LEWISHAM,flat,True,leasehold,173926.04166666666,<=200k,150k~200k
+2002,7,LEWISHAM,semi-detached,False,freehold,381500.0,>200k,>300k
+2002,7,LEWISHAM,terraced,False,freehold,252333.33333333334,>200k,200k~300k
+2002,7,MERTON,flat,False,leasehold,213902.5,>200k,200k~300k
+2002,7,MERTON,flat,True,leasehold,394285.71428571426,>200k,>300k
+2002,7,MERTON,terraced,False,freehold,249475.0,>200k,200k~300k
+2002,7,MERTON,terraced,False,leasehold,178000.0,<=200k,150k~200k
+2002,7,NEWHAM,flat,False,leasehold,139222.09677419355,<=200k,<=150k
+2002,7,NEWHAM,flat,True,leasehold,214609.1224489796,>200k,200k~300k
+2002,7,NEWHAM,semi-detached,False,freehold,259000.0,>200k,200k~300k
+2002,7,NEWHAM,terraced,True,freehold,170666.66666666666,<=200k,150k~200k
+2002,7,REDBRIDGE,flat,False,leasehold,147758.09523809524,<=200k,<=150k
+2002,7,RICHMOND UPON THAMES,flat,False,leasehold,224512.5,>200k,200k~300k
+2002,7,SOUTHWARK,flat,False,leasehold,213803.5845410628,>200k,200k~300k
+2002,7,SOUTHWARK,flat,True,leasehold,217564.0,>200k,200k~300k
+2002,7,SOUTHWARK,semi-detached,False,leasehold,199995.0,<=200k,150k~200k
+2002,7,SOUTHWARK,terraced,False,leasehold,148000.0,<=200k,<=150k
+2002,7,TOWER HAMLETS,flat,False,leasehold,209786.63636363635,>200k,200k~300k
+2002,7,TOWER HAMLETS,flat,True,leasehold,244048.2876712329,>200k,200k~300k
+2002,7,TOWER HAMLETS,terraced,True,leasehold,225000.0,>200k,200k~300k
+2002,7,WALTHAM FOREST,flat,False,leasehold,113051.52173913043,<=200k,<=150k
+2002,7,WALTHAM FOREST,flat,True,leasehold,75000.0,<=200k,<=150k
+2002,7,WALTHAM FOREST,terraced,False,freehold,192500.0,<=200k,150k~200k
+2002,7,WANDSWORTH,flat,False,freehold,204000.0,>200k,200k~300k
+2002,7,WANDSWORTH,flat,False,leasehold,218128.02362204724,>200k,200k~300k
+2002,7,WANDSWORTH,flat,True,leasehold,286138.9756097561,>200k,200k~300k
+2002,7,WANDSWORTH,semi-detached,False,freehold,494000.0,>200k,>300k
+2002,7,WANDSWORTH,semi-detached,False,leasehold,220000.0,>200k,200k~300k
+2002,7,WANDSWORTH,terraced,False,freehold,395166.6666666667,>200k,>300k
+2002,7,WANDSWORTH,terraced,False,leasehold,395000.0,>200k,>300k
+2002,8,BARNET,flat,False,freehold,123500.0,<=200k,<=150k
+2002,8,BARNET,flat,False,leasehold,193687.1794871795,<=200k,150k~200k
+2002,8,BARNET,flat,True,leasehold,304309.0909090909,>200k,>300k
+2002,8,BARNET,semi-detached,False,freehold,355000.0,>200k,>300k
+2002,8,BARNET,terraced,False,freehold,159500.0,<=200k,150k~200k
+2002,8,BEXLEY,flat,False,leasehold,82500.0,<=200k,<=150k
+2002,8,BRENT,flat,False,leasehold,190268.33333333334,<=200k,150k~200k
+2002,8,BRENT,flat,True,leasehold,137500.0,<=200k,<=150k
+2002,8,BRENT,terraced,False,freehold,357333.3333333333,>200k,>300k
+2002,8,BRENT,terraced,False,leasehold,204150.0,>200k,200k~300k
+2002,8,BROMLEY,detached,False,freehold,500000.0,>200k,>300k
+2002,8,BROMLEY,flat,False,leasehold,117192.85714285714,<=200k,<=150k
+2002,8,BROMLEY,flat,True,leasehold,60000.0,<=200k,<=150k
+2002,8,BROMLEY,semi-detached,False,freehold,190000.0,<=200k,150k~200k
+2002,8,BROMLEY,terraced,False,freehold,215000.0,>200k,200k~300k
+2002,8,CAMDEN,flat,False,leasehold,301843.77021276596,>200k,>300k
+2002,8,CAMDEN,flat,True,leasehold,407200.0,>200k,>300k
+2002,8,CAMDEN,semi-detached,False,leasehold,275000.0,>200k,200k~300k
+2002,8,CAMDEN,terraced,False,freehold,1012441.6666666666,>200k,>300k
+2002,8,CAMDEN,terraced,False,leasehold,278666.6666666667,>200k,200k~300k
+2002,8,CITY OF LONDON,flat,False,leasehold,271419.3548387097,>200k,200k~300k
+2002,8,CITY OF LONDON,flat,True,leasehold,248500.0,>200k,200k~300k
+2002,8,CITY OF WESTMINSTER,flat,False,leasehold,371476.6191536748,>200k,>300k
+2002,8,CITY OF WESTMINSTER,flat,True,leasehold,397434.2105263158,>200k,>300k
+2002,8,CITY OF WESTMINSTER,terraced,False,freehold,500000.0,>200k,>300k
+2002,8,CITY OF WESTMINSTER,terraced,False,leasehold,367250.0,>200k,>300k
+2002,8,CROYDON,flat,False,leasehold,115787.5,<=200k,<=150k
+2002,8,EALING,flat,False,leasehold,221365.39726027398,>200k,200k~300k
+2002,8,EALING,flat,True,leasehold,222500.0,>200k,200k~300k
+2002,8,EALING,semi-detached,False,freehold,362000.0,>200k,>300k
+2002,8,EALING,semi-detached,False,leasehold,241000.0,>200k,200k~300k
+2002,8,EALING,terraced,False,freehold,163000.0,<=200k,150k~200k
+2002,8,EALING,terraced,False,leasehold,128000.0,<=200k,<=150k
+2002,8,ENFIELD,flat,False,leasehold,144018.72340425532,<=200k,<=150k
+2002,8,ENFIELD,flat,True,leasehold,139995.0,<=200k,<=150k
+2002,8,ENFIELD,terraced,False,freehold,158000.0,<=200k,150k~200k
+2002,8,GREENWICH,flat,False,leasehold,155325.2564102564,<=200k,150k~200k
+2002,8,GREENWICH,flat,True,leasehold,231259.375,>200k,200k~300k
+2002,8,GREENWICH,terraced,False,freehold,298666.6666666667,>200k,200k~300k
+2002,8,HACKNEY,flat,False,leasehold,179176.08910891088,<=200k,150k~200k
+2002,8,HACKNEY,flat,True,leasehold,279094.8387096774,>200k,200k~300k
+2002,8,HAMMERSMITH AND FULHAM,flat,False,leasehold,263041.3961038961,>200k,200k~300k
+2002,8,HAMMERSMITH AND FULHAM,terraced,False,leasehold,787500.0,>200k,>300k
+2002,8,HARINGEY,flat,False,leasehold,185369.73684210525,<=200k,150k~200k
+2002,8,HARINGEY,flat,True,leasehold,254997.5,>200k,200k~300k
+2002,8,HARINGEY,semi-detached,False,leasehold,145000.0,<=200k,<=150k
+2002,8,HOUNSLOW,flat,False,leasehold,232860.0,>200k,200k~300k
+2002,8,ISLINGTON,flat,False,freehold,725000.0,>200k,>300k
+2002,8,ISLINGTON,flat,False,leasehold,250360.19393939394,>200k,200k~300k
+2002,8,ISLINGTON,flat,True,leasehold,403055.55555555556,>200k,>300k
+2002,8,ISLINGTON,semi-detached,True,freehold,695000.0,>200k,>300k
+2002,8,ISLINGTON,terraced,False,freehold,354000.0,>200k,>300k
+2002,8,ISLINGTON,terraced,True,freehold,625000.0,>200k,>300k
+2002,8,KENSINGTON AND CHELSEA,detached,False,freehold,1992305.0,>200k,>300k
+2002,8,KENSINGTON AND CHELSEA,flat,False,leasehold,489502.760942761,>200k,>300k
+2002,8,KENSINGTON AND CHELSEA,flat,True,leasehold,977257.6923076923,>200k,>300k
+2002,8,KENSINGTON AND CHELSEA,terraced,False,freehold,532500.0,>200k,>300k
+2002,8,LAMBETH,flat,False,leasehold,202025.0,>200k,200k~300k
+2002,8,LAMBETH,flat,True,leasehold,383239.8888888889,>200k,>300k
+2002,8,LAMBETH,terraced,False,leasehold,188724.75,<=200k,150k~200k
+2002,8,LEWISHAM,detached,False,freehold,400000.0,>200k,>300k
+2002,8,LEWISHAM,flat,False,freehold,153000.0,<=200k,150k~200k
+2002,8,LEWISHAM,flat,False,leasehold,140215.20833333334,<=200k,<=150k
+2002,8,LEWISHAM,flat,True,leasehold,196171.70103092783,<=200k,150k~200k
+2002,8,LEWISHAM,terraced,False,freehold,180000.0,<=200k,150k~200k
+2002,8,LEWISHAM,terraced,False,leasehold,154950.0,<=200k,150k~200k
+2002,8,MERTON,flat,False,leasehold,213275.75757575757,>200k,200k~300k
+2002,8,MERTON,flat,True,leasehold,304166.6666666667,>200k,>300k
+2002,8,MERTON,terraced,False,leasehold,128250.0,<=200k,<=150k
+2002,8,NEWHAM,flat,False,leasehold,147314.83333333334,<=200k,<=150k
+2002,8,NEWHAM,flat,True,leasehold,287605.3125,>200k,200k~300k
+2002,8,REDBRIDGE,flat,False,leasehold,153436.89655172414,<=200k,150k~200k
+2002,8,RICHMOND UPON THAMES,flat,False,leasehold,293636.1111111111,>200k,200k~300k
+2002,8,RICHMOND UPON THAMES,flat,True,leasehold,189950.0,<=200k,150k~200k
+2002,8,SOUTHWARK,detached,False,leasehold,487500.0,>200k,>300k
+2002,8,SOUTHWARK,flat,False,freehold,282500.0,>200k,200k~300k
+2002,8,SOUTHWARK,flat,False,leasehold,218874.11518324606,>200k,200k~300k
+2002,8,SOUTHWARK,flat,True,leasehold,195836.25925925927,<=200k,150k~200k
+2002,8,SOUTHWARK,terraced,False,freehold,310000.0,>200k,>300k
+2002,8,SOUTHWARK,terraced,False,leasehold,203000.0,>200k,200k~300k
+2002,8,TOWER HAMLETS,flat,False,leasehold,201205.96698113208,>200k,200k~300k
+2002,8,TOWER HAMLETS,flat,True,leasehold,258070.1,>200k,200k~300k
+2002,8,TOWER HAMLETS,terraced,False,freehold,655000.0,>200k,>300k
+2002,8,WALTHAM FOREST,flat,False,leasehold,116510.83333333333,<=200k,<=150k
+2002,8,WANDSWORTH,detached,False,freehold,915833.3333333334,>200k,>300k
+2002,8,WANDSWORTH,detached,True,freehold,399950.0,>200k,>300k
+2002,8,WANDSWORTH,flat,False,leasehold,214500.425,>200k,200k~300k
+2002,8,WANDSWORTH,flat,True,leasehold,380212.5909090909,>200k,>300k
+2002,8,WANDSWORTH,terraced,False,freehold,379998.75,>200k,>300k
+2002,8,WANDSWORTH,terraced,False,leasehold,297500.0,>200k,200k~300k
+2002,8,WANDSWORTH,terraced,True,freehold,368900.0,>200k,>300k
+2002,9,BARNET,flat,False,freehold,153500.0,<=200k,150k~200k
+2002,9,BARNET,flat,False,leasehold,184951.83529411766,<=200k,150k~200k
+2002,9,BARNET,flat,True,leasehold,241191.66666666666,>200k,200k~300k
+2002,9,BARNET,terraced,False,freehold,170000.0,<=200k,150k~200k
+2002,9,BEXLEY,flat,False,leasehold,110000.0,<=200k,<=150k
+2002,9,BRENT,flat,False,leasehold,195017.67073170733,<=200k,150k~200k
+2002,9,BRENT,terraced,False,freehold,900000.0,>200k,>300k
+2002,9,BROMLEY,flat,False,leasehold,123252.27272727272,<=200k,<=150k
+2002,9,BROMLEY,semi-detached,False,leasehold,188000.0,<=200k,150k~200k
+2002,9,CAMDEN,flat,False,freehold,305000.0,>200k,>300k
+2002,9,CAMDEN,flat,False,leasehold,294305.01086956525,>200k,200k~300k
+2002,9,CAMDEN,flat,True,leasehold,612500.0,>200k,>300k
+2002,9,CAMDEN,semi-detached,False,freehold,1450000.0,>200k,>300k
+2002,9,CAMDEN,terraced,False,freehold,732500.0,>200k,>300k
+2002,9,CAMDEN,terraced,False,leasehold,775000.0,>200k,>300k
+2002,9,CITY OF LONDON,flat,False,leasehold,286201.53125,>200k,200k~300k
+2002,9,CITY OF WESTMINSTER,detached,False,leasehold,390000.0,>200k,>300k
+2002,9,CITY OF WESTMINSTER,flat,False,leasehold,367564.2268041237,>200k,>300k
+2002,9,CITY OF WESTMINSTER,flat,True,leasehold,379029.6875,>200k,>300k
+2002,9,CITY OF WESTMINSTER,terraced,False,freehold,1565000.0,>200k,>300k
+2002,9,CITY OF WESTMINSTER,terraced,False,leasehold,357499.5,>200k,>300k
+2002,9,CITY OF WESTMINSTER,terraced,True,freehold,2130000.0,>200k,>300k
+2002,9,CROYDON,flat,False,freehold,60000.0,<=200k,<=150k
+2002,9,CROYDON,flat,False,leasehold,115117.1875,<=200k,<=150k
+2002,9,CROYDON,flat,True,leasehold,350000.0,>200k,>300k
+2002,9,EALING,flat,False,leasehold,208993.1038961039,>200k,200k~300k
+2002,9,EALING,flat,True,leasehold,251086.36363636365,>200k,200k~300k
+2002,9,EALING,terraced,False,freehold,69000.0,<=200k,<=150k
+2002,9,ENFIELD,flat,False,freehold,400000.0,>200k,>300k
+2002,9,ENFIELD,flat,False,leasehold,127973.87096774194,<=200k,<=150k
+2002,9,ENFIELD,flat,True,leasehold,112497.5,<=200k,<=150k
+2002,9,GREENWICH,detached,False,freehold,335000.0,>200k,>300k
+2002,9,GREENWICH,flat,False,leasehold,192982.0588235294,<=200k,150k~200k
+2002,9,GREENWICH,flat,True,leasehold,252500.0,>200k,200k~300k
+2002,9,GREENWICH,terraced,False,freehold,315000.0,>200k,>300k
+2002,9,GREENWICH,terraced,False,leasehold,125000.0,<=200k,<=150k
+2002,9,HACKNEY,flat,False,leasehold,176663.80412371134,<=200k,150k~200k
+2002,9,HACKNEY,flat,True,leasehold,267441.5625,>200k,200k~300k
+2002,9,HACKNEY,terraced,False,freehold,230000.0,>200k,200k~300k
+2002,9,HAMMERSMITH AND FULHAM,flat,False,leasehold,263446.447761194,>200k,200k~300k
+2002,9,HAMMERSMITH AND FULHAM,terraced,False,freehold,705000.0,>200k,>300k
+2002,9,HAMMERSMITH AND FULHAM,terraced,False,leasehold,250000.0,>200k,200k~300k
+2002,9,HARINGEY,flat,False,leasehold,187736.4406779661,<=200k,150k~200k
+2002,9,HARINGEY,flat,True,leasehold,249972.5,>200k,200k~300k
+2002,9,HARINGEY,semi-detached,False,leasehold,275000.0,>200k,200k~300k
+2002,9,HARINGEY,terraced,False,leasehold,108000.0,<=200k,<=150k
+2002,9,HOUNSLOW,flat,False,leasehold,252109.95,>200k,200k~300k
+2002,9,HOUNSLOW,flat,True,leasehold,125000.0,<=200k,<=150k
+2002,9,ISLINGTON,flat,False,freehold,313750.0,>200k,>300k
+2002,9,ISLINGTON,flat,False,leasehold,238432.93893129771,>200k,200k~300k
+2002,9,ISLINGTON,flat,True,leasehold,302842.85714285716,>200k,>300k
+2002,9,ISLINGTON,semi-detached,True,freehold,692500.0,>200k,>300k
+2002,9,ISLINGTON,terraced,False,leasehold,179995.0,<=200k,150k~200k
+2002,9,ISLINGTON,terraced,True,freehold,445000.0,>200k,>300k
+2002,9,KENSINGTON AND CHELSEA,flat,False,leasehold,484664.24311926606,>200k,>300k
+2002,9,KENSINGTON AND CHELSEA,flat,True,leasehold,531588.4615384615,>200k,>300k
+2002,9,KENSINGTON AND CHELSEA,terraced,False,leasehold,1106000.0,>200k,>300k
+2002,9,LAMBETH,flat,False,freehold,320000.0,>200k,>300k
+2002,9,LAMBETH,flat,False,leasehold,180198.29015544042,<=200k,150k~200k
+2002,9,LAMBETH,flat,True,leasehold,332820.83636363636,>200k,>300k
+2002,9,LAMBETH,terraced,False,freehold,213500.0,>200k,200k~300k
+2002,9,LAMBETH,terraced,False,leasehold,155000.0,<=200k,150k~200k
+2002,9,LEWISHAM,flat,False,freehold,235000.0,>200k,200k~300k
+2002,9,LEWISHAM,flat,False,leasehold,133453.18181818182,<=200k,<=150k
+2002,9,LEWISHAM,flat,True,leasehold,176740.64285714287,<=200k,150k~200k
+2002,9,LEWISHAM,terraced,False,freehold,245875.0,>200k,200k~300k
+2002,9,LEWISHAM,terraced,False,leasehold,129500.0,<=200k,<=150k
+2002,9,MERTON,detached,False,freehold,390000.0,>200k,>300k
+2002,9,MERTON,flat,False,leasehold,207632.2888888889,>200k,200k~300k
+2002,9,MERTON,flat,True,leasehold,416000.0,>200k,>300k
+2002,9,MERTON,terraced,False,freehold,400000.0,>200k,>300k
+2002,9,NEWHAM,flat,False,leasehold,153762.66666666666,<=200k,150k~200k
+2002,9,NEWHAM,flat,True,leasehold,272481.78571428574,>200k,200k~300k
+2002,9,REDBRIDGE,flat,False,leasehold,143355.55555555556,<=200k,<=150k
+2002,9,RICHMOND UPON THAMES,flat,False,leasehold,308128.5714285714,>200k,>300k
+2002,9,RICHMOND UPON THAMES,flat,True,leasehold,150000.0,<=200k,<=150k
+2002,9,SOUTHWARK,detached,False,freehold,85000.0,<=200k,<=150k
+2002,9,SOUTHWARK,flat,False,freehold,96000.0,<=200k,<=150k
+2002,9,SOUTHWARK,flat,False,leasehold,206661.70142180094,>200k,200k~300k
+2002,9,SOUTHWARK,flat,True,leasehold,201396.4126984127,>200k,200k~300k
+2002,9,SOUTHWARK,terraced,False,freehold,353000.0,>200k,>300k
+2002,9,TOWER HAMLETS,flat,False,leasehold,238092.79245283018,>200k,200k~300k
+2002,9,TOWER HAMLETS,flat,True,leasehold,238508.44,>200k,200k~300k
+2002,9,WALTHAM FOREST,flat,False,leasehold,122733.95348837209,<=200k,<=150k
+2002,9,WANDSWORTH,detached,False,freehold,705000.0,>200k,>300k
+2002,9,WANDSWORTH,flat,False,freehold,355000.0,>200k,>300k
+2002,9,WANDSWORTH,flat,False,leasehold,222628.2142857143,>200k,200k~300k
+2002,9,WANDSWORTH,flat,True,leasehold,365519.1904761905,>200k,>300k
+2002,9,WANDSWORTH,semi-detached,False,freehold,450000.0,>200k,>300k
+2002,9,WANDSWORTH,semi-detached,False,leasehold,327500.0,>200k,>300k
+2002,9,WANDSWORTH,terraced,False,freehold,235166.66666666666,>200k,200k~300k
+2002,9,WANDSWORTH,terraced,False,leasehold,280000.0,>200k,200k~300k
+2002,10,BARNET,flat,False,leasehold,183310.75,<=200k,150k~200k
+2002,10,BARNET,flat,True,leasehold,168660.0,<=200k,150k~200k
+2002,10,BARNET,semi-detached,False,leasehold,180000.0,<=200k,150k~200k
+2002,10,BRENT,flat,False,leasehold,176550.54716981133,<=200k,150k~200k
+2002,10,BRENT,semi-detached,False,freehold,498500.0,>200k,>300k
+2002,10,BRENT,terraced,False,freehold,58000.0,<=200k,<=150k
+2002,10,BRENT,terraced,False,leasehold,232500.0,>200k,200k~300k
+2002,10,BROMLEY,flat,False,leasehold,121149.6551724138,<=200k,<=150k
+2002,10,BROMLEY,flat,True,leasehold,131750.0,<=200k,<=150k
+2002,10,BROMLEY,semi-detached,False,freehold,270000.0,>200k,200k~300k
+2002,10,CAMDEN,detached,False,freehold,2325000.0,>200k,>300k
+2002,10,CAMDEN,flat,False,freehold,300000.0,>200k,200k~300k
+2002,10,CAMDEN,flat,False,leasehold,290399.78534031415,>200k,200k~300k
+2002,10,CAMDEN,flat,True,leasehold,634375.0,>200k,>300k
+2002,10,CAMDEN,semi-detached,False,freehold,761703.0,>200k,>300k
+2002,10,CAMDEN,terraced,False,freehold,425000.0,>200k,>300k
+2002,10,CAMDEN,terraced,False,leasehold,485000.0,>200k,>300k
+2002,10,CITY OF LONDON,flat,False,leasehold,252937.5,>200k,200k~300k
+2002,10,CITY OF WESTMINSTER,flat,False,freehold,193231.0,<=200k,150k~200k
+2002,10,CITY OF WESTMINSTER,flat,False,leasehold,378525.47229551454,>200k,>300k
+2002,10,CITY OF WESTMINSTER,flat,True,leasehold,442334.05555555556,>200k,>300k
+2002,10,CITY OF WESTMINSTER,terraced,False,freehold,600000.0,>200k,>300k
+2002,10,CITY OF WESTMINSTER,terraced,False,leasehold,395925.0,>200k,>300k
+2002,10,CROYDON,flat,False,leasehold,115019.28571428571,<=200k,<=150k
+2002,10,CROYDON,terraced,False,freehold,175000.0,<=200k,150k~200k
+2002,10,EALING,flat,False,leasehold,208985.5909090909,>200k,200k~300k
+2002,10,EALING,flat,True,leasehold,260000.0,>200k,200k~300k
+2002,10,EALING,terraced,False,leasehold,191200.0,<=200k,150k~200k
+2002,10,ENFIELD,flat,False,leasehold,140922.42424242425,<=200k,<=150k
+2002,10,ENFIELD,flat,True,leasehold,191248.75,<=200k,150k~200k
+2002,10,ENFIELD,semi-detached,False,leasehold,250000.0,>200k,200k~300k
+2002,10,ENFIELD,terraced,False,freehold,178000.0,<=200k,150k~200k
+2002,10,ENFIELD,terraced,True,freehold,199000.0,<=200k,150k~200k
+2002,10,GREENWICH,flat,False,freehold,89000.0,<=200k,<=150k
+2002,10,GREENWICH,flat,False,leasehold,161438.085106383,<=200k,150k~200k
+2002,10,GREENWICH,flat,True,leasehold,317500.0,>200k,>300k
+2002,10,HACKNEY,flat,False,leasehold,176580.5,<=200k,150k~200k
+2002,10,HACKNEY,flat,True,leasehold,216079.05454545454,>200k,200k~300k
+2002,10,HACKNEY,terraced,False,freehold,224666.66666666666,>200k,200k~300k
+2002,10,HAMMERSMITH AND FULHAM,flat,False,freehold,377500.0,>200k,>300k
+2002,10,HAMMERSMITH AND FULHAM,flat,False,leasehold,274294.4666666667,>200k,200k~300k
+2002,10,HAMMERSMITH AND FULHAM,flat,True,leasehold,168000.0,<=200k,150k~200k
+2002,10,HAMMERSMITH AND FULHAM,semi-detached,False,leasehold,310000.0,>200k,>300k
+2002,10,HAMMERSMITH AND FULHAM,terraced,False,freehold,296500.0,>200k,200k~300k
+2002,10,HAMMERSMITH AND FULHAM,terraced,False,leasehold,277500.0,>200k,200k~300k
+2002,10,HARINGEY,flat,False,leasehold,197478.9605263158,<=200k,150k~200k
+2002,10,HARINGEY,flat,True,leasehold,256500.0,>200k,200k~300k
+2002,10,HARINGEY,terraced,False,freehold,270000.0,>200k,200k~300k
+2002,10,HARINGEY,terraced,False,leasehold,699950.0,>200k,>300k
+2002,10,HOUNSLOW,flat,False,leasehold,244500.0,>200k,200k~300k
+2002,10,ISLINGTON,detached,True,freehold,875000.0,>200k,>300k
+2002,10,ISLINGTON,flat,False,leasehold,255908.03260869565,>200k,200k~300k
+2002,10,ISLINGTON,flat,True,leasehold,208512.5,>200k,200k~300k
+2002,10,ISLINGTON,terraced,False,leasehold,405000.0,>200k,>300k
+2002,10,KENSINGTON AND CHELSEA,flat,False,freehold,490000.0,>200k,>300k
+2002,10,KENSINGTON AND CHELSEA,flat,False,leasehold,434554.35885167465,>200k,>300k
+2002,10,KENSINGTON AND CHELSEA,flat,True,leasehold,294746.875,>200k,200k~300k
+2002,10,KENSINGTON AND CHELSEA,terraced,False,freehold,1015000.0,>200k,>300k
+2002,10,KENSINGTON AND CHELSEA,terraced,False,leasehold,610000.0,>200k,>300k
+2002,10,KINGSTON UPON THAMES,flat,False,leasehold,138000.0,<=200k,<=150k
+2002,10,LAMBETH,flat,False,leasehold,186682.36813186813,<=200k,150k~200k
+2002,10,LAMBETH,flat,True,leasehold,295484.3220338983,>200k,200k~300k
+2002,10,LAMBETH,semi-detached,True,freehold,231250.0,>200k,200k~300k
+2002,10,LAMBETH,terraced,False,freehold,285000.0,>200k,200k~300k
+2002,10,LAMBETH,terraced,False,leasehold,169950.0,<=200k,150k~200k
+2002,10,LEWISHAM,detached,False,freehold,425000.0,>200k,>300k
+2002,10,LEWISHAM,flat,False,freehold,65000.0,<=200k,<=150k
+2002,10,LEWISHAM,flat,False,leasehold,131520.13513513515,<=200k,<=150k
+2002,10,LEWISHAM,flat,True,leasehold,141398.0,<=200k,<=150k
+2002,10,LEWISHAM,semi-detached,False,leasehold,114000.0,<=200k,<=150k
+2002,10,LEWISHAM,terraced,False,freehold,203799.8,>200k,200k~300k
+2002,10,LEWISHAM,terraced,False,leasehold,97000.0,<=200k,<=150k
+2002,10,MERTON,flat,False,leasehold,245156.0,>200k,200k~300k
+2002,10,MERTON,flat,True,leasehold,281666.6666666667,>200k,200k~300k
+2002,10,MERTON,semi-detached,False,leasehold,248750.0,>200k,200k~300k
+2002,10,MERTON,terraced,False,freehold,871500.0,>200k,>300k
+2002,10,NEWHAM,flat,False,leasehold,154642.57142857142,<=200k,150k~200k
+2002,10,NEWHAM,flat,True,leasehold,244103.33333333334,>200k,200k~300k
+2002,10,NEWHAM,terraced,False,freehold,160997.5,<=200k,150k~200k
+2002,10,NEWHAM,terraced,False,leasehold,139995.0,<=200k,<=150k
+2002,10,REDBRIDGE,flat,False,leasehold,161299.66666666666,<=200k,150k~200k
+2002,10,REDBRIDGE,semi-detached,False,freehold,60000.0,<=200k,<=150k
+2002,10,RICHMOND UPON THAMES,flat,False,leasehold,314937.5,>200k,>300k
+2002,10,SOUTHWARK,flat,False,leasehold,211151.1366906475,>200k,200k~300k
+2002,10,SOUTHWARK,flat,True,leasehold,256363.63636363635,>200k,200k~300k
+2002,10,SOUTHWARK,semi-detached,False,leasehold,141500.0,<=200k,<=150k
+2002,10,SOUTHWARK,terraced,False,freehold,250000.0,>200k,200k~300k
+2002,10,TOWER HAMLETS,flat,False,freehold,350000.0,>200k,>300k
+2002,10,TOWER HAMLETS,flat,False,leasehold,239405.08860759492,>200k,200k~300k
+2002,10,TOWER HAMLETS,flat,True,leasehold,306330.63157894736,>200k,>300k
+2002,10,TOWER HAMLETS,semi-detached,False,freehold,445000.0,>200k,>300k
+2002,10,WALTHAM FOREST,flat,False,leasehold,127152.30769230769,<=200k,<=150k
+2002,10,WALTHAM FOREST,terraced,False,freehold,280000.0,>200k,200k~300k
+2002,10,WANDSWORTH,flat,False,freehold,300000.0,>200k,200k~300k
+2002,10,WANDSWORTH,flat,False,leasehold,230909.48847926268,>200k,200k~300k
+2002,10,WANDSWORTH,flat,True,leasehold,356267.0416666667,>200k,>300k
+2002,10,WANDSWORTH,terraced,False,freehold,470000.0,>200k,>300k
+2002,11,BARNET,flat,False,freehold,136250.0,<=200k,<=150k
+2002,11,BARNET,flat,False,leasehold,199376.47959183675,<=200k,150k~200k
+2002,11,BARNET,flat,True,leasehold,327283.3333333333,>200k,>300k
+2002,11,BARNET,semi-detached,False,freehold,134950.0,<=200k,<=150k
+2002,11,BARNET,semi-detached,False,leasehold,155000.0,<=200k,150k~200k
+2002,11,BARNET,terraced,False,freehold,180000.0,<=200k,150k~200k
+2002,11,BARNET,terraced,False,leasehold,145000.0,<=200k,<=150k
+2002,11,BRENT,flat,False,leasehold,191728.55844155845,<=200k,150k~200k
+2002,11,BROMLEY,flat,False,leasehold,124163.95833333333,<=200k,<=150k
+2002,11,BROMLEY,flat,True,leasehold,87500.0,<=200k,<=150k
+2002,11,CAMDEN,detached,False,leasehold,635000.0,>200k,>300k
+2002,11,CAMDEN,flat,False,leasehold,302606.64245810057,>200k,>300k
+2002,11,CAMDEN,flat,True,leasehold,918437.5,>200k,>300k
+2002,11,CAMDEN,semi-detached,False,freehold,670000.0,>200k,>300k
+2002,11,CAMDEN,terraced,False,leasehold,415000.0,>200k,>300k
+2002,11,CITY OF LONDON,flat,False,leasehold,313190.3846153846,>200k,>300k
+2002,11,CITY OF WESTMINSTER,flat,False,leasehold,404830.340625,>200k,>300k
+2002,11,CITY OF WESTMINSTER,flat,True,leasehold,468100.0,>200k,>300k
+2002,11,CITY OF WESTMINSTER,terraced,False,freehold,375000.0,>200k,>300k
+2002,11,CITY OF WESTMINSTER,terraced,False,leasehold,245000.0,>200k,200k~300k
+2002,11,CROYDON,flat,False,leasehold,110616.9,<=200k,<=150k
+2002,11,CROYDON,flat,True,leasehold,113000.0,<=200k,<=150k
+2002,11,CROYDON,semi-detached,False,leasehold,108000.0,<=200k,<=150k
+2002,11,CROYDON,terraced,False,leasehold,185000.0,<=200k,150k~200k
+2002,11,EALING,flat,False,leasehold,198031.34848484848,<=200k,150k~200k
+2002,11,EALING,flat,True,leasehold,271200.0,>200k,200k~300k
+2002,11,EALING,semi-detached,False,freehold,356000.0,>200k,>300k
+2002,11,EALING,semi-detached,False,leasehold,250000.0,>200k,200k~300k
+2002,11,EALING,terraced,False,leasehold,174983.33333333334,<=200k,150k~200k
+2002,11,ENFIELD,flat,False,leasehold,150750.0,<=200k,150k~200k
+2002,11,ENFIELD,flat,True,leasehold,111737.5,<=200k,<=150k
+2002,11,ENFIELD,terraced,False,freehold,229995.0,>200k,200k~300k
+2002,11,GREENWICH,flat,False,leasehold,150223.02083333334,<=200k,150k~200k
+2002,11,GREENWICH,flat,True,leasehold,273021.73913043475,>200k,200k~300k
+2002,11,GREENWICH,terraced,False,freehold,185000.0,<=200k,150k~200k
+2002,11,HACKNEY,flat,False,leasehold,176390.65217391305,<=200k,150k~200k
+2002,11,HACKNEY,flat,True,leasehold,241495.0,>200k,200k~300k
+2002,11,HACKNEY,terraced,False,freehold,125000.0,<=200k,<=150k
+2002,11,HACKNEY,terraced,False,leasehold,175000.0,<=200k,150k~200k
+2002,11,HAMMERSMITH AND FULHAM,flat,False,freehold,470000.0,>200k,>300k
+2002,11,HAMMERSMITH AND FULHAM,flat,False,leasehold,256812.97810218978,>200k,200k~300k
+2002,11,HAMMERSMITH AND FULHAM,flat,True,leasehold,824107.0,>200k,>300k
+2002,11,HAMMERSMITH AND FULHAM,semi-detached,False,leasehold,184505.0,<=200k,150k~200k
+2002,11,HAMMERSMITH AND FULHAM,terraced,False,freehold,337500.0,>200k,>300k
+2002,11,HAMMERSMITH AND FULHAM,terraced,False,leasehold,280750.0,>200k,200k~300k
+2002,11,HARINGEY,flat,False,leasehold,203496.05263157896,>200k,200k~300k
+2002,11,HARINGEY,flat,True,leasehold,101500.0,<=200k,<=150k
+2002,11,HARINGEY,semi-detached,False,leasehold,200000.0,<=200k,150k~200k
+2002,11,HOUNSLOW,flat,False,leasehold,257661.05555555556,>200k,200k~300k
+2002,11,HOUNSLOW,flat,True,leasehold,250000.0,>200k,200k~300k
+2002,11,ISLINGTON,flat,False,freehold,320000.0,>200k,>300k
+2002,11,ISLINGTON,flat,False,leasehold,255579.97727272726,>200k,200k~300k
+2002,11,ISLINGTON,flat,True,leasehold,262141.875,>200k,200k~300k
+2002,11,ISLINGTON,terraced,False,freehold,465000.0,>200k,>300k
+2002,11,KENSINGTON AND CHELSEA,flat,False,freehold,489077.5,>200k,>300k
+2002,11,KENSINGTON AND CHELSEA,flat,False,leasehold,400614.25581395347,>200k,>300k
+2002,11,KENSINGTON AND CHELSEA,flat,True,leasehold,440966.6666666667,>200k,>300k
+2002,11,KENSINGTON AND CHELSEA,semi-detached,False,freehold,1480000.0,>200k,>300k
+2002,11,KENSINGTON AND CHELSEA,terraced,False,freehold,1402500.0,>200k,>300k
+2002,11,LAMBETH,flat,False,leasehold,195720.79393939395,<=200k,150k~200k
+2002,11,LAMBETH,flat,True,leasehold,351524.96774193546,>200k,>300k
+2002,11,LAMBETH,semi-detached,False,freehold,221000.0,>200k,200k~300k
+2002,11,LAMBETH,terraced,False,freehold,336666.6666666667,>200k,>300k
+2002,11,LEWISHAM,flat,False,leasehold,132946.57657657657,<=200k,<=150k
+2002,11,LEWISHAM,flat,True,leasehold,195299.70588235295,<=200k,150k~200k
+2002,11,LEWISHAM,terraced,False,freehold,110000.0,<=200k,<=150k
+2002,11,MERTON,flat,False,leasehold,218994.5945945946,>200k,200k~300k
+2002,11,MERTON,flat,True,leasehold,232690.0,>200k,200k~300k
+2002,11,MERTON,terraced,False,freehold,384500.0,>200k,>300k
+2002,11,NEWHAM,flat,False,leasehold,138999.58333333334,<=200k,<=150k
+2002,11,NEWHAM,flat,True,leasehold,246500.0,>200k,200k~300k
+2002,11,REDBRIDGE,flat,False,leasehold,183177.22222222222,<=200k,150k~200k
+2002,11,REDBRIDGE,flat,True,leasehold,295950.0,>200k,200k~300k
+2002,11,RICHMOND UPON THAMES,flat,False,leasehold,260409.0909090909,>200k,200k~300k
+2002,11,RICHMOND UPON THAMES,terraced,False,freehold,430000.0,>200k,>300k
+2002,11,SOUTHWARK,flat,False,freehold,301750.0,>200k,>300k
+2002,11,SOUTHWARK,flat,False,leasehold,208985.19736842104,>200k,200k~300k
+2002,11,SOUTHWARK,flat,True,leasehold,259026.08695652173,>200k,200k~300k
+2002,11,SOUTHWARK,terraced,False,freehold,280000.0,>200k,200k~300k
+2002,11,SOUTHWARK,terraced,False,leasehold,185000.0,<=200k,150k~200k
+2002,11,TOWER HAMLETS,flat,False,freehold,80000.0,<=200k,<=150k
+2002,11,TOWER HAMLETS,flat,False,leasehold,205588.15333333332,>200k,200k~300k
+2002,11,TOWER HAMLETS,flat,True,leasehold,232889.13333333333,>200k,200k~300k
+2002,11,WALTHAM FOREST,flat,False,leasehold,120436.875,<=200k,<=150k
+2002,11,WALTHAM FOREST,terraced,False,freehold,200250.0,>200k,200k~300k
+2002,11,WANDSWORTH,flat,False,leasehold,250144.35164835164,>200k,200k~300k
+2002,11,WANDSWORTH,flat,True,leasehold,379612.7272727273,>200k,>300k
+2002,11,WANDSWORTH,semi-detached,False,freehold,230000.0,>200k,200k~300k
+2002,11,WANDSWORTH,semi-detached,False,leasehold,238000.0,>200k,200k~300k
+2002,11,WANDSWORTH,terraced,False,freehold,445000.0,>200k,>300k
+2002,11,WANDSWORTH,terraced,True,freehold,359000.0,>200k,>300k
+2002,12,BARNET,flat,False,freehold,160000.0,<=200k,150k~200k
+2002,12,BARNET,flat,False,leasehold,200744.78813559323,>200k,200k~300k
+2002,12,BARNET,flat,True,leasehold,301202.3333333333,>200k,>300k
+2002,12,BARNET,semi-detached,False,freehold,425000.0,>200k,>300k
+2002,12,BARNET,terraced,False,freehold,324975.0,>200k,>300k
+2002,12,BARNET,terraced,False,leasehold,158316.33333333334,<=200k,150k~200k
+2002,12,BEXLEY,flat,False,leasehold,97725.0,<=200k,<=150k
+2002,12,BRENT,flat,False,leasehold,200387.0806451613,>200k,200k~300k
+2002,12,BRENT,flat,True,leasehold,90000.0,<=200k,<=150k
+2002,12,BRENT,semi-detached,False,leasehold,190000.0,<=200k,150k~200k
+2002,12,BRENT,terraced,False,freehold,165000.0,<=200k,150k~200k
+2002,12,BRENT,terraced,False,leasehold,207500.0,>200k,200k~300k
+2002,12,BROMLEY,flat,False,freehold,170000.0,<=200k,150k~200k
+2002,12,BROMLEY,flat,False,leasehold,113811.25714285714,<=200k,<=150k
+2002,12,CAMDEN,detached,False,freehold,1400000.0,>200k,>300k
+2002,12,CAMDEN,flat,False,leasehold,292928.42441860464,>200k,200k~300k
+2002,12,CAMDEN,flat,True,leasehold,220250.0,>200k,200k~300k
+2002,12,CAMDEN,semi-detached,False,freehold,602000.0,>200k,>300k
+2002,12,CAMDEN,semi-detached,False,leasehold,385000.0,>200k,>300k
+2002,12,CAMDEN,terraced,False,freehold,536250.0,>200k,>300k
+2002,12,CAMDEN,terraced,False,leasehold,303500.0,>200k,>300k
+2002,12,CITY OF LONDON,flat,False,leasehold,325504.7619047619,>200k,>300k
+2002,12,CITY OF LONDON,flat,True,leasehold,365000.0,>200k,>300k
+2002,12,CITY OF WESTMINSTER,detached,False,freehold,515000.0,>200k,>300k
+2002,12,CITY OF WESTMINSTER,flat,False,leasehold,367222.5068870523,>200k,>300k
+2002,12,CITY OF WESTMINSTER,flat,True,leasehold,447228.3076923077,>200k,>300k
+2002,12,CITY OF WESTMINSTER,terraced,False,leasehold,525052.0,>200k,>300k
+2002,12,CROYDON,detached,False,leasehold,175000.0,<=200k,150k~200k
+2002,12,CROYDON,flat,False,leasehold,120970.51282051283,<=200k,<=150k
+2002,12,CROYDON,terraced,False,freehold,130000.0,<=200k,<=150k
+2002,12,EALING,detached,False,freehold,1525000.0,>200k,>300k
+2002,12,EALING,flat,False,leasehold,230756.4814814815,>200k,200k~300k
+2002,12,EALING,flat,True,leasehold,298374.6666666667,>200k,200k~300k
+2002,12,EALING,semi-detached,False,leasehold,201000.0,>200k,200k~300k
+2002,12,ENFIELD,detached,False,leasehold,185000.0,<=200k,150k~200k
+2002,12,ENFIELD,flat,False,leasehold,139108.15384615384,<=200k,<=150k
+2002,12,ENFIELD,flat,True,leasehold,233499.0,>200k,200k~300k
+2002,12,ENFIELD,terraced,False,freehold,215000.0,>200k,200k~300k
+2002,12,ENFIELD,terraced,False,leasehold,161500.0,<=200k,150k~200k
+2002,12,GREENWICH,flat,False,leasehold,159325.3488372093,<=200k,150k~200k
+2002,12,GREENWICH,flat,True,leasehold,295262.87671232875,>200k,200k~300k
+2002,12,HACKNEY,flat,False,leasehold,171813.56164383562,<=200k,150k~200k
+2002,12,HACKNEY,flat,True,leasehold,210674.77777777778,>200k,200k~300k
+2002,12,HACKNEY,semi-detached,False,freehold,487000.0,>200k,>300k
+2002,12,HACKNEY,terraced,False,freehold,210000.0,>200k,200k~300k
+2002,12,HACKNEY,terraced,False,leasehold,145000.0,<=200k,<=150k
+2002,12,HAMMERSMITH AND FULHAM,flat,False,freehold,77000.0,<=200k,<=150k
+2002,12,HAMMERSMITH AND FULHAM,flat,False,leasehold,242933.83,>200k,200k~300k
+2002,12,HAMMERSMITH AND FULHAM,flat,True,leasehold,274300.0,>200k,200k~300k
+2002,12,HAMMERSMITH AND FULHAM,terraced,False,freehold,420000.0,>200k,>300k
+2002,12,HAMMERSMITH AND FULHAM,terraced,False,leasehold,304699.8,>200k,>300k
+2002,12,HARINGEY,flat,False,leasehold,182535.0,<=200k,150k~200k
+2002,12,HARINGEY,flat,True,leasehold,156000.0,<=200k,150k~200k
+2002,12,HARINGEY,semi-detached,True,freehold,1125000.0,>200k,>300k
+2002,12,HARINGEY,terraced,False,freehold,806500.0,>200k,>300k
+2002,12,HARINGEY,terraced,True,freehold,185000.0,<=200k,150k~200k
+2002,12,HOUNSLOW,flat,False,leasehold,216785.7142857143,>200k,200k~300k
+2002,12,ISLINGTON,flat,False,leasehold,258344.168,>200k,200k~300k
+2002,12,ISLINGTON,flat,True,leasehold,255686.39024390245,>200k,200k~300k
+2002,12,ISLINGTON,terraced,False,freehold,343166.6666666667,>200k,>300k
+2002,12,ISLINGTON,terraced,False,leasehold,470000.0,>200k,>300k
+2002,12,ISLINGTON,terraced,True,freehold,450000.0,>200k,>300k
+2002,12,KENSINGTON AND CHELSEA,flat,False,leasehold,443329.84263959393,>200k,>300k
+2002,12,KENSINGTON AND CHELSEA,flat,True,leasehold,324125.0,>200k,>300k
+2002,12,KENSINGTON AND CHELSEA,semi-detached,False,leasehold,345000.0,>200k,>300k
+2002,12,KENSINGTON AND CHELSEA,terraced,False,freehold,325000.0,>200k,>300k
+2002,12,KENSINGTON AND CHELSEA,terraced,False,leasehold,242500.0,>200k,200k~300k
+2002,12,LAMBETH,flat,False,leasehold,195194.16091954024,<=200k,150k~200k
+2002,12,LAMBETH,flat,True,leasehold,307975.0909090909,>200k,>300k
+2002,12,LAMBETH,semi-detached,False,freehold,168950.0,<=200k,150k~200k
+2002,12,LAMBETH,terraced,False,freehold,219500.0,>200k,200k~300k
+2002,12,LAMBETH,terraced,False,leasehold,472499.0,>200k,>300k
+2002,12,LEWISHAM,flat,False,leasehold,142050.0,<=200k,<=150k
+2002,12,LEWISHAM,flat,True,leasehold,160945.54347826086,<=200k,150k~200k
+2002,12,LEWISHAM,semi-detached,False,freehold,354000.0,>200k,>300k
+2002,12,LEWISHAM,terraced,False,freehold,160000.0,<=200k,150k~200k
+2002,12,LEWISHAM,terraced,False,leasehold,145325.0,<=200k,<=150k
+2002,12,MERTON,flat,False,leasehold,223261.59574468085,>200k,200k~300k
+2002,12,MERTON,flat,True,leasehold,317500.0,>200k,>300k
+2002,12,MERTON,terraced,False,freehold,173000.0,<=200k,150k~200k
+2002,12,MERTON,terraced,False,leasehold,171000.0,<=200k,150k~200k
+2002,12,NEWHAM,flat,False,leasehold,133427.85714285713,<=200k,<=150k
+2002,12,NEWHAM,flat,True,leasehold,306615.0,>200k,>300k
+2002,12,REDBRIDGE,flat,False,leasehold,200631.13636363635,>200k,200k~300k
+2002,12,REDBRIDGE,terraced,False,leasehold,183000.0,<=200k,150k~200k
+2002,12,RICHMOND UPON THAMES,flat,False,leasehold,278821.875,>200k,200k~300k
+2002,12,SOUTHWARK,flat,False,freehold,220000.0,>200k,200k~300k
+2002,12,SOUTHWARK,flat,False,leasehold,196045.86713286713,<=200k,150k~200k
+2002,12,SOUTHWARK,flat,True,leasehold,247981.42857142858,>200k,200k~300k
+2002,12,SOUTHWARK,terraced,False,leasehold,174700.0,<=200k,150k~200k
+2002,12,TOWER HAMLETS,flat,False,freehold,220000.0,>200k,200k~300k
+2002,12,TOWER HAMLETS,flat,False,leasehold,232294.01351351352,>200k,200k~300k
+2002,12,TOWER HAMLETS,flat,True,leasehold,316830.55555555556,>200k,>300k
+2002,12,WALTHAM FOREST,flat,False,freehold,137000.0,<=200k,<=150k
+2002,12,WALTHAM FOREST,flat,False,leasehold,132532.61904761905,<=200k,<=150k
+2002,12,WALTHAM FOREST,flat,True,leasehold,132000.0,<=200k,<=150k
+2002,12,WALTHAM FOREST,semi-detached,False,freehold,300000.0,>200k,200k~300k
+2002,12,WANDSWORTH,flat,False,leasehold,224528.66666666666,>200k,200k~300k
+2002,12,WANDSWORTH,flat,True,leasehold,413482.7586206897,>200k,>300k
+2002,12,WANDSWORTH,semi-detached,False,leasehold,227500.0,>200k,200k~300k
+2002,12,WANDSWORTH,terraced,False,freehold,395000.0,>200k,>300k
+2002,12,WANDSWORTH,terraced,False,leasehold,200750.0,>200k,200k~300k
