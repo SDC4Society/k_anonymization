@@ -43,8 +43,29 @@ class Hierarchy:
             ignore_index=True,
             inplace=True,
         )
-        self.__hierarchy_df = hierarchy_df
-        self.__name = name
+        self.hierarchy_df = ITableDF(hierarchy_df)
+        self.name = name
+
+    @classmethod
+    def make_default(cls, name: str, org_column: pd.DataFrame):
+        """
+        Initialize from a CSV file.
+
+        The CSV should have no header, where the first column is the raw
+        data and each following column is a higher level of generalization.
+
+        Parameters
+        ----------
+        name : str
+            Hierarchy name.
+        path : str
+            The path of the csv file.
+        sep : str, default ','
+            Separator string (delimiter) of the csv file.
+        """
+        unique_values = org_column.unique()
+        hierarchy_df = pd.DataFrame({0: unique_values, 1: ["*"] * unique_values.size})
+        return cls(name, hierarchy_df)
 
     @classmethod
     def from_csv(cls, name: str, path: str, sep: str = ","):
@@ -105,31 +126,20 @@ class Hierarchy:
                 else:
                     for v in props["tree"][level]["values"]:
                         _hi[_hi.isin(v["original"]).any(axis=1)] = v["generalized"]
-                    hierarchy_df[level + 1] = _hi[level].copy()
+                    hierarchy_df[level + 1] = _hi[level]
 
         return cls(name, hierarchy_df)
 
-    @property
-    def name(self):
+    def _repr_html_(self):
         """
-        Name of this hierarchy.
+        Get the HTML representation of the dataset.
 
         Returns
         -------
         str
+            HTML string for Jupyter display.
         """
-        return self.__name
-
-    @property
-    def hierarchy_df(self):
-        """
-        The underlying hierarchy mapping DataFrame.
-
-        Returns
-        -------
-        ITableDF
-        """
-        return ITableDF(self.__hierarchy_df.copy())
+        return self.hierarchy_df._repr_html_()
 
     @cached_property
     def height(self):
@@ -140,7 +150,7 @@ class Hierarchy:
         -------
         int
         """
-        return self.__hierarchy_df.shape[1] - 1
+        return self.hierarchy_df.shape[1] - 1
 
     @cached_property
     def leaves(self):
@@ -151,7 +161,7 @@ class Hierarchy:
         -------
         list
         """
-        return self.__hierarchy_df[0].to_list()
+        return self.hierarchy_df[0].to_list()
 
     def contains(self, node_value: any):
         """
@@ -169,7 +179,7 @@ class Hierarchy:
         if node_value in self.leaves or node_value == "*":
             return True
 
-        return True if self.__hierarchy_df.eq(node_value).any().sum() != 0 else False
+        return True if self.hierarchy_df.eq(node_value).any().sum() != 0 else False
 
     def get_leaves_under_node(self, node_value: any):
         """
@@ -191,7 +201,7 @@ class Hierarchy:
         if node_value == "*":
             return self.leaves
 
-        search_df = self.__hierarchy_df[self.__hierarchy_df.eq(node_value).any(axis=1)]
+        search_df = self.hierarchy_df[self.hierarchy_df.eq(node_value).any(axis=1)]
         if search_df.shape[0] == 0:
             raise ValueError(
                 f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy.'
@@ -218,9 +228,7 @@ class Hierarchy:
         if node_value == "*":
             return self.height
 
-        search_df = self.__hierarchy_df.columns[
-            self.__hierarchy_df.eq(node_value).any()
-        ]
+        search_df = self.hierarchy_df.columns[self.hierarchy_df.eq(node_value).any()]
         if search_df.size == 0:
             raise ValueError(
                 f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy.'
@@ -258,9 +266,7 @@ class Hierarchy:
                     f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy.'
                 )
 
-        search_df = self.__hierarchy_df[
-            self.__hierarchy_df.isin(node_values).any(axis=1)
-        ]
+        search_df = self.hierarchy_df[self.hierarchy_df.isin(node_values).any(axis=1)]
 
         for level in range(self.height):
             _unique = search_df[level].unique()
@@ -301,10 +307,39 @@ class HierarchiesDict(dict):
 
     def __init__(
         self,
+        hierarchies_dict: dict[str, Hierarchy],
+        qids_idx: list[int],
+        qids_order: list[str] = None,
+    ):
+        self.update(hierarchies_dict)
+        if qids_order is not None:
+            self.__qids_idx_mapping = {
+                qids_idx[pos]: qid for pos, qid in enumerate(qids_order)
+            }
+        else:
+            self.__qids_idx_mapping = {
+                qids_idx[pos]: qid for pos, qid in enumerate(hierarchies_dict.keys())
+            }
+
+    @classmethod
+    def make_default(cls, df: pd.DataFrame, qids_idx: list[int]):
+        return cls(
+            {
+                att: Hierarchy.make_default(att, df[att])
+                for pos, att in enumerate(df.columns)
+                if pos in qids_idx
+            },
+            qids_idx,
+        )
+
+    @classmethod
+    def from_dir(
+        cls,
         hierarchies_dir: str,
         df: pd.DataFrame,
-        qids: list,
-        qids_idx: list,
+        qids_idx: list[int],
+        file_type: Literal["csv", "json"],
+        sep: str = ",",
     ):
         """
         Initialize the HierarchiesDict.
@@ -323,13 +358,22 @@ class HierarchiesDict(dict):
         qids_idx : list
             The column indices of the QID attributes.
         """
-        self.hierarchies_dir = hierarchies_dir
-        self.__df = df
-        self.__qids = []
-        for pos, qid in enumerate(qids):
-            self.__qids.extend([None] * (qids_idx[pos] - len(self.__qids)))
-            self.__qids.append(qid)
-        self.__qids.extend([None] * (df.columns.size - len(self.__qids)))
+        hierarchies_dict = {}
+        for pos, att in enumerate(df.columns):
+            if pos in qids_idx:
+                try:
+                    if file_type == "csv":
+                        hierarchies_dict[att] = Hierarchy.from_csv(
+                            att, f"{hierarchies_dir}/{att}.csv", sep
+                        )
+                    else:
+                        hierarchies_dict[att] = Hierarchy.from_json(
+                            att, df[att], f"{hierarchies_dir}/{att}.json"
+                        )
+                except FileNotFoundError:
+                    hierarchies_dict[att] = Hierarchy.make_default(att, df[att])
+
+        return cls(hierarchies_dict, qids_idx)
 
     def __getitem__(self, key):
         """
@@ -356,24 +400,15 @@ class HierarchiesDict(dict):
             attribute name is not found in the QID list.
         """
         if isinstance(key, int):
-            _key = self.__qids[key]
+            _key = self.__qids_idx_mapping.get(key, None)
             if _key is None:
                 raise AttributeError(
                     f"Cannot find hierarchy for attribute at index '{key}'"
                 )
         else:
             _key = key
-            if _key is None or _key not in self.__qids:
+            if _key is None or _key not in self.keys():
                 raise AttributeError(f"Cannot find attribute '{_key}'")
-        if _key not in self.keys():
-            super().__setitem__(
-                _key,
-                Hierarchy.from_json(
-                    _key,
-                    self.__df[_key],
-                    f"{self.hierarchies_dir}/{_key}.json",
-                ),
-            )
         return super().__getitem__(_key)
 
     @cached_property
@@ -389,12 +424,17 @@ class HierarchiesDict(dict):
         -------
         ipywidgets.VBox
         """
-        qids = [x for x in self.__qids if x is not None]
-        dropdown = Dropdown(options=qids, value=qids[0])
+        qids = self.keys()
         children = [
             get_ITable_widget(self.__getitem__(qid).hierarchy_df) for qid in qids
         ]
         stack = Stack(children, selected_index=0)
-        dropdown = Dropdown(options=qids)
+        dropdown = Dropdown(options=list(qids))
         jslink((dropdown, "index"), (stack, "selected_index"))
         return VBox([Label("Generalization Trees:"), dropdown, stack])
+
+    def describe(self):
+        return self.all_hierarchies_df
+
+    def copy(self):
+        return HierarchiesDict(super().copy(), self.__qids_idx_mapping.keys())
