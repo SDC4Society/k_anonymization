@@ -22,10 +22,18 @@ class Hierarchy:
     Parameters
     ----------
     name : str
-        The identifier for the hierarchy (usually the column name).
+        Name of the attribute.
     hierarchy_df : DataFrame
-        A DataFrame where column 0 is the raw data and subsequent
-        columns are progressively more generalized levels.
+        DataFrame storing generalization hierarchy. Column names must be
+        progressive integers, where Column `0` stores the raw data and
+        subsequent columns store progressively higher generalized values.
+
+    Attributes
+    ----------
+    name : str
+        Name of the attribute.
+    hierarchy_df : ITableDF
+        DataFrame storing generalization hierarchy.
     """
 
     def __init__(self, name: str, hierarchy_df: DataFrame):
