@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -101,7 +103,9 @@ class Lightning(Algorithm):
         self.generalization_scoring = generalization_scoring
         self.__lattice: Lattice = Lattice(dataset)
         self.__greedy_interval: int = (
-            greedy_interval if greedy_interval is not None else self.__lattice.max_height
+            greedy_interval
+            if greedy_interval is not None
+            else self.__lattice.max_height
         )
         assert self.__greedy_interval >= 1, "greedy_interval must be >= 1"
         self.__time_limit: float | None = time_limit

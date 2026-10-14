@@ -25,6 +25,10 @@ sphinx:
     napoleon_use_rtype: False
     autodoc_default_options:
       show-inheritance: True
+    autodoc_preserve_defaults: True
+    autodoc_type_aliases:
+      "GroupAnonymization": "GroupAnonymization"
+      "GeneralizationScoring": "GeneralizationScoring"
     toc_object_entries_show_parents: "hide"
     suppress_warnings: ["etoc.toctree"]
     templates_path:

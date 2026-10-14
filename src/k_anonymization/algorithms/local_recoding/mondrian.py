@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from numpy import median, ndarray
 from pandas import factorize, unique
 

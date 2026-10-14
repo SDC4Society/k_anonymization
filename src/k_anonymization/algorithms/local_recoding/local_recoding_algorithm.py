@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = ["GroupAnonymization", "GroupAnonymizationBuiltIn", "LocalRecodingAlgorithm"]
 
 from abc import abstractmethod

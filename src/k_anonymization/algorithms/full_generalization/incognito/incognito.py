@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from queue import PriorityQueue
 
 from k_anonymization.algorithms.full_generalization._generalization_scoring import (

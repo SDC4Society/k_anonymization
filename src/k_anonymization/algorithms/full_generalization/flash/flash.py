@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from queue import PriorityQueue
 from typing import List
 
@@ -215,16 +217,12 @@ class Flash(Algorithm):
             node = path[mid]
             node.tag()
 
-            k_ano = (
-                self.__lattice.k_anonymity(node.generalization_tuple) >= self.k
-            )
+            k_ano = self.__lattice.k_anonymity(node.generalization_tuple) >= self.k
 
             if k_ano:
                 node.check_as_k_ano()
                 self.__tagging_upper_nodes(node)
-                generalized_df = self.__apply_generalization(
-                    node.generalization_tuple
-                )
+                generalized_df = self.__apply_generalization(node.generalization_tuple)
                 score = self.generalization_scoring(generalized_df, self)
                 if self.__best_score is None or score < self.__best_score:
                     self.__best_score = score
