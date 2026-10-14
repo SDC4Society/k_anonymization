@@ -132,7 +132,7 @@ class Dataset:
         for idx, qid in enumerate(columns):
             if qid in self.qids:
                 self.qids_idx.append(idx)
-                if is_categorical[self.qids.index(qid)]:
+                if self.is_categorical[self.qids.index(qid)]:
                     self.qids_categorical.append(qid)
                     self.qids_idx_categorical.append(idx)
                 else:
