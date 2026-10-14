@@ -289,7 +289,7 @@ class HierarchiesDict(dict):
     Parameters
     ----------
     hierarchies_dict : dict[str, Hierarchy]
-        Dictionary storing the hierarchy object of every column.
+        Dictionary storing the hierarchy of every column.
     qids_mapping : dict[int, str], default None
         Explicitly specify column index of every attribute.
         If `None`, set column indices to their indices in
@@ -298,7 +298,7 @@ class HierarchiesDict(dict):
 
     def __init__(
         self,
-        hierarchies_dict: dict[str, Hierarchy],
+        hierarchies_dict: dict[str, Hierarchy] | dict[str, DataFrame],
         qids_mapping: dict[int, str] = None,
     ):
         """
@@ -309,14 +309,22 @@ class HierarchiesDict(dict):
 
         Parameters
         ----------
-        hierarchies_dict : dict[str, Hierarchy]
-            Dictionary storing the hierarchy object of every QID attribute.
+        hierarchies_dict : dict[str, Hierarchy] or dict[str, DataFrame]
+            Dictionary storing the hierarchy of every QID attribute.
         qids_mapping : dict[int, str], default None
             Explicitly specify column index of every QID attribute.
             If `None`, set column indices to their indices in
             `hierarchies_dict.keys()`.
         """
-        self.update(hierarchies_dict)
+        _hierarchies_dict = {
+            name: (
+                hierarchy
+                if isinstance(hierarchy, Hierarchy)
+                else Hierarchy(name, hierarchy)
+            )
+            for name, hierarchy in hierarchies_dict.items()
+        }
+        self.update(_hierarchies_dict)
 
         if qids_mapping is None:
             self.__qids_idx_mapping = {
