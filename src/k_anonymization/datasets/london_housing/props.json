@@ -1,5 +1,5 @@
 {
-    "qids_idx": [1,2,3,4,5],
+    "qids": ["year", "month", "district", "street", "is_new"],
     "target": "price_class",
     "is_categorical": [false, false, true, true, true]
 }

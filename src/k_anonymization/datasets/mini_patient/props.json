@@ -1,5 +1,5 @@
 {
-    "qids_idx": [0,2],
+    "qids": ["age","zip"],
     "target": "disease",
     "is_categorical": [false, false]
 }

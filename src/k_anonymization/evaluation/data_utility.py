@@ -2,7 +2,6 @@
 Data utility metrics.
 """
 
-from numpy import max as np_max
 from numpy import ndarray
 from pandas import DataFrame
 
@@ -466,39 +465,3 @@ class NCP:
 
         _all_penalties += (org_data.shape[0] - _sum_groups_sizes) * len(qids_idx)
         return _all_penalties / (len(qids_idx) * org_data.shape[0])
-
-
-class CM:
-    """
-    Classification penalty (Classification Metric)
-    """
-
-    @staticmethod
-    def calculate(
-        data,
-        qids: list,
-        target: str,
-    ):
-        return (
-            data.groupby(qids, observed=True)[target]
-            .agg(
-                lambda x: x.count() - np_max(x.value_counts()) if x.nunique() > 1 else 0
-            )
-            .sum()
-            / data.shape[0]
-        )
-
-
-class RM:
-    """
-    Regression penalty (Regression Metric)
-    """
-
-    @staticmethod
-    def calculate(df: DataFrame, qids: list, target: str):
-        max_range = df[target].max() - df[target].min()
-        return (
-            df.groupby(qids, observed=True)[target]
-            .agg(lambda x: (x.std() / max_range))
-            .mean()
-        )

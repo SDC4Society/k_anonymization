@@ -1,5 +1,5 @@
 {
-    "qids_idx": [1,2,3],
+    "qids": ["marital-status","age","zip"],
     "target": "crime",
     "is_categorical": [true, false, false]
 }
