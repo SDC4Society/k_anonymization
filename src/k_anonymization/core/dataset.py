@@ -151,20 +151,20 @@ class Dataset:
 
         The directory contains:
 
-        - `data.csv` (Required): a CSV file storing the data, where the top row stores
-        the header (attribute) names.
+        - `data.csv` (Required): a CSV file storing the data, where the top
+          row stores the header (attribute) names.
 
         - `props.json` (Optional): a JSON file storing data properties,
-        including `qids`, `is_categorical`, and `target`. If any of the
-        above properties is not provided, use its default value.
-        If `props.json` does not exist, use default values for all
-        properties.
+          including `qids`, `is_categorical`, and `target`. If any of those
+          properties is not provided, use its default value. If `props.json`
+          does not exist, use default values for all
+          properties.
 
         - `hierarchies/` (Optional): a directory containing hierarchy files
-        of all QID attributes. If the hierarchy file of an attribute is not
-        provided, use its default hierarchy, i.e., suppress all values.
-        If `hierarchies/` does not exist, use default hierarchies for all
-        attributes.
+          of all QID attributes. If the hierarchy file of an attribute is not
+          provided, use its default hierarchy, i.e., suppress all values.
+          If `hierarchies/` does not exist, use default hierarchies for all
+          attributes.
 
 
         Parameters
