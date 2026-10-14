@@ -1,11 +1,8 @@
 import json
 from functools import cached_property
-from os import path as os_path
 
 from itables import show as itables_show
 from pandas import DataFrame, read_csv
-
-from k_anonymization import __file__ as top_dir
 
 from .frame import ITableDF
 from .hierarchy import HierarchiesDict
@@ -15,180 +12,203 @@ class Dataset:
     """
     Management class for handling dataset and its properties.
 
-    This class serves as a central hub for a dataset, orchestrating
-    the loading of raw data, attribute properties, and generalization
-    hierarchies.
+    This class serves as a central hub for a dataset, storing data,
+    attribute properties, and generalization hierarchies.
 
     Parameters
     ----------
     name : str
-        The name of the dataset. This should correspond to a directory
-        in `k_anonymization/datasets/`.
+        Name of the dataset.
+    df : DataFrame
+        Dataset itself.
+    qids : list[str], default None
+        Specify QID attributes. If `None`, select all columns in `df`
+        except `target` as QID attributes.
+    is_categorical : list[bool], default None
+        Specify whether a QID attribute is categorical (`True`) or
+        numerical (`False`). If `None`, determine from `df.dtypes`.
+    hierarchies : HierarchiesDict, default None
+        Specify generalization hierarchies for all QID attributes.
+        If `None`, use default hierarchies, i.e., suppress all values.
+    target : str, default None
+        Sensitive attribute, a.k.a., target for data analysis tasks.
 
     Attributes
     ----------
-    all_datasets : list
-        A class-level list containing all instantiated Dataset objects.
     name : str
-        The name assigned to the dataset instance.
+        Name of the dataset.
+    df : ITableDF
+        Dataset itself.
+    qids : list[str]
+        List of names of the QID attributes.
+    qids_categorial : list[str]
+        List of names of the categorical QID attributes.
+    qids_numerical : list[str]
+        List of names of the numerical QID attributes.
+    qids_idx : list[int]
+        List of column indices of the QID attributes in `df`.
+    qids_idx_categorical : list[int]
+        List of column indices of the categorical QID attributes in `df`.
+    qids_idx_numerical : list[int]
+        List of column indices of the numerical QID attributes in `df`.
+    is_categorical : list[bool]
+        List of booleans indicating if a QID attribute is categorical.
+        Its order matches the orders of `qids` and `qids_idx`.
+    hierarchies : HierarchiesDict
+        Generalization hierarchies manager of all QID attributes.
+    target : str
+        Sensitive attribute, a.k.a., target for data analysis tasks.
     """
 
-    # TODO: implement classes for QIDs
+    # TODO: implement classes for attributes and/or QIDs
 
-    all_datasets = []
-
-    def __init__(self, name: str):
+    def __init__(
+        self,
+        name: str,
+        df: DataFrame,
+        qids: list[str] = None,
+        is_categorical: list[bool] = None,
+        hierarchies: HierarchiesDict = None,
+        target: str = None,
+    ):
         """
-        Initializes the Dataset instance, and registers it in the global
-        `all_datasets` list.
+        Initialize the Dataset.
 
         Parameters
         ----------
         name : str
-            The name of the dataset, which corresponds to a directory in
-            `k_anonymization/datasets/`.
+            Name of the dataset.
+        df : DataFrame
+            Dataset itself.
+        qids : list[str], default None
+            Specify QID attributes. If `None`, select all columns in `df`
+            except `target` as QID attributes.
+        is_categorical : list[bool], default None
+            Specify whether a QID attribute is categorical (`True`) or
+            numerical (`False`). If `None`, determine from `df.dtypes`.
+        hierarchies : HierarchiesDict, default None
+            Specify generalization hierarchies for all QID attributes.
+            If `None`, use default hierarchies, i.e., suppress all values.
+        target : str, default None
+            Sensitive attribute, a.k.a., target for data analysis tasks.
         """
         self.name = name
-        self.__df = None
-        self.__hierarchies = None
-        self.__props = None
-        Dataset.all_datasets.append(self)
+        self.df = ITableDF(df, table_name=name)
+
+        columns = df.columns
+
+        if qids is not None:
+            self.qids = qids
+            self.qids_idx = [idx for idx, qid in enumerate(columns) if qid in qids]
+        else:
+            self.qids = [col for col in columns if col != target]
+            self.qids_idx = [idx for idx, col in enumerate(columns) if col in self.qids]
+
+        self.qids = (
+            qids if qids is not None else [col for col in columns if col != target]
+        )
+
+        self.hierarchies = (
+            hierarchies
+            if hierarchies is not None
+            else HierarchiesDict.make_default(df, self.qids)
+        )
+
+        self.target = target
+
+        self.is_categorical = is_categorical
+        if self.is_categorical is None:
+            _qids_categorical = df.select_dtypes(exclude="number")
+            self.is_categorical = [
+                True if qid in _qids_categorical else False for qid in self.qids
+            ]
+
+        self.qids_idx = []
+        self.qids_categorical = []
+        self.qids_idx_categorical = []
+        self.qids_numerical = []
+        self.qids_idx_numerical = []
+
+        for idx, qid in enumerate(columns):
+            if qid in self.qids:
+                self.qids_idx.append(idx)
+                if self.is_categorical[self.qids.index(qid)]:
+                    self.qids_categorical.append(qid)
+                    self.qids_idx_categorical.append(idx)
+                else:
+                    self.qids_numerical.append(qid)
+                    self.qids_idx_numerical.append(idx)
+
+    @classmethod
+    def from_dir(
+        cls,
+        name: str,
+        dataset_dir: str,
+        hierarchies_csv_sep: str = ",",
+    ):
+        """
+        Initialize the Dataset from stored data in the given directory.
+
+        The directory contains:
+
+        - `data.csv` (Required): a CSV file storing the data, where the top
+          row stores the header (attribute) names.
+
+        - `props.json` (Optional): a JSON file storing data properties,
+          including `qids`, `is_categorical`, and `target`. If any of those
+          properties is not provided, use its default value. If `props.json`
+          does not exist, use default values for all
+          properties.
+
+        - `hierarchies/` (Optional): a directory containing hierarchy files
+          of all QID attributes. If the hierarchy file of an attribute is not
+          provided, use its default hierarchy, i.e., suppress all values.
+          If `hierarchies/` does not exist, use default hierarchies for all
+          attributes.
+
+
+        Parameters
+        ----------
+        name : str
+            Name of the dataset.
+        dataset_dir : str
+            Path to directory storing the data, its properties, and
+            generalization hierarchies.
+        hierarchies_csv_sep :  str, default ','
+            Separator string (delimiter) of CSV hierarchy files.
+        """
+
+        df = read_csv(f"{dataset_dir}/data.csv")
+        try:
+            with open(f"{dataset_dir}/props.json") as f:
+                props = json.load(f)
+        except:
+            props = {}
+        hierarchies = HierarchiesDict.from_dir(
+            f"{dataset_dir}/hierarchies",
+            df,
+            props.get("qids", None),
+            hierarchies_csv_sep,
+        )
+        return cls(
+            name,
+            df,
+            qids=props.get("qids", None),
+            is_categorical=props.get("is_categorical", None),
+            hierarchies=hierarchies,
+            target=props.get("target", None),
+        )
 
     def __str__(self):
         """
-        Return the uppercase name of the dataset.
+        Return the string representation of the sample dataset.
 
         Returns
         -------
         str
-            The dataset name in all caps.
+            The dataset name.
         """
-        return self.name.upper()
-
-    @cached_property
-    def path(self):
-        """
-        Get the absolute file path to the dataset directory.
-
-        Returns
-        -------
-        str
-            The directory path where the dataset assets are stored.
-        """
-        return f"{os_path.dirname(top_dir)}/datasets/{self.name}"
-
-    @cached_property
-    def props(self):
-        """
-        Load and cache the dataset properties from a JSON file.
-
-        The file is expected to be located at `path/props.json`.
-
-        Returns
-        -------
-        dict
-            A dictionary containing metadata such as QID indices and
-            categorical flags.
-        """
-        if self.__props is None:
-            with open(f"{self.path}/props.json") as f:
-                _props = json.load(f)
-            self.__props = _props
-        return self.__props
-
-    @cached_property
-    def qids(self):
-        """
-        A list of names of the QID attributes.
-
-        Returns
-        -------
-        list
-        """
-        return [self.df.columns[x] for x in self.props["qi_index"]]
-
-    @cached_property
-    def qids_idx(self):
-        """
-        The column indices of the QID attributes.
-
-        Returns
-        -------
-        list
-        """
-        return self.props["qi_index"]
-
-    @cached_property
-    def is_categorical(self):
-        """
-        A list of booleans indicating if a QID attribute is categorical.
-
-        Returns
-        -------
-        list
-        """
-        return self.props["is_category"]
-
-    @cached_property
-    def target(self):
-        """
-        The sensitive attribute.
-
-        Returns
-        -------
-        str
-        """
-        return self.props["target"]
-
-    @cached_property
-    def qids_categorical(self):
-        """
-        A list of names of the categorical QID attributes.
-
-        Returns
-        -------
-        list
-        """
-        return [qid for pos, qid in enumerate(self.qids) if self.is_categorical[pos]]
-
-    @cached_property
-    def qids_numerical(self):
-        """
-        A list of names of the numerical QID attributes.
-
-        Returns
-        -------
-        list
-        """
-        return [
-            qid for pos, qid in enumerate(self.qids) if not self.is_categorical[pos]
-        ]
-
-    @cached_property
-    def qids_idx_categorical(self):
-        """
-        The column indices of the categorical QID attributes.
-
-        Returns
-        -------
-        list
-        """
-        return [
-            idx for pos, idx in enumerate(self.qids_idx) if self.is_categorical[pos]
-        ]
-
-    @cached_property
-    def qids_idx_numerical(self):
-        """
-        The column indices of the numerical QID attributes.
-
-        Returns
-        -------
-        list
-        """
-        return [
-            idx for pos, idx in enumerate(self.qids_idx) if not self.is_categorical[pos]
-        ]
+        return self.name
 
     # TODO: Update other modules to use
     # - qids_categorical
@@ -201,7 +221,7 @@ class Dataset:
         """
         Generate a summary DataFrame of the dataset's attributes.
 
-        Provides a breakdown of each column's status as a QID, numerical,
+        Provide a breakdown of each column's status as a QID, numerical,
         or categorical attribute, along with the count of unique values.
 
         Returns
@@ -237,48 +257,6 @@ class Dataset:
                 "Categorical Attribute",
                 "No. of Unique Values",
             ],
-        )
-
-    @property
-    def df(self):
-        """
-        Lazy-load the dataset as a ITableDF.
-
-        Returns
-        -------
-        ITableDF
-            The underlying data stored in the CSV file.
-        """
-        if self.__df is None:
-            self.reload_df()
-        return self.__df
-
-    @property
-    def hierarchies(self):
-        """
-        Lazy-load the generalization hierarchies for this dataset.
-
-        Returns
-        -------
-        HierarchiesDict
-            Hierarchy definitions for the QID attributes.
-        """
-        if self.__hierarchies is None:
-            self.__hierarchies = HierarchiesDict(
-                f"{self.path}/hierarchies",
-                self.df,
-                self.qids,
-                self.qids_idx,
-            )
-        return self.__hierarchies
-
-    def reload_df(self):
-        """
-        Read the CSV file of the Dataset from disk.
-        """
-        self.__df = ITableDF(
-            read_csv(f"{self.path}/{self.name}.csv"),
-            table_name=str(self),
         )
 
     def describe(self):
@@ -325,7 +303,7 @@ class Dataset:
         """
         Create a stratified sample of the dataset.
 
-        Samples rows based on the distribution of the target attribute.
+        Sample rows based on the distribution of the target attribute.
 
         Parameters
         ----------
@@ -366,11 +344,6 @@ class Dataset:
     def _repr_html_(self):
         """
         Get the HTML representation of the dataset.
-
-        Returns
-        -------
-        str
-            HTML string for Jupyter display.
         """
         return self.df._repr_html_()
 
@@ -388,75 +361,39 @@ class SampleDataset(Dataset):
     dataset : Dataset
         The parent Dataset instance from which this sample was derived.
     df : DataFrame
-        The sampled data records.
+        The sampled data.
 
     Attributes
     ----------
-    all_sample_datasets : list
-        A class-level list containing all instantiated SampleDataset objects.
     """
 
-    all_sample_datasets = []
-
-    def __init__(self, dataset: Dataset, df: DataFrame):
+    def __init__(self, base_dataset: Dataset, sampled_df: DataFrame):
         """
         Initialize the SampleDataset.
 
         Parameters
         ----------
         dataset : Dataset
-            The source dataset.
+            The source dataset instance.
         df : DataFrame
-            The filtered/sampled records to be stored.
-        """
-        super().__init__(dataset.name)
-        self.__df = ITableDF(
-            df,
-            table_name=f"SAMPLE {self.name.upper()}",
-        )
-        SampleDataset.all_sample_datasets.append(self)
-
-    def reload_df(self):
-        """
-        Unlike the base Dataset class, a SampleDataset cannot easily "reload"
-        from disk because it is a result of an in-memory sampling operation.
-        Thus, consider re-running the logic from `Dataset.sample` instead.
-
-        Returns
-        -------
-        ITableDF
-            The currently held sampled data.
-        """
-        print(
-            f"""
-        This dataset was sampled from '{self.name}'. 
-        This function may not perform correctly! 
-        Consider sampling '{self.name}' again. 
-        """
-        )
-        return self.__df
-
-    @property
-    def df(self):
-        """
-        Access the sampled data.
-
-        Returns
-        -------
-        ITableDF
             The sampled data.
         """
-        if self.__df is None:
-            self.reload_df()
-        return self.__df
+        super().__init__(
+            base_dataset.name,
+            sampled_df,
+            base_dataset.qids,
+            base_dataset.is_categorical,
+            base_dataset.hierarchies,
+            base_dataset.target,
+        )
 
     def __str__(self):
         """
-        Return the string representation of the sample.
+        Return the string representation of the sample dataset.
 
         Returns
         -------
         str
-            The word 'SAMPLE' followed by the uppercase dataset name.
+            The dataset name followed by the word 'sample'.
         """
-        return "SAMPLE " + self.name.upper()
+        return self.name + " sample"

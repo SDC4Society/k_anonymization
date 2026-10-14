@@ -1,6 +1,5 @@
 {
-    "qi_index": [0,2],
+    "qids": ["age","zip"],
     "target": "disease",
-    "is_category": [false, false],
-    "max_numeric": {}
+    "is_categorical": [false, false]
 }

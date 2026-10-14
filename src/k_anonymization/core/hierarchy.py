@@ -1,9 +1,10 @@
 import json
 from functools import cached_property
+from os.path import isfile
 from typing import Literal
 
-import pandas as pd
 from ipywidgets import Dropdown, Label, Stack, VBox, jslink
+from pandas import DataFrame, read_csv
 
 from k_anonymization.utils.data_table import get_ITable_widget
 
@@ -21,35 +22,59 @@ class Hierarchy:
     Parameters
     ----------
     name : str
-        The identifier for the hierarchy (usually the column name).
-    hierarchy_df : pd.DataFrame
-        A DataFrame where column 0 is the raw data and subsequent
-        columns are progressively more generalized levels.
+        Name of the attribute.
+    hierarchy_df : DataFrame
+        DataFrame storing generalization hierarchy. Column names must be
+        progressive integers, where Column `0` stores the raw data and
+        subsequent columns store progressively higher generalized values.
+
+    Attributes
+    ----------
+    name : str
+        Name of the attribute.
+    hierarchy_df : ITableDF
+        DataFrame storing generalization hierarchy.
     """
 
-    def __init__(self, name: str, hierarchy_df: pd.DataFrame):
+    def __init__(self, name: str, hierarchy_df: DataFrame):
         """
-        Initialize from a pre-computed hierarchy mapping DataFrame.
+        Initialize hierarchy from a pre-computed mapping DataFrame.
 
         Parameters
         ----------
         name : str
             Hierarchy name.
-        hierarchy_df : pd.DataFrame
-            The pre-computed hierarchy mapping DataFrame.
+        hierarchy_df : DataFrame
+            Pre-computed hierarchy mapping DataFrame.
         """
         hierarchy_df.sort_values(
             hierarchy_df.columns[::-1].to_list(),
             ignore_index=True,
             inplace=True,
         )
-        self.__hierarchy_df = hierarchy_df
-        self.__name = name
+        self.hierarchy_df = ITableDF(hierarchy_df)
+        self.name = name
+
+    @classmethod
+    def make_default(cls, name: str, org_column: DataFrame):
+        """
+        Initialize default a hierarchy where all values are suppressed.
+
+        Parameters
+        ----------
+        name : str
+            Hierarchy name.
+        org_column : DataFrame
+            Data column from the original dataset to use as Level 0.
+        """
+        unique_values = org_column.unique()
+        hierarchy_df = DataFrame({0: unique_values, 1: ["*"] * unique_values.size})
+        return cls(name, hierarchy_df)
 
     @classmethod
     def from_csv(cls, name: str, path: str, sep: str = ","):
         """
-        Initialize from a CSV file.
+        Initialize hierarchy from a pre-computed mapping CSV file.
 
         The CSV should have no header, where the first column is the raw
         data and each following column is a higher level of generalization.
@@ -59,16 +84,16 @@ class Hierarchy:
         name : str
             Hierarchy name.
         path : str
-            The path of the csv file.
+            Path to the pre-computed mapping CSV file.
         sep : str, default ','
-            Separator string (delimiter) of the csv file.
+            Separator string (delimiter) of the CSV file.
         """
-        return cls(name, pd.read_csv(path, sep=sep, header=None))
+        return cls(name, read_csv(path, sep=sep, header=None))
 
     @classmethod
-    def from_json(cls, name: str, org_column: pd.DataFrame, json_path: str):
+    def from_json(cls, name: str, org_column: DataFrame, json_path: str):
         """
-        Initialize from a JSON configuration file.
+        Initialize hierarchy from a JSON configuration file.
 
         Supports two types of definition for generalization:
 
@@ -82,12 +107,12 @@ class Hierarchy:
         ----------
         name : str
             Hierarchy name.
-        org_column : pd.DataFrame
-            The column from the original dataset to use as Level 0.
+        org_column : DataFrame
+            Data column from the original dataset to use as Level 0.
         json_path : str
             Path to the JSON configuration file.
         """
-        hierarchy_df = pd.DataFrame({0: org_column.unique()})
+        hierarchy_df = DataFrame({0: org_column.unique()})
         try:
             with open(json_path) as f:
                 props = json.load(f)
@@ -105,31 +130,15 @@ class Hierarchy:
                 else:
                     for v in props["tree"][level]["values"]:
                         _hi[_hi.isin(v["original"]).any(axis=1)] = v["generalized"]
-                    hierarchy_df[level + 1] = _hi[level].copy()
+                    hierarchy_df[level + 1] = _hi[level]
 
         return cls(name, hierarchy_df)
 
-    @property
-    def name(self):
+    def _repr_html_(self):
         """
-        Name of this hierarchy.
-
-        Returns
-        -------
-        str
+        Get the HTML representation of the hierarchy.
         """
-        return self.__name
-
-    @property
-    def hierarchy_df(self):
-        """
-        The underlying hierarchy mapping DataFrame.
-
-        Returns
-        -------
-        ITableDF
-        """
-        return ITableDF(self.__hierarchy_df.copy())
+        return self.hierarchy_df._repr_html_()
 
     @cached_property
     def height(self):
@@ -140,7 +149,7 @@ class Hierarchy:
         -------
         int
         """
-        return self.__hierarchy_df.shape[1] - 1
+        return self.hierarchy_df.shape[1] - 1
 
     @cached_property
     def leaves(self):
@@ -151,7 +160,7 @@ class Hierarchy:
         -------
         list
         """
-        return self.__hierarchy_df[0].to_list()
+        return self.hierarchy_df[0].to_list()
 
     def contains(self, node_value: any):
         """
@@ -169,7 +178,7 @@ class Hierarchy:
         if node_value in self.leaves or node_value == "*":
             return True
 
-        return True if self.__hierarchy_df.eq(node_value).any().sum() != 0 else False
+        return True if self.hierarchy_df.eq(node_value).any().sum() != 0 else False
 
     def get_leaves_under_node(self, node_value: any):
         """
@@ -191,7 +200,7 @@ class Hierarchy:
         if node_value == "*":
             return self.leaves
 
-        search_df = self.__hierarchy_df[self.__hierarchy_df.eq(node_value).any(axis=1)]
+        search_df = self.hierarchy_df[self.hierarchy_df.eq(node_value).any(axis=1)]
         if search_df.shape[0] == 0:
             raise ValueError(
                 f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy.'
@@ -218,9 +227,7 @@ class Hierarchy:
         if node_value == "*":
             return self.height
 
-        search_df = self.__hierarchy_df.columns[
-            self.__hierarchy_df.eq(node_value).any()
-        ]
+        search_df = self.hierarchy_df.columns[self.hierarchy_df.eq(node_value).any()]
         if search_df.size == 0:
             raise ValueError(
                 f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy.'
@@ -258,9 +265,7 @@ class Hierarchy:
                     f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy.'
                 )
 
-        search_df = self.__hierarchy_df[
-            self.__hierarchy_df.isin(node_values).any(axis=1)
-        ]
+        search_df = self.hierarchy_df[self.hierarchy_df.isin(node_values).any(axis=1)]
 
         for level in range(self.height):
             _unique = search_df[level].unique()
@@ -278,58 +283,121 @@ class HierarchiesDict(dict):
     """
     Dictionary-like manager for attributes' generalization hierarchies.
 
-    This class maps dataset column indices or attribute names to their
-    respective hierarchy definitions. Hierarchy configurations are
-    lazy-loaded of from JSON files stored in the dataset's directory.
+    This class maps attribute names or their column indices to their
+    respective hierarchy objects.
 
     Parameters
     ----------
-    hierarchies_dir : str
-        The path to the directory containing JSON files for the hierarchies.
-    df : pd.DataFrame
-        The original data.
-    qids : list
-        A list of names of the QID attributes.
-    qids_idx : list
-        The column indices of the QID attributes.
-
-    Attributes
-    ----------
-    hierarchies_dir : str
-        Directory path where JSON hierarchy files are located.
+    hierarchies_dict : dict[str, Hierarchy]
+        Dictionary storing the hierarchy object of every column.
+    qids_mapping : dict[int, str], default None
+        Explicitly specify column index of every attribute.
+        If `None`, set column indices to their indices in
+        `hierarchies_dict.keys()`.
     """
 
     def __init__(
         self,
-        hierarchies_dir: str,
-        df: pd.DataFrame,
-        qids: list,
-        qids_idx: list,
+        hierarchies_dict: dict[str, Hierarchy],
+        qids_mapping: dict[int, str] = None,
     ):
         """
         Initialize the HierarchiesDict.
 
-        Constructs an internal mapping of attribute names to their specific
-        column indices to allow for flexible lookup.
+        Also construct an internal mapping of QID attribute names to their
+        specific column indices to allow for flexible lookup.
+
+        Parameters
+        ----------
+        hierarchies_dict : dict[str, Hierarchy]
+            Dictionary storing the hierarchy object of every QID attribute.
+        qids_mapping : dict[int, str], default None
+            Explicitly specify column index of every QID attribute.
+            If `None`, set column indices to their indices in
+            `hierarchies_dict.keys()`.
+        """
+        self.update(hierarchies_dict)
+
+        if qids_mapping is None:
+            self.__qids_idx_mapping = {
+                pos: qid for pos, qid in enumerate(hierarchies_dict.keys())
+            }
+        else:
+            self.__qids_idx_mapping = qids_mapping
+
+    @classmethod
+    def make_default(
+        cls,
+        df: DataFrame,
+        qids: list[str] = None,
+    ):
+        """
+        Initialize a default HierarchiesDict where all columns are suppressed.
+
+        Parameters
+        ----------
+        df : DataFrame
+            Original data.
+        qids : dict[int, str], default None
+            Specify QID attributes. If `None`, select all columns in `df`.
+            Column indices are set to their indices in `df.columns`.
+        """
+        if qids is None:
+            return cls(
+                {att: Hierarchy.make_default(att, df[att]) for att in df.columns}
+            )
+        return cls(
+            {att: Hierarchy.make_default(att, df[att]) for att in qids},
+            {pos: att for pos, att in enumerate(df.columns) if att in qids},
+        )
+
+    @classmethod
+    def from_dir(
+        cls,
+        hierarchies_dir: str,
+        df: DataFrame,
+        qids: list[str] = None,
+        csv_sep: str = ",",
+    ):
+        """
+        Initialize the HierarchiesDict from CSV or JSON files.
+        If an attribute has both CSV and JSON files, CSV file is selected.
+        If both CSV and JSON files are not found, fall back to default
+        hierarchy (i.e., suppress all values).
 
         Parameters
         ----------
         hierarchies_dir : str
-            The path to the directory containing JSON files for the hierarchies.
-        df : pd.DataFrame
-            The original data.
-        qids : list
-            A list of names of the QID attributes.
-        qids_idx : list
-            The column indices of the QID attributes.
+            Path to the directory containing all hierarchy files.
+        df : DataFrame
+            Original data.
+        qids : list[str], default None
+            Specify QID attributes. If `None`, select all columns in `df`.
+            Column indices are set to their indices in `df.columns`.
+        csv_sep : str, default ','
+            Separator string (delimiter) of CSV files.
         """
-        self.hierarchies_dir = hierarchies_dir
-        self.__df = df
-        self.__qids = []
-        for pos, qid in enumerate(qids):
-            self.__qids.extend([None] * (qids_idx[pos] - len(self.__qids)))
-            self.__qids.append(qid)
-        self.__qids.extend([None] * (df.columns.size - len(self.__qids)))
+        hierarchies_dict = {}
+        columns = df.columns
+        if qids is None:
+            qids = columns
+        for att in columns:
+            if att in qids:
+                if isfile(f"{hierarchies_dir}/{att}.csv"):
+                    hierarchies_dict[att] = Hierarchy.from_csv(
+                        att, f"{hierarchies_dir}/{att}.csv", csv_sep
+                    )
+                elif isfile(f"{hierarchies_dir}/{att}.json"):
+                    hierarchies_dict[att] = Hierarchy.from_json(
+                        att, df[att], f"{hierarchies_dir}/{att}.json"
+                    )
+                else:
+                    hierarchies_dict[att] = Hierarchy.make_default(att, df[att])
+
+        return cls(
+            hierarchies_dict,
+            {pos: att for pos, att in enumerate(columns) if att in qids},
+        )
 
     def __getitem__(self, key):
         """
@@ -341,39 +409,24 @@ class HierarchiesDict(dict):
 
         Parameters
         ----------
-        key : int or str
-            The column index (int) or attribute name (str) to look up.
+        key : str or int
+            The attribute name (str) or its column index (int) to look up.
 
         Returns
         -------
         Hierarchy
             The hierarchy object associated with the specified attribute.
-
-        Raises
-        ------
-        AttributeError
-            If the key is an index with no assigned QID or if the
-            attribute name is not found in the QID list.
         """
         if isinstance(key, int):
-            _key = self.__qids[key]
+            _key = self.__qids_idx_mapping.get(key, None)
             if _key is None:
                 raise AttributeError(
                     f"Cannot find hierarchy for attribute at index '{key}'"
                 )
         else:
             _key = key
-            if _key is None or _key not in self.__qids:
+            if _key is None or _key not in self.keys():
                 raise AttributeError(f"Cannot find attribute '{_key}'")
-        if _key not in self.keys():
-            super().__setitem__(
-                _key,
-                Hierarchy.from_json(
-                    _key,
-                    self.__df[_key],
-                    f"{self.hierarchies_dir}/{_key}.json",
-                ),
-            )
         return super().__getitem__(_key)
 
     @cached_property
@@ -382,19 +435,35 @@ class HierarchiesDict(dict):
         Interactive widget to display all loaded hierarchies on IPython.
 
         Generates a UI component for IPython consisting of a dropdown menu
-        and a display area showing the generalization hierarchy of each QID
-        attribute.
+        and a display area showing the generalization hierarchy of every
+        QID attribute.
 
         Returns
         -------
         ipywidgets.VBox
         """
-        qids = [x for x in self.__qids if x is not None]
-        dropdown = Dropdown(options=qids, value=qids[0])
+        qids = self.keys()
         children = [
             get_ITable_widget(self.__getitem__(qid).hierarchy_df) for qid in qids
         ]
         stack = Stack(children, selected_index=0)
-        dropdown = Dropdown(options=qids)
+        dropdown = Dropdown(options=list(qids))
         jslink((dropdown, "index"), (stack, "selected_index"))
         return VBox([Label("Generalization Trees:"), dropdown, stack])
+
+    def describe(self):
+        """
+        Interactive widget to display all loaded hierarchies on IPython.
+
+        Generates a UI component for IPython consisting of a dropdown menu
+        and a display area showing the generalization hierarchy of every
+        QID attribute.
+
+        Returns
+        -------
+        ipywidgets.VBox
+        """
+        return self.all_hierarchies_df
+
+    def copy(self):
+        return HierarchiesDict(super().copy(), qids_idx=self.__qids_idx_mapping.keys())
