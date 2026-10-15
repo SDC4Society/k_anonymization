@@ -3,9 +3,8 @@ Interactive DataFrame display on IPython using ``itables``.
 """
 
 from IPython.display import HTML, display
-from itables import JavascriptFunction, init_notebook_mode
+from itables import JavascriptFunction, init_notebook_mode, widget
 from itables import show as itables_show
-from itables import widget
 from pandas.core.frame import DataFrame
 
 css = """
@@ -94,16 +93,14 @@ def show(
     }
     if table_name:
         _table_name = table_name.replace(" ", "_").lower()
-        _layout["top1"] = JavascriptFunction(
-            f"""
+        _layout["top1"] = JavascriptFunction(f"""
             function () {'{'}
                 let toolbar = document.createElement('div');
                 toolbar.innerHTML = '<h2 align="center" style="margin-top: 0">{table_name}</h2>';
      
                 return toolbar;
             {'}'}
-            """
-        )
+            """)
     else:
         _table_name = "custom-itables"
 
@@ -125,15 +122,13 @@ def show(
                     {
                         # "extend": "collection",
                         "text": "Reset All",
-                        "action": JavascriptFunction(
-                            """
+                        "action": JavascriptFunction("""
                             function (e, dt, node, config) {
                                 dt.columns().ccSearchClear()
                                 dt.searchPanes.clearSelections()
                                 dt.draw()
                             }
-                            """
-                        ),
+                            """),
                         "split": [
                             {"extend": "searchPanesClear", "text": "Reset Filters"},
                             {"extend": "ccSearchClear", "text": "Reset Search"},
@@ -233,16 +228,14 @@ def get_ITable_widget(
     }
     if table_name:
         _table_name = table_name.replace(" ", "_").lower()
-        _layout["top1"] = JavascriptFunction(
-            f"""
+        _layout["top1"] = JavascriptFunction(f"""
             function () {'{'}
                 let toolbar = document.createElement('div');
                 toolbar.innerHTML = '<h2 align="center" style="margin-top: 0">{table_name}</h2>';
      
                 return toolbar;
             {'}'}
-            """
-        )
+            """)
     else:
         _table_name = "custom-itables"
 
@@ -264,15 +257,13 @@ def get_ITable_widget(
                     {
                         # "extend": "collection",
                         "text": "Reset All",
-                        "action": JavascriptFunction(
-                            """
+                        "action": JavascriptFunction("""
                             function (e, dt, node, config) {
                                 dt.columns().ccSearchClear()
                                 dt.searchPanes.clearSelections()
                                 dt.draw()
                             }
-                            """
-                        ),
+                            """),
                         "split": [
                             {"extend": "searchPanesClear", "text": "Reset Filters"},
                             {"extend": "ccSearchClear", "text": "Reset Search"},

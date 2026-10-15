@@ -5,7 +5,7 @@ from itables import show as itables_show
 from pandas import DataFrame, read_csv
 
 from .frame import ITableDF
-from .hierarchy import HierarchiesDict
+from .hierarchy import HierarchiesDict, Hierarchy
 
 
 class Dataset:
@@ -98,15 +98,11 @@ class Dataset:
         columns = df.columns
 
         if qids is not None:
-            self.qids = qids
+            self.qids = sorted(qids, key=columns.tolist().index)
             self.qids_idx = [idx for idx, qid in enumerate(columns) if qid in qids]
         else:
             self.qids = [col for col in columns if col != target]
             self.qids_idx = [idx for idx, col in enumerate(columns) if col in self.qids]
-
-        self.qids = (
-            qids if qids is not None else [col for col in columns if col != target]
-        )
 
         self.hierarchies = (
             hierarchies
@@ -132,6 +128,11 @@ class Dataset:
         for idx, qid in enumerate(columns):
             if qid in self.qids:
                 self.qids_idx.append(idx)
+
+                if idx not in self.hierarchies._qids_idx_mapping:
+                    self.hierarchies._qids_idx_mapping[idx] = qid
+                    self.hierarchies[qid] = Hierarchy.make_default(qid, df[qid])
+
                 if self.is_categorical[self.qids.index(qid)]:
                     self.qids_categorical.append(qid)
                     self.qids_idx_categorical.append(idx)
@@ -232,9 +233,10 @@ class Dataset:
         _info_all = {}
         for col_idx, col in enumerate(list(self.df)):
             if col_idx not in self.qids_idx:
-                _info = ["", "", ""]
+                _info = ["o" if col == self.target else "", "", "", ""]
             else:
                 _info = [
+                    "",
                     "o" if col_idx in self.qids_idx else "",
                     (
                         "o"
@@ -252,6 +254,7 @@ class Dataset:
         return DataFrame(
             _info_all,
             index=[
+                "Sensitive/Target Attribute",
                 "Quasi-Identifier (QID)",
                 "Numerical Attribute",
                 "Categorical Attribute",

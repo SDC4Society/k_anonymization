@@ -1,0 +1,5 @@
+{
+    "qids": ["age","sex","hometown"],
+    "target": "condition",
+    "is_categorical": [false, true, true]
+}

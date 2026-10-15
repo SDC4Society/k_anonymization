@@ -27,6 +27,10 @@
 nav.page-toc ul.nav {
   display: block !important;
 }
+.bd-sidebar-secondary .sidebar-secondary-items .toc-entry a.nav-link {
+  display: flex !important;
+  align-items: center;
+}
 .bd-sidebar-secondary .sidebar-secondary-items .toc-entry a > code {
   display: block;
   max-width: max-content;
@@ -179,4 +183,25 @@ div.toctree-wrapper a:focus {
 }
 .prev-next-area a p.prev-next-title {
   color: var(--pst-color-text-base);
+}
+
+/* itables */
+.dt-scroll {
+  margin: 0 0 !important;
+}
+.dtsp-panesContainer {
+  width: 100% !important;
+}
+.dt-scroll-body {
+  height: auto !important;
+  border-bottom: none !important;
+}
+.dt-length label {
+  padding-left: 4px;
+}
+div.dtsp-searchPane div.dtsp-topRow {
+  border: 0.5px solid lightgrey !important;
+}
+thead:has(.no-header) {
+  display: none;
 }

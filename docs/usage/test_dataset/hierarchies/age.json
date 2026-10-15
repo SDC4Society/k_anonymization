@@ -1,0 +1,7 @@
+{
+  "lambda": [
+    "lambda x: f'{x//5*5}~{x//5*5+4}'",
+    "lambda x: f'{int(x.split(\"~\")[0])//10*10}~{int(x.split(\"~\")[0])//10*10+9}'",
+    "lambda x: '*'"
+  ]
+}

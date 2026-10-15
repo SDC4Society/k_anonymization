@@ -12,9 +12,7 @@ from k_anonymization.core.dataset import Dataset
 
 from ._utils import get_max_ranges
 
-GroupAnonymization: TypeAlias = Callable[
-    [Collection[Collection], dict], Collection[Collection]
-]
+GroupAnonymization: TypeAlias = Callable[[Collection[Collection], dict], Algorithm]
 """
 Prototype of a group anonymization method for local recoding algorithms.
 
@@ -25,9 +23,10 @@ to make records become indistinguishable in their respective group.
 Parameters
 ----------
 group : Collection[Collection]
-    The group of records to be anonymized.
-props : dict
-    A dictionary containing necessary properties for anonymization.
+    Group of records to be anonymized.
+algorithm : Algorithm
+    Algorithm instance containing necessary properties that can be used 
+    for anonymization. Typically, this is the algorithm providing `group`.
 
 Returns
 -------
@@ -49,19 +48,21 @@ class GroupAnonymizationBuiltIn:
     """
 
     @staticmethod
-    def SUMMARIZATION(group: Collection[Collection], props: dict):
+    def SUMMARIZATION(group: Collection[Collection], algorithm: LocalRecodingAlgorithm):
         """
         Anonymize a group by creating a summary range or set.
 
-        Numerical values are converted into intervals (e.g., "20-30"),
-        while categorical values are listed as a set.
+        Numerical values are converted into a min-max range (e.g., "20~30"),
+        while categorical values are listed as a set (e.g. "A & B & C").
 
         Parameters
         ----------
         group : Collection[Collection]
-            A group of records to be anonymized.
-        props : dict
-            Properties dict containing `qids_idx` and `is_categorical`.
+            Group of records to be anonymized.
+        algorithm : LocalRecodingAlgorithm
+            Algorithm instance containing necessary properties that can be
+            used for anonymization. Typically, this is the algorithm
+            providing `group`.
 
         Returns
         -------
@@ -81,16 +82,16 @@ class GroupAnonymizationBuiltIn:
                 if len(set(values)) == 1:
                     anon_value = f"{values[0]}"
                 else:
-                    anon_value = f"{min(values)} ~ {max(values)}"
+                    anon_value = f"{min(values)}~{max(values)}"
             return list(map(lambda x: anon_value, values))
 
         columns = list(zip(*group))
-        for pos, idx in enumerate(props.qids_idx):
-            columns[idx] = summarize(columns[idx], props.is_categorical[pos])
+        for pos, idx in enumerate(algorithm.qids_idx):
+            columns[idx] = summarize(columns[idx], algorithm.is_categorical[pos])
         return list(zip(*columns))
 
     @staticmethod
-    def MEAN_MODE(group: Collection[Collection], props: dict):
+    def MEAN_MODE(group: Collection[Collection], algorithm: LocalRecodingAlgorithm):
         """
         Anonymize a group by mean and mode.
 
@@ -100,9 +101,11 @@ class GroupAnonymizationBuiltIn:
         Parameters
         ----------
         group : Collection[Collection]
-            A group of records to be anonymized.
-        props : dict
-            Properties dict containing `qids_idx` and `is_categorical`.
+            Group of records to be anonymized.
+        algorithm : LocalRecodingAlgorithm
+            Algorithm instance containing necessary properties that can be
+            used for anonymization. Typically, this is the algorithm
+            providing `group`.
 
         Returns
         -------
@@ -119,12 +122,14 @@ class GroupAnonymizationBuiltIn:
             return list(map(lambda x: anon_value, values))
 
         columns = list(zip(*group))
-        for pos, idx in enumerate(props.qids_idx):
-            columns[idx] = get_mean_mode(columns[idx], props.is_categorical[pos])
+        for pos, idx in enumerate(algorithm.qids_idx):
+            columns[idx] = get_mean_mode(columns[idx], algorithm.is_categorical[pos])
         return list(zip(*columns))
 
     @staticmethod
-    def GENERALIZATION(group: Collection[Collection], props: dict):
+    def GENERALIZATION(
+        group: Collection[Collection], algorithm: LocalRecodingAlgorithm
+    ):
         """
         Anonymize a group by full-(sub)domain generalization.
 
@@ -134,9 +139,11 @@ class GroupAnonymizationBuiltIn:
         Parameters
         ----------
         group : Collection[Collection]
-            A group of records to be anonymized.
-        props : dict
-            Properties dict containing `qids_idx` and `hierarchies`.
+            Group of records to be anonymized.
+        algorithm : LocalRecodingAlgorithm
+            Algorithm instance containing necessary properties that can be
+            used for anonymization. Typically, this is the algorithm
+            providing `group`.
 
         Returns
         -------
@@ -144,9 +151,9 @@ class GroupAnonymizationBuiltIn:
             The anonymized group.
         """
         columns = list(zip(*group))
-        for _, idx in enumerate(props.qids_idx):
+        for _, idx in enumerate(algorithm.qids_idx):
             columns[idx] = [
-                props.hierarchies[idx].get_lowest_common_ancestor(columns[idx])
+                algorithm.hierarchies[idx].get_lowest_common_ancestor(columns[idx])
             ] * len(columns[idx])
         return list(zip(*columns))
 

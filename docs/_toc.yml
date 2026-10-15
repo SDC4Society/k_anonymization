@@ -4,6 +4,11 @@
 format: jb-book
 root: index
 parts:
+  - caption: Usage Guide
+    chapters:
+      - file: usage/basic
+      - file: usage/create-dataset
+      - file: usage/create-hierarchy
   - caption: API Reference
     chapters:
       - file: api
