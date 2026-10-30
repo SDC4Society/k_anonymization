@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from numpy import median, ndarray
-from pandas import factorize, unique
+from pandas import factorize
 
 from k_anonymization.core.dataset import Dataset
 
-from .local_recoding_algorithm import (
+from ..local_recoding_algorithm import (
     GroupAnonymization,
     GroupAnonymizationBuiltIn,
     LocalRecodingAlgorithm,
@@ -87,14 +87,14 @@ class MondrianClassic(LocalRecodingAlgorithm):
 
         def get_normalized_range(idx):
             if idx in self.qids_idx_categorical:
-                return unique(slice_data[:, idx]).size / max_ranges[idx]
+                return len(set(slice_data[:, idx])) / max_ranges[idx]
             return (slice_data[:, idx].max() - slice_data[:, idx].min()) / (
                 max_ranges[idx]
             )
 
         return sorted(
             self.qids_idx,
-            key=lambda x: (-get_normalized_range(x), -unique(slice_data[:, x]).size),
+            key=lambda x: (-get_normalized_range(x), -len(set(slice_data[:, x]))),
         )
 
     def do_partitioning(self, slice_data: ndarray, sorted_qids_idx: list[int]):
@@ -114,7 +114,7 @@ class MondrianClassic(LocalRecodingAlgorithm):
         Returns
         -------
         list[numpy.ndarray] | None
-            List of resulting partitions, or `None` if allowable split is done.
+            List of resulting partitions, or `None` if no allowable split is done.
         """
         for idx in sorted_qids_idx:
             median_val = median(slice_data[:, idx])
@@ -129,7 +129,10 @@ class MondrianClassic(LocalRecodingAlgorithm):
 
     def do_mondrian(self, np_data: ndarray):
         """
-        The core of Classic Mondrian's partitioning process. At every step:
+        The core of Classic Mondrian's partitioning process.
+
+        Original data is recursively partitioned into smaller data slices
+        until no further partitioning is possible. For each data slice:
 
         1. Create a sorted list of QID attributes indices: by the
            widest normalized ranges, followed by cardinalities.
@@ -315,7 +318,7 @@ class MondrianClassicUnOptimized(LocalRecodingAlgorithm):
             # If idx is a categorical attribute
             # (self.__ranges[idx] stores a single integer):
             if isinstance(self.__ranges[idx], int):
-                return unique(slice_col).size / self.__ranges[idx]
+                return len(set(slice_col)) / self.__ranges[idx]
             else:
                 return (slice_col.max() - slice_col.min()) / (
                     self.__ranges[idx][1] - self.__ranges[idx][0]
@@ -325,7 +328,7 @@ class MondrianClassicUnOptimized(LocalRecodingAlgorithm):
             self.qids_idx,
             key=lambda x: (
                 -get_normalized_range(x),
-                -unique(slice_data[:, x]).size,
+                -len(set(slice_data[:, x])),
             ),
         )
 

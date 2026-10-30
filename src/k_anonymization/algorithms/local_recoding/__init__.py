@@ -16,13 +16,14 @@ from .local_recoding_algorithm import (
     GroupAnonymizationBuiltIn,
     LocalRecodingAlgorithm,
 )
-from .mondrian import MondrianClassic, MondrianClassicUnOptimized
+from .mondrian import Mondrian, MondrianClassic, MondrianClassicUnOptimized
 from .oka.oka import OKA
 
 __all__ = [
     "LocalRecodingAlgorithm",
     "GroupAnonymization",
     "GroupAnonymizationBuiltIn",
+    "Mondrian",
     "MondrianClassic",
     "MondrianClassicUnOptimized",
     "KMember",

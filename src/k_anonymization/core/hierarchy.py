@@ -283,7 +283,7 @@ class Hierarchy:
         """
         assert len(node_values) > 1, "node_values must contains at least 2 values."
 
-        for node_value in node_values:
+        for node_value in set(node_values):
             if not self.contains(node_value):
                 raise ValueError(
                     f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy.'
@@ -435,7 +435,7 @@ class HierarchiesDict(dict):
             df,
         )
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> Hierarchy:
         """
         Retrieve a Hierarchy by index or attribute name.
 
