@@ -6,7 +6,11 @@ Currently, the module is under active development for research and fact-checking
 The following algorithms have been implemented and tested:
 
 - Datafly {cite}`datafly`
-- Classic Mondrian {cite}`mondrian`
+- Incognito {cite}`incognito`
+- Flash {cite}`flash`
+- Lightning {cite}`lightning`
+- Mondrian {cite}`basic-mondrian` 
+- Classic Mondrian {cite}`classic-mondrian`
 - k-Member {cite}`kmember`
 - One-pass K-Means (OKA) {cite}`oka`
 - Perturbation {cite}`pk-cat, pk-num`

@@ -13,14 +13,18 @@ from ..local_recoding_algorithm import (
 
 class Mondrian(LocalRecodingAlgorithm):
     """
-    Implementation of Mondrian algorithm.
+    Implementation of (Basic) Mondrian algorithm.
 
-    Mondrian uses a top-down, greedy domain partitioning approach.
+    (Basic) Mondrian uses a top-down, greedy domain partitioning approach.
     It divides data into smaller groups by recursively splitting the
     widest-range QID attribute (of the local region at each step) until
     there is no longer an allowable split satisfying `k`-anonymity
     (i.e., no possible split that provides 2 groups of size ≥ `k`).
-     on its median value,
+
+    For __numerical__ QID attributes, Mondrian uses median partitioning.
+    For __categorical__ QID attributes, it firstly finds the lowest common
+    ancestor (LCA), then for every direct child of the LCA, it groups the
+    leaf nodes as a partition.
 
     Parameters
     ----------
@@ -65,11 +69,10 @@ class Mondrian(LocalRecodingAlgorithm):
 
     def sort_qids_idx(self, slice_data: ndarray, max_ranges: dict[int]):
         """
-        Determine the order of QID attributes to attempt splitting.
+        Determine the order of QID attributes to attempt partitioning.
 
-        Heuristically choose the QID attributes with the widest normalized
-        range first to minimize information loss. If the normalized ranges
-        are tied, pick the attribute with more distinct values.
+        Sort the QID attributes by the wider normalized ranges,
+        followed by the larger cardinalities.
 
         Parameters
         ----------
@@ -212,8 +215,8 @@ class Mondrian(LocalRecodingAlgorithm):
         Original data is recursively partitioned into smaller data slices
         until no further partitioning is possible. For each data slice:
 
-        1. Create a sorted list of QID attributes indices: by the
-           widest normalized ranges, followed by cardinalities.
+        1. Determine the order of QID attributes to attempt partitioning:
+           by the wider normalized ranges, followed by the larger cardinalities.
 
         2. Iterate through each QID attribute in the sorted list and try
            partitioning the data (slice). The loop stops immediately when

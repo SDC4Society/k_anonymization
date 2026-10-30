@@ -16,12 +16,14 @@ class MondrianClassic(LocalRecodingAlgorithm):
     """
     Implementation of Classic Mondrian algorithm.
 
-    Classic Mondrian uses a top-down, greedy domain partitioning
-    approach. It divides data into smaller groups by recursively
-    splitting the widest-range QID attribute (of the local region at
-    each step) on its median value, until there is no longer an
-    allowable split satisfying `k`-anonymity (i.e., no possible split
-    that provides 2 groups of size ≥ `k`).
+    Classic Mondrian uses a top-down, greedy domain partitioning approach.
+    It divides data into smaller groups by recursively splitting the
+    widest-range QID attribute (of the local region at each step) until
+    there is no longer an allowable split satisfying `k`-anonymity
+    (i.e., no possible split that provides 2 groups of size ≥ `k`).
+
+    Classic Mondrian considers all QID attributes numerical and uses
+    median partitioning method.
 
     Parameters
     ----------
@@ -66,11 +68,10 @@ class MondrianClassic(LocalRecodingAlgorithm):
 
     def sort_qids_idx(self, slice_data: ndarray, max_ranges: dict[int]):
         """
-        Determine the order of QID attributes to attempt splitting.
+        Determine the order of QID attributes to attempt partitioning.
 
-        Heuristically choose the QID attributes with the widest normalized
-        range first to minimize information loss. If the normalized ranges
-        are tied, pick the attribute with more distinct values.
+        Sort the QID attributes by the wider normalized ranges,
+        followed by the larger cardinalities.
 
         Parameters
         ----------
@@ -134,8 +135,8 @@ class MondrianClassic(LocalRecodingAlgorithm):
         Original data is recursively partitioned into smaller data slices
         until no further partitioning is possible. For each data slice:
 
-        1. Create a sorted list of QID attributes indices: by the
-           widest normalized ranges, followed by cardinalities.
+        1. Determine the order of QID attributes to attempt partitioning:
+           by the wider normalized ranges, followed by the larger cardinalities.
 
         2. Iterate through each QID attribute in the sorted list and try
            partitioning the data (slice). The loop stops immediately when
@@ -161,7 +162,7 @@ class MondrianClassic(LocalRecodingAlgorithm):
         for idx in self.qids_idx:
             if idx in self.qids_idx_categorical:
                 # Store categorical attribute ranges as their cardinalities
-                # Factorize categorical attributes to allow for median-based partitioning
+                # Factorize categorical attributes to allow for median partitioning.
                 # Store factorized-original value maps to revert them later.
                 encode, value_map = factorize(np_data[:, idx])
                 max_ranges[idx] = value_map.size
@@ -184,7 +185,7 @@ class MondrianClassic(LocalRecodingAlgorithm):
         partition_ables = self.do_partitioning(
             np_data, self.sort_qids_idx(np_data, max_ranges)
         )
-        # If no split provide 2 partitions of size >= k
+        # If no split provides 2 partitions of size ≥ k
         if partition_ables is None:
             return [___restore_cat_qids_idx(np_data)]
 
@@ -197,7 +198,7 @@ class MondrianClassic(LocalRecodingAlgorithm):
             _partition_ables = self.do_partitioning(
                 slice_data, self.sort_qids_idx(slice_data, max_ranges)
             )
-            # If no split provide 2 partitions of size >= k
+            # If no split provides 2 partitions of size ≥ k
             if _partition_ables is None:
                 groups.append(___restore_cat_qids_idx(slice_data))
             else:
@@ -217,7 +218,7 @@ class MondrianClassic(LocalRecodingAlgorithm):
         # Using numpy.ndarray is significantly faster than pandas.DataFrame
         np_data = self.anon_data.values
 
-        # If data size < k*2 => impossible split into 2 partitions of size >= k
+        # If data size < k*2 -> impossible split into 2 partitions of size ≥ k
         if np_data.shape[0] < self.k * 2:
             return [np_data.tolist()]
 
@@ -226,16 +227,19 @@ class MondrianClassic(LocalRecodingAlgorithm):
 
 class MondrianClassicUnOptimized(LocalRecodingAlgorithm):
     """
-    Implementation of Classic Mondrian algorithm. This class uses recursion
-    for partitioning, which is less memory efficient and potentially causes
-    stack overflow.
+    Implementation of Classic Mondrian algorithm using recursions.
 
-    Classic Mondrian uses a top-down, greedy domain partitioning
-    approach. It divides data into smaller groups by recursively
-    splitting the widest-range QID attribute (of the local region at
-    each step) on its median value, until there is no longer an
-    allowable split satisfying `k`-anonymity (i.e., no possible split
-    that provides 2 groups of size ≥ `k`).
+    This class uses recursions for partitioning, which is not memory-safe
+    and potentially causes stack overflow.
+
+    Classic Mondrian uses a top-down, greedy domain partitioning approach.
+    It divides data into smaller groups by recursively splitting the
+    widest-range QID attribute (of the local region at each step) until
+    there is no longer an allowable split satisfying `k`-anonymity
+    (i.e., no possible split that provides 2 groups of size ≥ `k`).
+
+    Classic Mondrian considers all QID attributes numerical and uses
+    median partitioning method.
 
     Parameters
     ----------
