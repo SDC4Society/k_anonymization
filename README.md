@@ -39,7 +39,7 @@ In general, this repository was developed __WITHOUT__ the involvement of generat
 
 [3] Kohlmayer, F., Prasser, F., Eckert, C., Kemper, A., and Kuhn, K. A. “Flash: Efficient, Stable and Optimal K-Anonymity.” 2012 International Conference on Privacy, Security, Risk and Trust and 2012 International Conference on Social Computing. IEEE, 2012. https://doi.org/10.1109/SocialCom-PASSAT.2012.52
 
-[4] Prasser, Fabian, Raffael Bild, and Klaus A. Kuhn. “Lightning: Utility-Driven Anonymization of High-Dimensional Data.” Transactions on Data Privacy 9.2 (2016): 161–185.
+[4] Prasser, Fabian, Raffael Bild, and Klaus A. Kuhn. “Lightning: Utility-Driven Anonymization of High-Dimensional Data.” Transactions on Data Privacy 9.2, 2016. pp. 161–185. https://dl.acm.org/doi/10.5555/2993206.2993209.
 
 [5] LeFevre, Kristen, David J. DeWitt, and Raghu Ramakrishnan. “Workload-aware anonymization.” Proceedings of the 12th ACM SIGKDD international conference on Knowledge discovery and data mining (KDD '06). ACM, 2006. https://doi.org/10.1145/1150402.1150435.
 
