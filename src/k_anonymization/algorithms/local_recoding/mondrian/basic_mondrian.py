@@ -226,11 +226,11 @@ class Mondrian(LocalRecodingAlgorithm):
 
            Partitioning method:
 
-            - Numerical Attributes: Median partitioning.
+           - Numerical Attributes: Median partitioning.
 
-            - Categorical Attributes: Find the lowest common ancestor (LCA),
-                then for every direct child of the LCA, group its leaf nodes as
-                a partition.
+           - Categorical Attributes: Find the lowest common ancestor (LCA),
+             then for every direct child of the LCA, group its leaf nodes as
+             a partition.
 
         Parameters
         ----------
