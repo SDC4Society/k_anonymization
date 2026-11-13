@@ -111,12 +111,6 @@ class Dataset:
             else HierarchiesDict.make_default(df, self.qids)
         )
 
-        for qid in self.qids:
-            hierarchy_df = hierarchies[qid].hierarchy_df
-            hierarchies[qid].hierarchy_df = hierarchy_df[
-                hierarchy_df[0].isin(df[qid].unique())
-            ].reset_index(drop=True)
-
         self.target = target
 
         self.is_categorical = is_categorical
@@ -139,6 +133,11 @@ class Dataset:
                 if idx not in self.hierarchies._qids_idx_mapping:
                     self.hierarchies._qids_idx_mapping[idx] = qid
                     self.hierarchies[qid] = Hierarchy.make_default(qid, df[qid])
+                else:
+                    hierarchy_df = hierarchies[qid].hierarchy_df
+                    hierarchies[qid].hierarchy_df = hierarchy_df[
+                        hierarchy_df[0].isin(df[qid].unique())
+                    ].reset_index(drop=True)
 
                 if self.is_categorical[self.qids.index(qid)]:
                     self.qids_categorical.append(qid)
