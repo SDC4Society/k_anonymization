@@ -1,7 +1,7 @@
 import json
 from functools import cached_property
 from os.path import isfile
-from typing import Literal
+from typing import Collection, Literal
 
 from ipywidgets import Dropdown, Label, Stack, VBox, jslink
 from pandas import DataFrame, read_csv
@@ -227,7 +227,7 @@ class Hierarchy:
         search_df = self.hierarchy_df[self.hierarchy_df.eq(node_value).any(axis=1)]
         if search_df.shape[0] == 0:
             raise ValueError(
-                f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy.'
+                f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy of {self.name}.'
             )
         return search_df[0].to_list()
 
@@ -254,7 +254,7 @@ class Hierarchy:
         search_df = self.hierarchy_df.columns[self.hierarchy_df.eq(node_value).any()]
         if search_df.size == 0:
             raise ValueError(
-                f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy.'
+                f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy of {self.name}.'
             )
         return search_df.item()
 
@@ -286,7 +286,7 @@ class Hierarchy:
         for node_value in set(node_values):
             if not self.contains(node_value):
                 raise ValueError(
-                    f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy.'
+                    f'Node "{node_value}" (type: {type(node_value)}) not found in the hierarchy of {self.name}.'
                 )
 
         search_df = self.hierarchy_df[self.hierarchy_df.isin(node_values).any(axis=1)]
@@ -314,9 +314,9 @@ class HierarchiesDict(dict):
     ----------
     hierarchies_dict : dict[str, Hierarchy]
         Dictionary storing the hierarchy of every column.
-    df : DataFrame, default None
-        Dataset to ensure column index of every QID attribute
-        matches its index in `df.columns`.
+    df_columns : Collection, default None
+        Ensure column index of every QID attribute matches its index
+        in `df.columns`.
         If `None`, set column indices to their indices in
         `hierarchies_dict.keys()`.
     """
@@ -324,7 +324,7 @@ class HierarchiesDict(dict):
     def __init__(
         self,
         hierarchies_dict: dict[str, Hierarchy] | dict[str, DataFrame],
-        df: DataFrame = None,
+        df_columns: Collection = None,
     ):
         """
         Initialize the HierarchiesDict.
@@ -336,9 +336,9 @@ class HierarchiesDict(dict):
         ----------
         hierarchies_dict : dict[str, Hierarchy] or dict[str, DataFrame]
             Dictionary storing the hierarchy of every QID attribute.
-        df : DataFrame, default None
-            Dataset to ensure column index of every QID attribute
-            matches its index in `df.columns`.
+        df_columns : Collection, default None
+            Ensure column index of every QID attribute matches its index
+            in `df.columns`.
             If `None`, set column indices to their indices in
             `hierarchies_dict.keys()`.
         """
@@ -352,14 +352,14 @@ class HierarchiesDict(dict):
         }
         self.update(_hierarchies_dict)
 
-        if df is None:
+        if df_columns is None:
             self._qids_idx_mapping = {
                 pos: qid for pos, qid in enumerate(hierarchies_dict.keys())
             }
         else:
             self._qids_idx_mapping = {
                 pos: att
-                for pos, att in enumerate(df.columns)
+                for pos, att in enumerate(df_columns)
                 if att in _hierarchies_dict
             }
 
@@ -502,4 +502,19 @@ class HierarchiesDict(dict):
         return self.all_hierarchies_df
 
     def copy(self):
-        return HierarchiesDict(super().copy(), qids_idx=self._qids_idx_mapping.keys())
+        current_idx = 0
+        df_columns = []
+        for idx, qid in self._qids_idx_mapping.items():
+            if current_idx < idx:
+                while current_idx < idx:
+                    df_columns.append(f"HI_TEMP_{current_idx}")
+                    current_idx += 1
+            df_columns.append(qid)
+            current_idx += 1
+        return HierarchiesDict(
+            {
+                qid: Hierarchy(hierarchy.name, hierarchy.hierarchy_df.copy())
+                for qid, hierarchy in self.items()
+            },
+            df_columns,
+        )

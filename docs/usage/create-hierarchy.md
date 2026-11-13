@@ -142,9 +142,9 @@ hierarchies = HierarchiesDict(
             ["Aomori" , "Tohoku", "*"],
         ])
     },
-    df=dataset.df # Provide `df` to match column indices.
-    # If `df` is not provided, default indices follow
-    # `hierarchies_dict.keys()`
+    df_columns=dataset.df.columns 
+    # Provide `df.columns` to match column indices.
+    # If not provided, default indices follow `hierarchies_dict.keys()`.
 )
 hierarchies["hometown"] # or hierarchies[2]
 ```
@@ -175,7 +175,7 @@ hierarchies = HierarchiesDict(
             ["Aomori" , "Tohoku", "*"],
         ])
     },
-    df=df
+    df_columns=df.columns
 )
 
 dataset = Dataset("Test Dataset", df, hierarchies=hierarchies)
