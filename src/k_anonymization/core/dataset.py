@@ -134,8 +134,8 @@ class Dataset:
                     self.hierarchies._qids_idx_mapping[idx] = qid
                     self.hierarchies[qid] = Hierarchy.make_default(qid, df[qid])
                 else:
-                    hierarchy_df = hierarchies[qid].hierarchy_df
-                    hierarchies[qid].hierarchy_df = hierarchy_df[
+                    hierarchy_df = self.hierarchies[qid].hierarchy_df
+                    self.hierarchies[qid].hierarchy_df = hierarchy_df[
                         hierarchy_df[0].isin(df[qid].unique())
                     ].reset_index(drop=True)
 
