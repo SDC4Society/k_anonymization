@@ -3,6 +3,7 @@ from functools import cached_property
 
 from itables import show as itables_show
 from pandas import DataFrame, read_csv
+from sklearn.model_selection import train_test_split
 
 from .frame import ITableDF
 from .hierarchy import HierarchiesDict, Hierarchy
@@ -109,6 +110,12 @@ class Dataset:
             if hierarchies is not None
             else HierarchiesDict.make_default(df, self.qids)
         )
+
+        for qid in self.qids:
+            hierarchy_df = hierarchies[qid].hierarchy_df
+            hierarchies[qid].hierarchy_df = hierarchy_df[
+                hierarchy_df[0].isin(df[qid].unique())
+            ].reset_index(drop=True)
 
         self.target = target
 
@@ -302,11 +309,16 @@ class Dataset:
             ],
         )
 
-    def sample(self, n=None, frac=None, seed=None, ignore_index=True):
+    def sample(
+        self,
+        n=None,
+        frac=None,
+        seed=None,
+        stratified=False,
+        reset_indices=True,
+    ):
         """
-        Create a stratified sample of the dataset.
-
-        Sample rows based on the distribution of the target attribute.
+        Create a sample of the dataset.
 
         Parameters
         ----------
@@ -316,33 +328,39 @@ class Dataset:
             Fraction of data to sample.
         seed : int, optional
             Random state for reproducibility.
-        ignore_index : bool, default True
-            If True, the resulting index will be labeled 0, 1, …, n - 1.
+        stratified : bool, default False
+            If True, create a stratified sample.
+            Sample rows based on the distribution of the target attribute.
+        reset_indices : bool, default True
+            If False, keep row indices the same as in original data.
+            If True, reset row indices to 0, 1 ... (n-1)
 
         Returns
         -------
         SampleDataset
             A new dataset object containing the sampled records.
         """
-        if n is None:
-            _frac = frac
-        else:
-            _frac = float(n / self.df.shape[0])
-        return SampleDataset(
-            self,
-            self.df.groupby(
-                self.target,
-                group_keys=False,
-            )[self.df.columns]
-            .apply(
-                lambda x: x.sample(
-                    frac=_frac,
-                    random_state=seed,
-                    ignore_index=ignore_index,
-                )
+        assert n is not None or frac is not None, "Either 'n' or 'frac' must be given."
+
+        if stratified:
+            sample_df, _ = train_test_split(
+                self.df,
+                train_size=frac if n is None else n,
+                stratify=self.df[self.target],
+                random_state=seed,
             )
-            .reset_index(drop=True),
-        )
+            sample_df.sort_index(inplace=True)
+        else:
+            sample_df = (
+                self.df.sample(frac=frac, random_state=seed).sort_index()
+                if n is None
+                else self.df.sample(n=n, random_state=seed).sort_index()
+            )
+
+        if reset_indices:
+            return SampleDataset(self, sample_df.reset_index(drop=True))
+        else:
+            return SampleDataset(self, sample_df)
 
     def _repr_html_(self):
         """
@@ -386,7 +404,7 @@ class SampleDataset(Dataset):
             sampled_df,
             base_dataset.qids,
             base_dataset.is_categorical,
-            base_dataset.hierarchies,
+            base_dataset.hierarchies.copy(),
             base_dataset.target,
         )
 
